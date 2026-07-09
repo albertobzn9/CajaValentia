@@ -2,6 +2,7 @@
 
 Start with the item closest to the question:
 
+- [`modernization-handoff.md`](modernization-handoff.md): read-first technical and experimental handoff.
 - [`behavioral-protocol.md`](behavioral-protocol.md): experimental task.
 - [`hardware-io.md`](hardware-io.md): box inputs and outputs.
 - [`architecture/01_mapa_modulos_matlab_limpio.md`](architecture/01_mapa_modulos_matlab_limpio.md): visual module map.
