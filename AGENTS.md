@@ -1,5 +1,12 @@
 # Working Rules
 
+## Canonical Workspace
+
+Make active changes only in `/Users/ab/Documents/GitHub/CajaValentia` and push
+them to its private GitHub remote. The Google Drive project folder is an archive
+and reference source, not an active working copy. Read
+`docs/working-agreement.md` before changing project structure or hardware code.
+
 ## Non-negotiable
 
 - `legacy/` is an audit archive: do not clean it up or edit it.

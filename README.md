@@ -17,6 +17,7 @@ the historical program needed to understand old data and behavior.
 
 - [`matlab/README_USO_USB.md`](matlab/README_USO_USB.md): operating from USB.
 - [`docs/README.md`](docs/README.md): protocol, hardware, architecture, and decisions.
+- [`docs/working-agreement.md`](docs/working-agreement.md): where active work belongs.
 - [`HISTORY.md`](HISTORY.md): why the releases exist.
 - [`AGENTS.md`](AGENTS.md): safety rules for people and coding agents changing the program.
 
