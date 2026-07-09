@@ -22,4 +22,10 @@
   present.
 - Confirm generated result columns and timestamps from a real session.
 
-Until these steps pass, `v2.0.0-rc.1` is a candidate, not a production release.
+Until these steps pass, `v2.0.0-rc.2` is a candidate, not a production release.
+
+## Modern Hardware Branch
+
+The branch `migration/r2022a-r2026a-ni-usb6501` passes its software-only test
+in MATLAB R2026a. It has not yet run `cmc_modern_preflight` on a Windows machine
+with Data Acquisition Toolbox, NI support, and the USB-6501 attached.

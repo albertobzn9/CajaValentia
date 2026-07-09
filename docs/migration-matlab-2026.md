@@ -1,9 +1,9 @@
-# Migration to MATLAB R2026a
+# Migration to Modern MATLAB
 
 ## Conclusion
 
 The behavioral logic can migrate. The current program cannot run unchanged in
-R2026a because its hardware layer uses the retired legacy DAQ interface.
+R2022a-R2026a because its hardware layer uses the retired legacy DAQ interface.
 Migration is feasible because the recorded hardware is an NI USB-6501, which
 MathWorks currently lists as supported for digital I/O.
 
@@ -32,7 +32,8 @@ identifier, not the hardware model.
 ## Safe Migration Plan
 
 1. Keep MATLAB R2011a in production until the new version passes all checks.
-2. On a separate Windows computer, install MATLAB R2026a, Data Acquisition
+2. On a separate Windows computer, install MATLAB R2022a or newer through
+   R2026a, Data Acquisition
    Toolbox, and the NI-DAQmx support package.
 3. Build a small hardware adapter that first reproduces only the existing 24
    digital lines. Verify every input and output with the box disconnected from
@@ -48,3 +49,10 @@ archive and possibly for inspecting old behavior, but it is not a reliable test
 environment for the current Apple-silicon Mac and macOS. The lab's actual
 Windows release and its installed toolbox/driver remain the reference for
 backward-compatibility testing.
+
+## Current Migration Branch
+
+`migration/r2022a-r2026a-ni-usb6501` contains the first modern adapter. It uses
+the `DataAcquisition` API introduced in R2020a, so it intentionally avoids APIs
+added after R2022a. Its test protocol is
+[`modern-hardware-lab-test.md`](modern-hardware-lab-test.md).

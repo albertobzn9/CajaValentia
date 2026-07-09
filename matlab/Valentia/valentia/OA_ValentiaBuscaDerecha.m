@@ -2,7 +2,7 @@ function [P]=OA_ValentiaBuscaDerecha(OA)
 %regresa el valor de los sensores de la extrema derecha
 DatosL=[];
 escribePto(OA,[9:12],[0 0 0 0]);
-DatosL=[getvalue(OA.Line(1:8))];
+DatosL=OA.readInputs();
 DD=not(DatosL(2:4))';
 PV=find(DD==1);
 P=0;

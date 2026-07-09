@@ -3,7 +3,7 @@ function [DI,DD,Datos]=OA_ValentiaRevisaPalanca(OA)
 %DI : contador del lado izquierdo
 %DD : contador del lado derecho
     escribePto(OA,[9:12],[1 1 0 0]);
-    Datos=[getvalue(OA.Line(1:8))];
+    Datos=OA.readInputs();
     a=Datos(1:4);
     DD=bin2dec(strcat(num2str(a(4)),num2str(a(3)),num2str(a(1)),num2str(a(2))));
     a=Datos(5:8);
