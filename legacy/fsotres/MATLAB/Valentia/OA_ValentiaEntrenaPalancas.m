@@ -1,0 +1,637 @@
+function varargout = OA_ValentiaEntrenaPalancas(varargin)
+% OA_VALENTIAENTRENAPALANCAS M-file for OA_ValentiaEntrenaPalancas.fig
+%      OA_VALENTIAENTRENAPALANCAS, by itself, creates a new OA_VALENTIAENTRENAPALANCAS or raises the existing
+%      singleton*.
+%
+%      H = OA_VALENTIAENTRENAPALANCAS returns the handle to a new OA_VALENTIAENTRENAPALANCAS or the handle to
+%      the existing singleton*.
+%
+%      OA_VALENTIAENTRENAPALANCAS('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in OA_VALENTIAENTRENAPALANCAS.M with the given input arguments.
+%
+%      OA_VALENTIAENTRENAPALANCAS('Property','Value',...) creates a new OA_VALENTIAENTRENAPALANCAS or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before OA_ValentiaEntrenaPalancas_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to OA_ValentiaEntrenaPalancas_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help OA_ValentiaEntrenaPalancas
+
+% Last Modified by GUIDE v2.5 28-Nov-2012 10:29:26
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @OA_ValentiaEntrenaPalancas_OpeningFcn, ...
+                   'gui_OutputFcn',  @OA_ValentiaEntrenaPalancas_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before OA_ValentiaEntrenaPalancas is made visible.
+function OA_ValentiaEntrenaPalancas_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to OA_ValentiaEntrenaPalancas (see VARARGIN)
+
+% Choose default command line output for OA_ValentiaEntrenaPalancas
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes OA_ValentiaEntrenaPalancas wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+%se inicializan las interfaces de National Instruments presentes en el
+%sistema
+daqreset
+
+%se usa la función OA_ValentiaInicio para dar de alta la interfaz de
+%National Instruments asociada a la tarea OA_Valentia
+handles.OA = OA_ValentiaInicio;
+%la referencia handles.OA se utiliza en las funciones de control
+%para las luces, sonidos, recompensa, palancas, contadores de las palancas
+%y estimulo electrico
+
+%inicializamos todas las variables de control
+
+%estimulos izquierda
+handles.Luz=0;
+handles.Sonido=0;
+handles.SonidoInt=0;
+handles.LuzInt=0;
+
+%estimulos derecha
+handles.LuzD=0;
+handles.SonidoD=0;
+handles.SonidoIntD=0;
+handles.LuzIntD=0;
+
+%contadores de las palancas
+handles.ContadorI=0;
+handles.ContadorD=0;
+
+guidata(hObject, handles);
+
+%cambiamos al directorio de trabajo
+cd('C:\Users\fsotres\Documents\MATLAB\Valentia\')
+
+%guardamos valores de inicio para la recompensa
+RD=[0 1];RI=[0 1];
+save('C:\Users\fsotres\Documents\MATLAB\Valentia\DatosValentia','RD','RI');
+
+%cargamos el valor de  retardo de la recompensa
+load('RetardoRecomp','RetardoRecomp');
+set(handles.edit3,'String',num2str(RetardoRecomp));
+
+%cargamos el numero de pellets que se dan por evento
+load('PelletsEvento','PelletsEvento');
+set(handles.edit4,'String',num2str(PelletsEvento));
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = OA_ValentiaEntrenaPalancas_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%Esta función es el control del lado Izquierdo
+
+%La variable Control es la bandera para permanecer en el ciclo
+%la inicializamos a cero y la guardamos 
+Control=0;
+save('controlEnt','Control')
+
+%usamos la función  OA_ValentiaEstimulo para asegurarnos que las luces
+%del lado derecho estan apagadas
+OA_ValentiaEstimuloI(handles.OA,0,0)
+OA_ValentiaEstimuloD(handles.OA,0,0)
+
+%usamos la función OA_ValentiaPalanca para asegurarnos que la palanca 
+%del lado derecho esta oculta
+OA_ValentiaPalanca(handles.OA,'D',2); 
+
+%leemos los valores asociados a las luces   y los sonidos
+%y las asignamos a las variables EstimS y EstimL respectivamanete
+EstimS=handles.Sonido+handles.Sonido*handles.SonidoInt;
+EstimL=handles.Luz+handles.Luz*handles.LuzInt;
+
+%usamos la función OA_ValentiaEstimulo para que luces y sonidos
+%se enciendan de acuerdo a lo solicitado en el lado Izquierdo
+OA_ValentiaEstimuloI(handles.OA,EstimS,EstimL);
+%hacemos una pausa de medio segundo
+pause(.5)
+%sacamos la palanca del lado Izquierdo al mandar una 'I' y un 1 
+%a la función OA_ValentiaPalanca
+OA_ValentiaPalanca(handles.OA,'I',1); 
+%limpiamos el contador de eventos de las palancas
+OA_ValentiaResetPalancas(handles.OA)
+
+%asignamos el valor 1 a la variable control  para ingresar al ciclo
+Control=1;
+%y la salvamos
+save('controlEnt','Control')
+
+%leemos el valor del contador de eventos de la palanca
+[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA)
+%guardamos el valor del contador del lado izquierdo en una variable
+%auxiliar
+DDA=DI;
+
+%permanecemos en un ciclo hasta que Control sea igual a cero
+while(1)
+    %leemos el valor del contador de eventos de la palanca
+    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+    %si se modifico el valor del contador de eventos entonces la rata lo
+    %presiono
+    if(DI~=DDA)
+        %si lo presiono actualizamos el contador
+        handles.ContadorI=handles.ContadorI+1;
+        guidata(hObject, handles);
+        set(handles.edit1,'String',num2str(handles.ContadorI));
+        %leemos cuantos pellets debemos dar
+        load('PelletsEvento','PelletsEvento');
+        %entramos en un ciclo para dar los pellets
+        for i=1:PelletsEvento
+            %usamos la funcion OA_ValentiaRecompensaI para activar el
+            %dispensador del lado izquierdo
+            OA_ValentiaRecompensaI(handles.OA);
+            pause(.5)
+        end
+        %leemos cual es el valor del retardo asociado al intervalo variable
+        load('RetardoRecomp','RetardoRecomp');
+        IntVar=2*RetardoRecomp*rand(1,1); %intervalo variable uniformemente distribuido 
+        %IntVar=2*RetardoRecomp*((abs(randn(1,1))+3.5)/7); %intervalo variable normalmente distribuido
+        pause(IntVar);
+        %preguntamos nuevamente por los contadores de la palanca para saber
+        %si la rata presiono nuevamente y dar la recompensa
+        [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+        DDA=DI;
+    end
+    %verificamos si el entrenador activo el control manual para dar
+    %recompensa para eso leemos el archivo controlPellet
+    pause(.1)
+    load('controlPellet','Pellet')
+    if(Pellet==1)
+        %de ser asi entonces usamos la funcion OA_ValentiaRecompensaI_est para activar el
+            %dispensador del lado izquierdo
+       OA_ValentiaRecompensaI(handles.OA)
+       %apagamos la bandera de solicitud manual de pellet
+       Pellet=0;
+       save('controlPellet','Pellet')
+    end   
+    %verificamos si el entrenador quiere que termine la secuencia del lado
+    %izquierdo
+    load('controlEnt')
+    if(Control==0)
+       % de ser asi, salimos del ciclo
+        break
+    end  
+end 
+
+%si salimos del ciclo del lado izquierdo apagamos luces y sonidos mediante
+%la función OA_ValentiaEstimulo
+OA_ValentiaEstimuloI(handles.OA,0,0)
+guidata(hObject, handles);
+
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%cuando se presiona el boton detener ponemos en cero la bandera Control
+Control=0;
+save('controlEnt','Control')
+%apagamos luces y sonido de ambos lados
+OA_ValentiaEstimuloI(handles.OA,0,0)
+OA_ValentiaEstimuloD(handles.OA,0,0)
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%cuando el entrenado presiona el botón de dar pellet prendemos la
+%bandera correspondiente
+Pellet=1;
+save('controlPellet','Pellet')
+
+
+% --- Executes on button press in pushbutton11.
+function pushbutton11_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+%cuando se presiona el boton detener ponemos en cero la bandera Control
+Control=0;
+save('controlEnt','Control')
+%apagamos luces y sonido de ambos lados
+OA_ValentiaEstimuloD(handles.OA,0,0)
+OA_ValentiaEstimuloI(handles.OA,0,0)
+
+
+% --- Executes on button press in checkbox1.
+function checkbox1_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Luz Izquierda 0 apagada 1 encendida
+handles.Luz=get(hObject,'Value'); 
+guidata(hObject, handles);
+% --- Executes on button press in checkbox2.
+function checkbox2_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Sonido Izquierda 0 apagada 1 encendida
+handles.Sonido=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in checkbox3.
+function checkbox3_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Luz Intermitente Izquierda:
+%0 continua 1 parpadea
+handles.LuzInt=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+
+% --- Executes on button press in checkbox4.
+function checkbox4_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Sonido Intermitente Izquierda:
+%0 continua 1 intermitente
+handles.SonidoInt=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in checkbox5.
+function checkbox5_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Luz Derecha 0 apagada 1 encendida
+handles.LuzD=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in checkbox6.
+function checkbox6_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Sonido Derecha 0 apagada 1 encendida
+handles.SonidoD=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in checkbox7.
+function checkbox7_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%se verifica el valor de la bandera de Luz Intermitente Derecha:
+%0 continua 1 parpadea
+
+handles.LuzIntD=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in checkbox8.
+function checkbox8_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%se verifica el valor de la bandera de Sonido Intermitente Derecha:
+%0 continua 1 intermitente
+
+handles.SonidoIntD=get(hObject,'Value'); 
+guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton12. Usar Derecha
+function pushbutton12_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%Esta función es el control del lado Derecho
+
+%La variable Control es la bandera para permanecer en el ciclo
+%la inicializamos a cero y la guardamos 
+Control=0;
+save('controlEnt','Control')
+
+%usamos la función  OA_ValentiaEstimulo para asegurarnos que las luces
+%del lado Izquierdo estan apagadas
+OA_ValentiaEstimuloI(handles.OA,0,0)
+%usamos la función OA_ValentiaPalanca para asegurarnos que la palanca 
+%del lado Izquierdo esta oculta
+OA_ValentiaPalanca(handles.OA,'I',2); 
+
+%leemos los valores asociados a las luces   y los sonidos del lado derecho
+%y las asignamos a las variables EstimS y EstimL respectivamanete
+EstimS=handles.SonidoD+handles.SonidoD*handles.SonidoIntD;
+EstimL=handles.LuzD+handles.LuzD*handles.LuzIntD;
+
+%usamos la función OA_ValentiaEstimulo para que luces y sonidos
+%se enciendan de acuerdo a lo solicitado en el lado derecho
+OA_ValentiaEstimuloD(handles.OA,EstimS,EstimL)
+%hacemos una pausa de medio segundo
+pause(.5)
+%sacamos la palanca del lado Derecho al mandar una 'D' y un 1 
+%a la función OA_ValentiaPalanca
+OA_ValentiaPalanca(handles.OA,'D',1); 
+%limpiamos el contador de eventos de las palancas
+OA_ValentiaResetPalancas(handles.OA) %no usar ResetPalanca antes de Palanca
+
+%asignamos el valor 1 a la variable control  para ingresar al ciclo
+Control=1;
+%y la salvamos
+save('controlEntD','Control')
+Contador=0;
+
+%leemos el valor del contador de eventos de la palanca
+[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+%guardamos el valor del contador del lado derecho en una variable
+%auxiliar
+DDA=DD;
+
+%permanecemos en un ciclo hasta que Control sea igual a cero
+while(1)
+      %leemos el valor del contador de eventos de la palanca
+    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+     %si se modifico el valor del contador de eventos entonces la rata lo
+    %presiono
+
+    if(DD~=DDA)
+        %     %si lo presiono actualizamos el contador
+        handles.ContadorD=handles.ContadorD+1;
+        guidata(hObject, handles);
+        set(handles.edit2,'String',num2str(handles.ContadorD));
+        %leemos cuantos pellets debemos dar
+        load('PelletsEvento','PelletsEvento');
+         %entramos en un ciclo para dar los pellets
+        for i=1:PelletsEvento
+            %usamos la funcion OA_ValentiaRecompensaD para activar el
+            %dispensador del lado derecho
+            OA_ValentiaRecompensaD(handles.OA);
+            pause(.5)
+        end  
+        %leemos cual es el valor del retardo asociado al intervalo variable
+        load('RetardoRecomp','RetardoRecomp');
+        IntVar=2*RetardoRecomp*rand(1,1); %intervalo variable uniformemente distribuido 
+        %IntVar=2*RetardoRecomp*((abs(randn(1,1))+3.5)/7); %intervalo variable normalmente distribuido
+        pause(IntVar);
+        %preguntamos nuevamente por los contadores de la palanca para saber
+        %si la rata presiono nuevamente y dar la recompensa
+        [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+        DDA=DD;
+    end
+    pause(.1)
+    load('controlPelletD','Pellet')
+    if(Pellet==1)
+        %de ser asi entonces usamos la funcion OA_ValentiaRecompensaD para activar el
+        %dispensador del lado derecho
+       OA_ValentiaRecompensaD(handles.OA);
+        %apagamos la bandera de solicitud manual de pellet y la salvamos
+       Pellet=0;
+       save('controlPelletD','Pellet')
+    end   
+    %verificamos si el entrenador quiere que termine la secuencia del lado
+    %derecho
+    load('controlEntD')
+    if(Control==0)
+        % de ser asi, salimos del ciclo
+        break
+    end  
+end 
+%si salimos del ciclo del lado derecho apagamos luces y sonidos mediante
+%la función OA_ValentiaEstimulo
+OA_ValentiaEstimuloD(handles.OA,0,0)
+guidata(hObject, handles);
+
+
+
+% --- Executes on button press in pushbutton13.
+function pushbutton13_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%cuando el entrenado presiona el botón de dar pellet prendemos la
+%bandera correspondiente del lado derecho
+Pellet=1;
+save('controlPelletD','Pellet')
+
+
+% --- Executes on button press in pushbutton14.
+function pushbutton14_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%cuando se presiona el boton detener ponemos en cero la bandera Control del
+%lado derecho
+Control=0;
+save('controlEntD','Control')
+%apagamos luces y sonido del lado derecho
+OA_ValentiaEstimuloD(handles.OA,0,0)
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+set(hObject,'String','0');
+
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+%se asigna cero a la casilla 
+set(hObject,'String','0');
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+
+%cuando se ordena cerrar la pantalla de control
+%primero apagamos los estimulos y se restaura y cierra la tarjeta de
+%National Instrument
+OA_ValentiaEstimuloD(handles.OA,0,0)
+OA_ValentiaEstimuloI(handles.OA,0,0)
+daqreset
+delete(hObject);
+
+
+
+function edit3_Callback(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%leemos de la casilla cual es el valor promedio para el intervalo variable 
+%asociado a la activacion de las palancas
+RetardoRecomp=str2double(get(hObject,'String'));
+save('RetardoRecomp','RetardoRecomp');
+
+% --- Executes during object creation, after setting all properties.
+function edit3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function figure1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on button press in pushbutton15.
+function pushbutton15_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%cargamos la variable de resultados
+load('Resultados','Resultados');
+%la presentamos en pantalla
+Resultados
+
+
+% --- Executes on button press in pushbutton16.
+function pushbutton16_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%limpiamos la variable de resultados
+Resultados=[];
+%la salvamos
+save('Resultados','Resultados');
+
+
+
+function edit4_Callback(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%leemos la casilla para saber cuantos pellets por evento se daran
+PelletsEvento=str2double(get(hObject,'String'));
+save('PelletsEvento','PelletsEvento');
+
+% --- Executes during object creation, after setting all properties.
+function edit4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

@@ -1,0 +1,166 @@
+
+ ----------General Information  ----------
+
+Current Time & Date: 
+14-Nov-2012 13:05:24
+
+Operating System: 
+Microsoft Windows [Version 6.1.7601] 
+
+Hardware Configuration:
+x86 Family 6 Model 7 Stepping 10, GenuineIntel
+The measured CPU speed is 3000 MHz
+RAM is 4061 MB
+Swap space is 8120 MB
+
+PROCESSOR_ARCHITECTURE = x86
+PROCESSOR_ARCHITEW6432 = AMD64
+
+MATLAB version: 
+7.12.0.635 (R2011a)
+
+Data Acquisition Toolbox version: 
+       Name: 'Data Acquisition Toolbox'
+    Version: '2.18'
+    Release: '(R2011a)'
+       Date: '09-Mar-2011'
+
+
+MATLAB License Number:
+161052
+
+ ----------Memory Information:  ----------
+   MemoryLoad =   44 %
+    TotalPhys =    3.97 GB 
+    AvailPhys =    2.22 GB 
+TotalPageFile =    4.00 GB 
+AvailPageFile =    4.00 GB 
+ TotalVirtual =    4.00 GB 
+ AvailVirtual =    3.30 GB 
+      UsedDaq =    0.00 bytes 
+
+ ----------MATLAB root directory:  ----------
+C:\Program Files (x86)\MATLAB\R2011a
+
+ ----------Data Acquisition Toolbox directory:  ----------
+C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq
+
+ ----------Available hardware:  ----------
+
+          ToolboxName: 'Data Acquisition Toolbox'
+       ToolboxVersion: '2.18 (R2011a)'
+        MATLABVersion: '7.12 (R2011a)'
+    InstalledAdaptors: {'winsound'}
+
+
+ ----------Adaptor List ----------
+
+    'winsound'
+
+
+ ----------ni adaptor: ----------
+
+ ----------Registering adaptor: ni ----------
+
+Error registering ni adaptor
+
+Could not register adaptor ni: 'ni.dll' not found.  Make sure it is on the MATLAB path.
+
+Error displaying DAQHWINFO for adaptor ni
+Failure to find requested data acquisition device: ni.
+
+ ----------Session Based Vendors:  ----------
+
+Data acquisition vendor 'National Instruments':
+
+            ID: 'ni'
+      FullName: 'National Instruments'
+AdaptorVersion: '2.18 (R2011a)'
+ DriverVersion: '9.1 NI-DAQmx'
+ IsOperational: true
+
+
+ ----------Session Based Devices:  ----------
+
+No data acquisition devices available.
+
+ ----------MATLAB path:  ----------
+
+		MATLABPATH
+
+	C:\Users\fsotres\Documents\MATLAB
+	C:\Users\fsotres\Documents\MATLAB\Valentia
+	C:\Users\fsotres\Documents\MATLAB\Valentia\valentia
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\general
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\ops
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\lang
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\elmat
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\randfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\elfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\specfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\matfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\datafun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\polyfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\funfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\sparfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\scribe
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\graph2d
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\graph3d
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\specgraph
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\graphics
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\uitools
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\strfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\imagesci
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\iofun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\audiovideo
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\timefun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\datatypes
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\verctrl
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\codetools
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\helptools
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\winfun
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\winfun\net
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\demos
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\timeseries
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\hds
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\guide
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\plottools
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\local
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\matlab\datamanager
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\simulink
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\instrument
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\asynciolib
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\comparisons
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\controllib\general
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\controllib\graphics
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daq
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daqguis
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daqdemos
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daqblks\daqblks
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daqblks\daqmasks
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\daq\daqblks\daqmex
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\dastudio
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\sam\m3i
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\eml\eml
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\siglib
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\signal\signal
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\signal\sigtools
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\signal\sptoolgui
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\signal\sigdemos
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\filterdesignlib
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\spcuilib
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\stats\stats
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\stats\statsdemos
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\stats\classreg
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\statslib
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\testmeaslib\general
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\testmeaslib\graphics
+	C:\Program Files (x86)\MATLAB\R2011a\toolbox\shared\testmeaslib\simulink
+
+ ---------- ----------End test ---------- ----------
+
+This information has been saved in the text file:
+daqtest.txt
+
+If any errors occurred, please visit the MathWorks Technical Support Web Site
+at http://www.mathworks.com/contact_TS.html 

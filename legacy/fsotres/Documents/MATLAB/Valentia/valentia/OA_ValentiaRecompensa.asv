@@ -1,0 +1,32 @@
+function OA_ValentiaRecompensa(OA,Lado)
+%Lado: 'I'  izquierdo, 'D'  derecho
+%Sentido: 1 derecha,  2 izquierda 
+
+load('c:
+
+if(strcmp(Lado,'D')) 
+    OA.RD=not(OA.RD);
+    guidata(hObject, handles);
+    Datos(1:2)=OA.RD;
+    control=15;   
+end
+if(strcmp(Lado,'I'))
+    OA.RI=not(OA.RI);
+    guidata(hObject, handles);
+    Datos(1:2)=OA.RI;
+    control=16;  
+end
+
+escribePto(OA,[23:24],Datos);
+escribePto(OA,[control],1);
+escribePto(OA,[control],0);
+
+pause(2)
+
+Datos=[0 0];
+escribePto(OA,[23:24],Datos);
+escribePto(OA,[control],1);
+escribePto(OA,[control],0);
+
+
+

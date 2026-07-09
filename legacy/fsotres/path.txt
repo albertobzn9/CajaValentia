@@ -1,0 +1,3 @@
+Asi llegamos a fsotres. lo que ves es lo que hay en el usuario menos este archivo. como ves ya ni siquiera existe este usuario pero como todo esta hardcoded con path a fsotres pues se tuvo que quedar asi.
+
+C:\Users\fsotres

@@ -1,0 +1,261 @@
+
+ ----------General Information  ----------
+
+Current Time & Date: 
+23-Oct-2012 18:07:47
+
+Operating System: 
+Microsoft Windows XP [Versi¢n 5.1.2600] 
+
+
+MATLAB version: 
+7.6.0.324 (R2008a)
+
+Data Acquisition Toolbox version: 
+       Name: 'Data Acquisition Toolbox'
+    Version: '2.12'
+    Release: '(R2008a)'
+       Date: '23-Jan-2008'
+
+
+MATLAB License Number:
+161051
+
+ ----------Memory Information:  ----------
+       MemoryLoad: 82
+        TotalPhys: 527220736
+        AvailPhys: 92385280
+    TotalPageFile: 886022144
+    AvailPageFile: 392753152
+     TotalVirtual: 2.1474e+009
+     AvailVirtual: 1.5248e+009
+          UsedDaq: 0
+
+
+ ----------MATLAB root directory:  ----------
+E:\Archivos de programa\MATLAB\R2008a
+
+ ----------Data Acquisition Toolbox directory:  ----------
+e:\archivos de programa\matlab\r2008a\toolbox\daq
+
+ ----------MATLAB path:  ----------
+
+		MATLABPATH
+
+	C:\Documents and Settings\Administrador\Mis documentos\MATLAB
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\general
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\ops
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\lang
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\elmat
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\elfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\specfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\matfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\datafun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\polyfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\funfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\sparfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\scribe
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\graph2d
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\graph3d
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\specgraph
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\graphics
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\uitools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\strfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\imagesci
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\iofun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\audiovideo
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\timefun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\datatypes
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\verctrl
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\codetools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\helptools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\winfun
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\demos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\timeseries
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\hds
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\guide
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\plottools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\local
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\controllib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\dastudio
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\matlab\datamanager
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\curvefit\curvefit
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\curvefit\cftoolgui
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\optimlib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daq
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daqguis
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daqdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daqblks\daqblks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daqblks\daqmasks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daqblks\daqmex
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\testmeaslib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\filterdesign\filterdesign
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\filterdesign\quantization
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\filterdesign\filtdesdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\filterdesignlib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\fuzzy\fuzzy
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\fuzzy\fuzdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\gads
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\gads\gads
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\gads\gadsdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\images
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\imuitools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\imdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\iptutils
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\imageslib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\medformats
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\spcuilib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\images\iptformats
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\imaq\imaq
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\imaqlib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\imaq\imaqdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\imaq\imaqblks\imaqblks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\imaq\imaqblks\imaqmasks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\imaq\imaqblks\imaqmex
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\instrument\instrument
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\instrument\instrumentdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\instrument\instrumentblks\instrumentblks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\instrument\instrumentblks\instrumentmex
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\instrument\instrumentblks\instrumentmasks
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nncontrol
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nndemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnanalyze
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nncustom
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nndistance
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnformat
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nninit
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnlearn
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnnetinput
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnnetwork
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnperformance
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnplot
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnprocess
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnsearch
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nntopology
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nntrain
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nntransfer
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnet\nnweight
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnguis
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnguis\nftool
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnguis\nntool
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnobsolete
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnresource
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnutils
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnguis\nnguiutils
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nndemos\nndatasets
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\nnet\nnguis\nntraintool
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\optim\optim
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\optim\optimdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\signal\signal
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\signal\sigtools
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\signal\sptoolgui
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\signal\sigdemos
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\stats
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\shared\statslib
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\wavelet\wavelet
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\wavelet\wmultisig1d
+	E:\Archivos de programa\MATLAB\R2008a\toolbox\wavelet\wavedemo
+	E:\Archivos de programa\MATLAB\R2008a\work
+
+ ----------Available hardware:  ----------
+
+          ToolboxName: 'Data Acquisition Toolbox'
+       ToolboxVersion: '2.12 (R2008a)'
+        MATLABVersion: '7.6 (R2008a)'
+    InstalledAdaptors: {3x1 cell}
+
+
+ ----------Adaptor List ----------
+
+    'nidaq'
+    'parallel'
+    'winsound'
+
+
+ ----------nidaq adaptor: ----------
+
+ ----------Registering adaptor: nidaq ----------
+
+Successfully registered nidaq adaptor
+
+ ----------Adaptor Information for adaptor nidaq ----------
+
+
+adaptorInfo = 
+
+           AdaptorDllName: [1x75 char]
+        AdaptorDllVersion: '2.12 (R2008a)'
+              AdaptorName: 'nidaq'
+               BoardNames: {'USB-6501'}
+        InstalledBoardIds: {'Dev2'}
+    ObjectConstructorName: {''  ''  'digitalio('nidaq','Dev2')'}
+
+
+ ----------Adaptor DLL Name ----------
+
+E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daq\private\mwnidaqmx.dll
+
+ ----------Adaptor Name ----------
+
+nidaq
+
+ ----------Object Constructor Names  ----------
+
+digitalio('nidaq','Dev2')
+
+ ----------Additional Adaptor Information for adaptor nidaq ----------
+
+
+xtraInfo = 
+
+           AdaptorDllName: [1x73 char]
+        AdaptorDllVersion: '2.12 (R2008a)'
+              AdaptorName: 'nidaq'
+               BoardNames: {1x0 cell}
+        InstalledBoardIds: {1x0 cell}
+    ObjectConstructorName: {0x3 cell}
+
+
+ ----------Adaptor DLL Name ----------
+
+E:\Archivos de programa\MATLAB\R2008a\toolbox\daq\daq\private\mwnidaq.dll
+
+ ----------Adaptor Name ----------
+
+nidaq
+
+ ----------Creating digitalio('nidaq','Dev2') object for adaptor nidaq ----------
+
+Display Summary of DigitalIO (DIO) Object Using 'USB-6501'.
+
+         Port Parameters:  Port 0 is port configurable for reading and writing.
+                           Port 1 is port configurable for reading and writing.
+                           Port 2 is port configurable for reading and writing.
+                           
+           Engine status:  Engine not required.
+
+DIO object contains no lines.
+
+
+
+ans = 
+
+                AdaptorName: 'nidaqmx'
+                 DeviceName: 'USB-6501'
+                         ID: 'Dev2'
+                       Port: [1x3 struct]
+              SubsystemType: 'DigitalIO'
+                 TotalLines: 24
+    VendorDriverDescription: 'National Instruments NIDAQmx driver'
+        VendorDriverVersion: '9.0'
+
+
+ ---------- ----------End test ---------- ----------
+
+This information has been saved in the text file:
+daqtest.txt
+
+If any errors occurred, please e-mail this information to:
+support@mathworks.com
