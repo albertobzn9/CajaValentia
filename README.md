@@ -1,21 +1,25 @@
 # CajaValentia
 
-Versioned recovery and modernization record for the Caja Valentia behavioral
-system.
+Private research software archive for the CMC/Valentia behavioral box. This
+repository makes the evolution of the MATLAB program explicit while preserving
+the historical program needed to understand old data and behavior.
 
-## Current Milestone
+## Releases
 
-This first commit is **Legacy Baseline**. It preserves the historical `fsotres`
-user snapshot exactly as captured from the laboratory computer. The program had
-two MATLAB trees that were both present on the MATLAB path:
+| Tag | Name | Meaning |
+| --- | --- | --- |
+| `v0.1.0` | Legacy Baseline | Untouched `fsotres` runtime snapshot, including both MATLAB code trees that were present on the lab computer. |
+| `v1.0.0` | Portable Core | Self-contained USB package with the daily-use MATLAB menu and its required dependencies. |
 
-- `legacy/fsotres/MATLAB`
-- `legacy/fsotres/Documents/MATLAB`
+## Read First
 
-This is an archival baseline, not a supported runtime. Later milestones add the
-portable USB program and the sound-only control conditions.
+- [`matlab/README_USO_USB.md`](matlab/README_USO_USB.md): operating from USB.
+- [`docs/README.md`](docs/README.md): protocol, hardware, architecture, and decisions.
+- [`HISTORY.md`](HISTORY.md): why the releases exist.
+- [`AGENTS.md`](AGENTS.md): safety rules for people and coding agents changing the program.
 
-## Integrity
+## Scope and Safety
 
-`legacy/fsotres-MANIFEST.sha256` records SHA-256 hashes for the archived files.
-Do not edit `legacy/fsotres`; future work belongs outside this directory.
+This is a private research repository. The `legacy/` tree is read-only. Do not
+operate physical hardware without a person present at the box. Generated session
+results are intentionally not tracked by Git.

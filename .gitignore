@@ -1,0 +1,9 @@
+.DS_Store
+*.asv
+*.tmp
+*.log
+
+# Session output is generated on the lab computer.
+matlab/resultados/*
+!matlab/resultados/README.md
+matlab/diagnosticos_lab/
