@@ -11,6 +11,9 @@
 - The first MATLAB run exposed a missing `ModoSonidoSolo` return value in the
   discrimination sequence helper. It was fixed, then the full non-hardware
   suite was rerun successfully.
+- The expanded full suite was executed successfully in MATLAB R2026a. It covers
+  risk `0`, `0.1`, `0.15`, `0.2`, `0.3`, and `0.6`, plus CP durations 30, 60,
+  90, and 120 seconds.
 
 ## Pending
 

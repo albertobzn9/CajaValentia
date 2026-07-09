@@ -11,6 +11,7 @@ the historical program needed to understand old data and behavior.
 | `v0.1.0` | Legacy Baseline | Untouched `fsotres` runtime snapshot, including both MATLAB code trees that were present on the lab computer. |
 | `v1.0.0` | Portable Core | Self-contained USB package with the daily-use MATLAB menu and its required dependencies. |
 | `v2.0.0-rc.1` | Sound-Only Controls | Candidate that adds sound-only controls to discrimination and dangerous crossings. Hardware validation is still required. |
+| `v2.0.0-rc.2` | Software Validation | Candidate with an expanded no-hardware test suite and a documented R2026a migration path. |
 
 ## Read First
 

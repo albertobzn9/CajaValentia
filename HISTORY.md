@@ -20,3 +20,10 @@ accidentally resolving an older global menu.
 Integrates sound-only control events into both discrimination (`ValentiaE`) and
 dangerous crossings (`ValentiaE2`). It is a release candidate until MATLAB and
 physical-box checks are completed.
+
+## v2.0.0-rc.2 - Software Validation
+
+Adds a single no-hardware suite across the relevant discrimination risks and CP
+durations. It also records the hardware migration constraint: the NI USB-6501
+is current-supported, but the program's legacy DAQ and audio calls must be
+rewritten before MATLAB R2026a can control the box.

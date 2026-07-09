@@ -3,6 +3,12 @@
 This changelog records behaviorally meaningful changes. Git commits retain the
 lower-level implementation history.
 
+## v2.0.0-rc.2 - Software Validation
+
+- Adds one no-hardware suite for the relevant discrimination risks and CP
+  durations; it passes in MATLAB R2026a.
+- Documents the required migration from legacy DAQ/audio APIs to MATLAB R2026a.
+
 ## v2.0.0-rc.1 - Sound-Only Controls
 
 - Adds discrimination sound-only trials when risk is greater than zero.
