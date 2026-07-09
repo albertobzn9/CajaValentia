@@ -10,6 +10,7 @@ the historical program needed to understand old data and behavior.
 | --- | --- | --- |
 | `v0.1.0` | Legacy Baseline | Untouched `fsotres` runtime snapshot, including both MATLAB code trees that were present on the lab computer. |
 | `v1.0.0` | Portable Core | Self-contained USB package with the daily-use MATLAB menu and its required dependencies. |
+| `v2.0.0-rc.1` | Sound-Only Controls | Candidate that adds sound-only controls to discrimination and dangerous crossings. Hardware validation is still required. |
 
 ## Read First
 
@@ -21,5 +22,6 @@ the historical program needed to understand old data and behavior.
 ## Scope and Safety
 
 This is a private research repository. The `legacy/` tree is read-only. Do not
-operate physical hardware without a person present at the box. Generated session
-results are intentionally not tracked by Git.
+operate physical hardware or use an unvalidated version with animals without a
+person present at the box. Generated session results are intentionally not
+tracked by Git.

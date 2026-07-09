@@ -46,7 +46,7 @@ end
 
 
 %Los resultados se guardan con el siguiente formato:
-%[Ensayo 1 Electrico Latencia Tiempo ContadorTotalIzq ContadorTotalDer]];
+%[Evento Lado Electrico Latencia Tiempo ContadorTotalIzq ContadorTotalDer Desplazamiento TipoEvento];
 %Ensayo: numero de ensayo
 %Lado:1 izquierdo, 0 Derecho
 %Electrico: 0 sin corriente, 1 con corriente
@@ -54,6 +54,7 @@ end
 %Tiempo transcurrido desde el inicio del experimento
 %ContadorTotalIzq
 %ContadorTotalDer
+%TipoEvento: 1 conflicto con comida, 2 sonido/parrilla sin luz ni recompensa
 
 
 
@@ -126,9 +127,9 @@ set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
 set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
 set(handles.edit14,'String','5000'); %amplitud del estimulo auditivo D
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
-set(handles.edit16,'String','2'); %m·ximo n˙mero de repeticiones por lado
+set(handles.edit16,'String','2'); %m√°ximo n√∫mero de repeticiones por lado
 set(handles.edit17,'String','2');  %pellets por recompensa ensayo riesgo
-set(handles.edit18,'String','600'); %maxima duracion de ensayo riesgo (s)
+    set(handles.edit18,'String','30'); %dia 17; operador cambia 30/30/60/90/120 s
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
 
 
@@ -168,6 +169,10 @@ TultimaP=0;
 
 Riesgo=str2num(get(handles.edit1,'String'));
 NumRepLado=str2num(get(handles.edit16,'String'));
+if(Riesgo~=1)
+    errordlg('Esta version experimental es solo para cruces peligrosos: use Riesgo = 1.','Cruces peligrosos');
+    return
+end
 %con el valor de riesgo y el numero max de repeticiones por lado se genera una secuencia de
 %1000 ensayos
 if(Riesgo==1)
@@ -190,6 +195,7 @@ if(PalXRec<=0)
 end
 
 Ensayo=1;
+NumeroEvento=1;
 R1=tic;
 R0=tic;
 TultimaPalanca=toc(R1);
@@ -222,6 +228,17 @@ end
 
 OA_ValentiaResetPalancas(handles.OA);
 
+TiemposSonidoSolo=[9 18 27]*60;
+ProximoSonidoSolo=1;
+
+msgbox(sprintf(['Modo experimental CP: sonido solo cerca de los min 9, 18 y 27.\n' ...
+    'Cada evento dura lo que indique "maxima duracion de ensayo riesgo".\n' ...
+    'No hay luz ni pellet; el evento no termina si la rata cruza.']))
+
+% Este reloj excluye la habituacion inicial y el mensaje de confirmacion.
+% Los eventos de sonido solo se programan durante los 30 min de conducta.
+RComportamiento=tic;
+
 
 EnsayoValido=0;
 set(handles.edit19,'String',num2str(EnsayoValido));
@@ -236,6 +253,34 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
+
+    % El boton Terminar puede haberse presionado durante el ITI bloqueante.
+    load('ControlTarea','CT_Ejecuta');
+    if(CT_Ejecuta==0)
+        break
+    end
+
+    % No interrumpimos un ensayo ni su ITI. Si ya toca un sonido solo,
+    % corre aqui: despues del ITI y antes del siguiente ensayo normal.
+    if(ProximoSonidoSolo<=size(TiemposSonidoSolo,2) && ...
+            toc(RComportamiento)>=TiemposSonidoSolo(ProximoSonidoSolo))
+        DuracionSonidoSolo=str2num(get(handles.edit18,'String'));
+        freqRiesgo=str2num(get(handles.edit14,'String'));
+        [FilaSonidoSolo,ContadorTI,ContadorTD,Detenido] = ...
+            OA_EjecutaSonidoSoloCP(handles,Secuencia(Ensayo,1), ...
+            DuracionSonidoSolo,freqRiesgo,NumeroEvento,R0,ContadorTI,ContadorTD);
+        set(handles.edit6,'String',num2str(ContadorTI));
+        set(handles.edit7,'String',num2str(ContadorTD));
+
+        if(Detenido==1)
+            break
+        end
+
+        Resultados=[Resultados;FilaSonidoSolo];
+        set(handles.uitable1,'Data',Resultados);
+        NumeroEvento=NumeroEvento+1;
+        ProximoSonidoSolo=ProximoSonidoSolo+1;
+    end
     
     EnsayoMismoLado=0;
     if((Ensayo>1)&&(Secuencia(Ensayo-1,1)==Secuencia(Ensayo,1)))
@@ -335,7 +380,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
         
         if(CDurMaxEns==0) %si la rata NO cruzo
-            Resultados=[Resultados;[Ensayo -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns]];
+            Resultados=[Resultados;[NumeroEvento -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns 1]];
             set(handles.uitable1,'Data',Resultados);
         end    
         
@@ -371,7 +416,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 end
                 if((DI>=PalXRec)&& EnsayoMismoLado==0) %%si no se repite el mismo lado
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
-                    Resultados=[Resultados;[Ensayo 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq]];
+                    Resultados=[Resultados;[NumeroEvento 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq 1]];
                     set(handles.uitable1,'Data',Resultados);
                     for iR=1:PelletsEvento
                         'recomp'
@@ -384,7 +429,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DI>=PalXRec)&& EnsayoMismoLado==1) %%si se repite el mismo lado
                     if(toc(R1)>(TultimaPalanca+IntVar))
                         TultimaPalanca=toc(R1);  %guardamos el tiempo de la ultima palanca
-                        Resultados=[Resultados;[Ensayo 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq]];
+                        Resultados=[Resultados;[NumeroEvento 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq 1]];
                         set(handles.uitable1,'Data',Resultados);
                         for iR=1:PelletsEvento
                              'recomp'
@@ -404,11 +449,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion m·xima
+        end %si la rata cruza antes de la duracion m√°xima
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'I',2); %nos aseguramos que la palanca der este afuera
         %           end
         Ensayo=Ensayo+1;
+        NumeroEvento=NumeroEvento+1;
         
         
         stop(handles.GS);
@@ -486,7 +532,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
 
         if(CDurMaxEns==0) %si la rata NO cruzo
-            Resultados=[Resultados;[Ensayo -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns]];
+            Resultados=[Resultados;[NumeroEvento -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns 1]];
             set(handles.uitable1,'Data',Resultados);
         end    
         
@@ -521,7 +567,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 end
                 if((DD>=PalXRec)&& EnsayoMismoLado==0)
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
-                    Resultados=[Resultados;[Ensayo 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer]];
+                    Resultados=[Resultados;[NumeroEvento 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer 1]];
                     set(handles.uitable1,'Data',Resultados);
                     for iR=1:PelletsEvento
                         OA_ValentiaRecompensaD(handles.OA);
@@ -533,7 +579,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DD>=PalXRec)&& EnsayoMismoLado==1)
                     if(toc(R1)>(TultimaPalanca+IntVar)) %verificamos que la respuesta se presente despues de un retardo
                         TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
-                        Resultados=[Resultados;[Ensayo 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer]];
+                        Resultados=[Resultados;[NumeroEvento 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer 1]];
                         set(handles.uitable1,'Data',Resultados);
                         for iR=1:PelletsEvento
                             OA_ValentiaRecompensaD(handles.OA);
@@ -551,12 +597,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion m·xima
+        end %si la rata cruza antes de la duracion m√°xima
         
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'D',2); %nos aseguramos que la palanca der este afuera
         %           end
         Ensayo=Ensayo+1;
+        NumeroEvento=NumeroEvento+1;
         
         
         stop(handles.GS);

@@ -14,3 +14,9 @@ explains old function shadowing and is essential for audit/reproducibility.
 Extracts the daily-use program and its dependencies into a self-contained USB
 folder. `abrir1` is the supported entry point; the local `abrir` wrapper avoids
 accidentally resolving an older global menu.
+
+## v2.0.0-rc.1 - Sound-Only Controls
+
+Integrates sound-only control events into both discrimination (`ValentiaE`) and
+dangerous crossings (`ValentiaE2`). It is a release candidate until MATLAB and
+physical-box checks are completed.

@@ -7,4 +7,6 @@ Start with the item closest to the question:
 - [`architecture/01_mapa_modulos_matlab_limpio.md`](architecture/01_mapa_modulos_matlab_limpio.md): visual module map.
 - [`architecture/02_inventario_modulos_matlab_limpio.md`](architecture/02_inventario_modulos_matlab_limpio.md): each active module in plain language.
 - [`architecture/04_backend_valentiae_aleatorizacion.md`](architecture/04_backend_valentiae_aleatorizacion.md): what risk, randomization, and trial count do.
+- [`sound-only-controls.md`](sound-only-controls.md): exact behavioral contract for the v2 candidate.
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
+- [`validation.md`](validation.md): what has and has not been tested.

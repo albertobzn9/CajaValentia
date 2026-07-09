@@ -16,12 +16,13 @@ C.
 
 ## Instrucciones Para El Operador
 
-1. Copiar la carpeta completa `06_matlab_limpio_usb` directo al USB.
+1. Copiar la carpeta `matlab` de esta version al USB y renombrarla
+   `CajaValentia`.
 2. Abrir MATLAB R2011a.
 3. En MATLAB, cambiar el **Current Folder** a la carpeta del USB:
 
    ```text
-   Z:\06_matlab_limpio_usb
+   Z:\CajaValentia
    ```
 
 4. En la Command Window escribir:
@@ -61,20 +62,20 @@ copia debe seguir funcionando.
 La unidad esperada en Windows es `Z:` y la carpeta debe quedar asi:
 
 ```text
-Z:\06_matlab_limpio_usb
+Z:\CajaValentia
 ```
 
 El codigo no depende de rutas locales antiguas ni de la carpeta
 `04_codigo_matlab_legacy`. Los archivos de estado se usan desde:
 
 ```text
-Z:\06_matlab_limpio_usb\Valentia
+Z:\CajaValentia\Valentia
 ```
 
 Los resultados se guardan/cargan por defecto desde:
 
 ```text
-Z:\06_matlab_limpio_usb\resultados
+Z:\CajaValentia\resultados
 ```
 
 ## Recomendacion De Prueba
@@ -82,10 +83,23 @@ Z:\06_matlab_limpio_usb\resultados
 Antes de usar con animales:
 
 1. Abrir MATLAB R2011a.
-2. Cambiar el **Current Folder** a `Z:\06_matlab_limpio_usb`.
+2. Cambiar el **Current Folder** a `Z:\CajaValentia`.
 3. Ejecutar `abrir1`.
 4. Probar que cada opcion del menu abre su GUI.
 5. Cerrar sin iniciar sesion.
 6. Confirmar que no aparece error de ruta ni de archivo `.mat` faltante.
 
 Si aparece un error, guardar el mensaje exacto y en que opcion del menu ocurrio.
+
+## Cambios En Esta Version Candidata
+
+- `ValentiaE`: con riesgo mayor que cero, cada bloque de diez eventos de comida
+  agrega un evento de sonido/parrilla sin luz ni pellet. Con riesgo cero no se
+  agrega ese evento.
+- `ValentiaE2`: programa eventos de sonido/parrilla sin luz ni pellet cerca de
+  los minutos 9, 18 y 27 de la conducta. La duracion se toma del campo de
+  ensayo de riesgo.
+
+Antes de usar estos cambios con animales, ejecutar las pruebas de simulacion y
+hacer una prueba supervisada de MATLAB R2011a y de la caja. En el repositorio
+fuente, el estado de validacion queda documentado en `docs/validation.md`.

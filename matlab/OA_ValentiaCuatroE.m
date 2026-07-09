@@ -54,6 +54,7 @@ end
 %Tiempo transcurrido desde el inicio del experimento
 %ContadorTotalIzq
 %ContadorTotalDer
+%TipoEvento: 0 seguro, 1 conflicto con comida, 2 sonido/parrilla sin comida
 
 
 
@@ -126,7 +127,7 @@ set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
 set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
 set(handles.edit14,'String','5000'); %Frecuencia del estimulo auditivo de Riesgo D
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
-set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
+set(handles.edit16,'String','3'); %mÃ¡ximo nÃºmero de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
@@ -156,6 +157,21 @@ function Inicio_Callback(hObject, eventdata, handles)
 
 
 
+Riesgo=str2num(get(handles.edit1,'String'));
+NumRepLado=str2num(get(handles.edit16,'String'));
+NumEnsayos=str2num(get(handles.edit4,'String'));
+if(Riesgo==1)
+    NumRepLado=1;
+    set(handles.edit16,'String','1');
+end
+
+try
+    [Secuencia,ModoSonidoSolo]=OA_SecuenciaDiscriminacionSonidoSolo(NumEnsayos,NumRepLado,Riesgo);
+catch ME
+    errordlg(ME.message,'Discriminacion experimental');
+    return
+end
+
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 CT_Ejecuta=1;
 save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
@@ -165,17 +181,6 @@ Resultados=[];
 ContadorTD=0;
 ContadorTI=0;
 TultimaP=0;
-
-Riesgo=str2num(get(handles.edit1,'String'));
-NumRepLado=str2num(get(handles.edit16,'String'));
-%con el valor de riesgo y el numero max de repeticiones por lado se genera una secuencia de
-%1000 ensayos
-if(Riesgo==1)
-    NumRepLado=1;
-    set(handles.edit16,'String','1');
-end
-%[Secuencia]=OA_SecuenciaEnsayos2(NumRepLado,Riesgo);
-[Secuencia]=OA_SecuenciaEnsayos3(NumRepLado,Riesgo);
 
 %limpiamos contadores de palanqueos
 set(handles.edit6,'String','0'); %lado izq
@@ -193,6 +198,11 @@ Ensayo=1;
 R1=tic;
 R0=tic;
 TultimaPalanca=toc(R1);
+
+if(ModoSonidoSolo==1)
+    msgbox(sprintf(['Modo experimental: cada bloque tiene 10 eventos con comida y 1 de sonido solo.\n' ...
+        'Riesgo y sonido solo solo aparecen cuando cambia el lado.']))
+end
 
 
 THabitua=str2num(get(handles.edit15,'String'));
@@ -252,7 +262,35 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     elseif(caso==0)
         Lado='D';
     end
-    
+
+    TipoEvento=Secuencia(Ensayo,2);
+    if(TipoEvento==2)
+        DuracionSonidoSolo=180;
+        DuracionAudio=DuracionSonidoSolo+1;
+        if(strcmp(Lado,'D')==1)
+            OA_Sonidos(handles.GS,DuracionAudio,freqRiesgo,1,0,0);
+        else
+            OA_Sonidos(handles.GS,DuracionAudio,0,0,freqRiesgo,1);
+        end
+        pause(.1)
+        OA_ValentiaEstimuloD(handles.OA,2,0); % LED que marca estimulacion electrica
+        pause(.1)
+        OA_ValentiaElectrico(handles.OA,1);
+        R2=tic;
+
+        [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = ...
+            OA_MonitoreaSonidoSolo(handles.OA,DuracionSonidoSolo,ContadorTI,ContadorTD);
+        set(handles.edit6,'String',num2str(ContadorTI));
+        set(handles.edit7,'String',num2str(ContadorTD));
+
+        if(Detenido==0)
+            Resultados=[Resultados;cmc_fila_resultado(Ensayo,LadoResultado,1,DuracionSonidoSolo, ...
+                toc(R0),ContadorTI,ContadorTD,LatenciaCruce,2,ModoSonidoSolo)];
+            set(handles.uitable1,'Data',Resultados);
+        end
+        Ensayo=Ensayo+1;
+        stop(handles.GS);
+    else
     SonidoIniS=get(handles.checkbox2,'Value');
     SonidoIniR=get(handles.checkbox12,'Value');
     %realizar ensayo lado izquierdo
@@ -338,7 +376,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
         
         if(CDurMaxEns==0) %si la rata NO cruzo
-            Resultados=[Resultados;[Ensayo -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns]];
+            Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
+                toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
             set(handles.uitable1,'Data',Resultados);
         end    
         
@@ -374,7 +413,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 end
                 if((DI>=PalXRec)&& EnsayoMismoLado==0) %%si no se repite el mismo lado
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
-                    Resultados=[Resultados;[Ensayo 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq]];
+                    Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
+                        toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
                     set(handles.uitable1,'Data',Resultados);
                     for iR=1:PelletsEvento
                         'recomp'
@@ -387,7 +427,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DI>=PalXRec)&& EnsayoMismoLado==1) %%si se repite el mismo lado
                     if(toc(R1)>(TultimaPalanca+IntVar))
                         TultimaPalanca=toc(R1);  %guardamos el tiempo de la ultima palanca
-                        Resultados=[Resultados;[Ensayo 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq]];
+                        Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
+                            toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
                         set(handles.uitable1,'Data',Resultados);
                         for iR=1:PelletsEvento
                              'recomp'
@@ -407,7 +448,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion máxima
+        end %si la rata cruza antes de la duracion mÃ¡xima
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'I',2); %nos aseguramos que la palanca der este afuera
         %           end
@@ -496,7 +537,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
 
         if(CDurMaxEns==0) %si la rata NO cruzo
-            Resultados=[Resultados;[Ensayo -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns]];
+            Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
+                toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
             set(handles.uitable1,'Data',Resultados);
         end    
         
@@ -531,7 +573,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 end
                 if((DD>=PalXRec)&& EnsayoMismoLado==0)
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
-                    Resultados=[Resultados;[Ensayo 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer]];
+                    Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
+                        toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
                     set(handles.uitable1,'Data',Resultados);
                     for iR=1:PelletsEvento
                         OA_ValentiaRecompensaD(handles.OA);
@@ -543,7 +586,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DD>=PalXRec)&& EnsayoMismoLado==1)
                     if(toc(R1)>(TultimaPalanca+IntVar)) %verificamos que la respuesta se presente despues de un retardo
                         TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
-                        Resultados=[Resultados;[Ensayo 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer]];
+                        Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
+                            toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
                         set(handles.uitable1,'Data',Resultados);
                         for iR=1:PelletsEvento
                             OA_ValentiaRecompensaD(handles.OA);
@@ -561,7 +605,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion máxima
+        end %si la rata cruza antes de la duracion mÃ¡xima
         
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'D',2); %nos aseguramos que la palanca der este afuera
@@ -571,6 +615,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         
         stop(handles.GS);
     end  %ensayo lado derecho
+    end  %sonido solo o ensayo con comida
     
     OA_ValentiaElectrico(handles.OA,0)
     pause(.5)
@@ -582,7 +627,11 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(CT_Ejecuta==0)
         break;
     end
-    FinEnsayos=str2num(get(handles.edit4,'String'));
+    if(ModoSonidoSolo==1)
+        FinEnsayos=size(Secuencia,1);
+    else
+        FinEnsayos=str2num(get(handles.edit4,'String'));
+    end
     if(Ensayo>=FinEnsayos+1)
         break
     end
@@ -1668,4 +1717,12 @@ function edit23_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+
+function Fila = cmc_fila_resultado(Ensayo,Lado,Electrico,Latencia,TiempoAbs,ContadorTI,ContadorTD,Desplazamiento,TipoEvento,ModoSonidoSolo)
+% Mantiene ocho columnas en cruces seguros y agrega tipo solo en DIS experimental.
+Fila = [Ensayo Lado Electrico Latencia TiempoAbs ContadorTI ContadorTD Desplazamiento];
+if ModoSonidoSolo == 1
+    Fila = [Fila TipoEvento];
 end
