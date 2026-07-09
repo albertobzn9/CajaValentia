@@ -125,7 +125,7 @@ set(handles.edit10,'String','1000'); %frecuencia del estimulo auditivo I
 set(handles.edit11,'String','1'); %amplitud del estimulo auditivo I
 set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
 set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
-set(handles.edit14,'String','5000'); %Frecuencia del estimulo auditivo de Riesgo D
+set(handles.edit14,'String',num2str(cmc_frecuencia_ruido_predeterminada)); %Frecuencia de ruido de riesgo
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo

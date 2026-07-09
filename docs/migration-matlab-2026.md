@@ -35,11 +35,13 @@ identifier, not the hardware model.
 2. On a separate Windows computer, install MATLAB R2022a or newer through
    R2026a, Data Acquisition
    Toolbox, and the NI-DAQmx support package.
-3. Build a small hardware adapter that first reproduces only the existing 24
+3. Install the Data Acquisition Toolbox Support Package for Windows Sound Cards
+   to use the modern DirectSound audio adapter at 20 kHz.
+4. Build a small hardware adapter that first reproduces only the existing 24
    digital lines. Verify every input and output with the box disconnected from
    animals.
-4. Migrate audio separately and measure left/right sound timing.
-5. Connect the unchanged behavioral logic to the new adapter, then compare a
+5. Measure left/right sound timing and the 15 kHz noise output.
+6. Connect the unchanged behavioral logic to the new adapter, then compare a
    supervised mock session against R2011a before any animal session.
 
 ## R2011a Installer on This Mac

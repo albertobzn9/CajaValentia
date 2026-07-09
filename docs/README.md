@@ -10,5 +10,6 @@ Start with the item closest to the question:
 - [`sound-only-controls.md`](sound-only-controls.md): exact behavioral contract for the v2 candidate.
 - [`migration-matlab-2026.md`](migration-matlab-2026.md): what migration requires and why it is feasible.
 - [`modern-hardware-lab-test.md`](modern-hardware-lab-test.md): safe test order for the modern branch.
+- [`audio-contract.md`](audio-contract.md): shared sound rule and validation limits.
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
 - [`validation.md`](validation.md): what has and has not been tested.

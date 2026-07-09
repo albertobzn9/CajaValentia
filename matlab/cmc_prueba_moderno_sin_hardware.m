@@ -3,6 +3,7 @@ function cmc_prueba_moderno_sin_hardware
 
 cmc_setup_paths();
 cmc_prueba_sin_hardware_completa();
+cmc_prueba_compatibilidad_audio();
 
 Tono = CMCGeneraSonido(1,1000,1,0,0,1.5);
 Ruido = CMCGeneraSonido(1,12000,1,12000,1,1.5);

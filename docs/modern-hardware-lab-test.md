@@ -11,6 +11,7 @@ the existing GUIDE GUIs.
 - MATLAB R2022a, R2023a, or newer through R2026a.
 - Data Acquisition Toolbox.
 - Data Acquisition Toolbox Support Package for NI-DAQmx Devices.
+- Data Acquisition Toolbox Support Package for Windows Sound Cards.
 - Detected NI USB-6501.
 
 Do not replace the production R2011a/NI driver stack on the only working system
@@ -26,8 +27,10 @@ available throughout.
 3. Run `cmc_modern_preflight`.
    It detects and configures the NI USB-6501 but does **not** write an output.
    Expected result: `OK preflight: Dev2 (USB-6501)`.
-4. Save the full MATLAB output and stop. This is the first decision point.
-5. Only with a trained person at the box, run `cmc_modern_arm_outputs` and test
+4. Run `cmc_modern_audio_preflight`.
+   It configures a 20 kHz DirectSound output but does **not** play audio.
+5. Save the full MATLAB output and stop. This is the first decision point.
+6. Only with a trained person at the box, run `cmc_modern_arm_outputs` and test
    harmless outputs first: LEDs, then sensors, then dispensers. Test grid and
    audio only after their line mappings and shutdown behavior are verified.
 
@@ -43,6 +46,7 @@ When in doubt, use the physical power shutdown.
 ## What This Does Not Validate
 
 - Exact timing of audio onset.
+- Actual level, spectrum, and perceived quality of the 15 kHz noise signal.
 - Physical output polarity or box wiring.
 - Safety of grid activation.
 - Correct response from a real rat.
