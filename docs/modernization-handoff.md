@@ -114,3 +114,4 @@ rather than silently changing the tagged baseline.
 - [`migration-matlab-2026.md`](migration-matlab-2026.md): migration rationale.
 - [`modern-hardware-lab-test.md`](modern-hardware-lab-test.md): lab procedure.
 - [`validation.md`](validation.md): tests already run.
+- [`lab-test-plan-2026-07-11.md`](lab-test-plan-2026-07-11.md): direct-Ethernet Saturday execution plan.

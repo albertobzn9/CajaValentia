@@ -4,6 +4,7 @@ Start with the item closest to the question:
 
 - [`modernization-handoff.md`](modernization-handoff.md): read-first technical and experimental handoff.
 - [`version-map.md`](version-map.md): plain-language Git and project-version map.
+- [`lab-test-plan-2026-07-11.md`](lab-test-plan-2026-07-11.md): direct-Ethernet lab plan for R2011a and modern MATLAB.
 - [`behavioral-protocol.md`](behavioral-protocol.md): experimental task.
 - [`hardware-io.md`](hardware-io.md): box inputs and outputs.
 - [`architecture/01_mapa_modulos_matlab_limpio.md`](architecture/01_mapa_modulos_matlab_limpio.md): visual module map.
