@@ -115,3 +115,4 @@ rather than silently changing the tagged baseline.
 - [`modern-hardware-lab-test.md`](modern-hardware-lab-test.md): lab procedure.
 - [`validation.md`](validation.md): tests already run.
 - [`lab-test-plan-2026-07-11.md`](lab-test-plan-2026-07-11.md): direct-Ethernet Saturday execution plan.
+- [`future-integration-boundary.md`](future-integration-boundary.md): long-term behavior/video/data constraints.
