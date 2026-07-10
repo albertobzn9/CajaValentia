@@ -13,6 +13,7 @@ Start with the item closest to the question:
 - [`architecture/02_inventario_modulos_matlab_limpio.md`](architecture/02_inventario_modulos_matlab_limpio.md): each active module in plain language.
 - [`architecture/04_backend_valentiae_aleatorizacion.md`](architecture/04_backend_valentiae_aleatorizacion.md): what risk, randomization, and trial count do.
 - [`sound-only-controls.md`](sound-only-controls.md): exact behavioral contract for the v2 candidate.
+- [`idea-eventos-solo-ruido.md`](idea-eventos-solo-ruido.md): short experimental rationale for the sound-only controls.
 - [`migration-matlab-2026.md`](migration-matlab-2026.md): what migration requires and why it is feasible.
 - [`modern-hardware-lab-test.md`](modern-hardware-lab-test.md): safe test order for the modern branch.
 - [`audio-contract.md`](audio-contract.md): shared sound rule and validation limits.
