@@ -90,6 +90,7 @@ handles.LuzInt=0;
 handles.PalancasIzqHabitua=0;
 handles.PalancasDerHabitua=0;
 
+cmc_configurar_tabla_resultados(handles.uitable1);
 guidata(hObject, handles);
 
 cmc_setup_paths();
@@ -1721,8 +1722,6 @@ end
 
 
 function Fila = cmc_fila_resultado(Ensayo,Lado,Electrico,Latencia,TiempoAbs,ContadorTI,ContadorTD,Desplazamiento,TipoEvento,ModoSonidoSolo)
-% Mantiene ocho columnas en cruces seguros y agrega tipo solo en DIS experimental.
-Fila = [Ensayo Lado Electrico Latencia TiempoAbs ContadorTI ContadorTD Desplazamiento];
-if ModoSonidoSolo == 1
-    Fila = [Fila TipoEvento];
-end
+% ModoSonidoSolo se conserva como argumento por compatibilidad con llamadas previas.
+% Desde v2.0.0-rc.3 todos los resultados llevan TipoEvento en la columna 9.
+Fila = [Ensayo Lado Electrico Latencia TiempoAbs ContadorTI ContadorTD Desplazamiento TipoEvento];
