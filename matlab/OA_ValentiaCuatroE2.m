@@ -90,6 +90,7 @@ handles.LuzInt=0;
 handles.PalancasIzqHabitua=0;
 handles.PalancasDerHabitua=0;
 
+cmc_configurar_tabla_resultados(handles.uitable1);
 guidata(hObject, handles);
 
 cmc_setup_paths();
