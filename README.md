@@ -21,6 +21,18 @@ the historical program needed to understand old data and behavior.
 - [`HISTORY.md`](HISTORY.md): why the releases exist.
 - [`AGENTS.md`](AGENTS.md): safety rules for people and coding agents changing the program.
 
+## Drive Archive
+
+The parallel historical archive is kept read-only at:
+
+```text
+/Users/ab/Library/CloudStorage/GoogleDrive-jasjabs19@gmail.com/My Drive/workspace/03_lab/02_CajaValentia
+```
+
+It contains earlier MATLAB packages, lab-operation notes, and audit evidence.
+Do not edit code there or copy whole folders back into this repository. Review a
+specific file, then bring a verified improvement here in a focused commit.
+
 ## Scope and Safety
 
 This is a private research repository. The `legacy/` tree is read-only. Do not
