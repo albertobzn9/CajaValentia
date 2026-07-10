@@ -10,9 +10,9 @@ El comando de entrada es:
 abrir1
 ```
 
-Tambien existe `abrir.m` como seguro: si por costumbre se escribe `abrir`
-estando dentro de esta carpeta, redirige a `abrir1` y no al menu viejo del disco
-C.
+Tambien existe `abrir.m` como redireccion local, pero el comando de operacion
+debe ser siempre `abrir1`. En la computadora del lab hay otros menus llamados
+`abrir` en rutas antiguas; MATLAB podria abrir uno de ellos.
 
 ## Instrucciones Para El Operador
 
@@ -28,11 +28,12 @@ C.
 4. En la Command Window escribir:
 
    ```matlab
+   which abrir1 -all
    abrir1
    ```
 
-   Si se escribe `abrir` por error, esta copia local tambien abre el menu
-   depurado.
+   La primera ruta de `which abrir1 -all` debe apuntar a
+   `Z:\CajaValentia\abrir1.m`.
 
 5. Elegir una opcion del menu depurado:
 
