@@ -63,11 +63,13 @@ try
         'ResultadosPrueba', 'lado', 'frecuencia');
 
     cmc_apaga_estimulos_prueba(OA, GS);
+    cmc_libera_tarjeta_prueba;
     fprintf('OK: prueba terminada sin luz de comida ni pellet.\n');
     msgbox('OK: termino la prueba. Revise que no hubo luz de comida ni pellet.', ...
         'CajaValentia');
 catch ME
     cmc_apaga_estimulos_prueba(OA, GS);
+    cmc_libera_tarjeta_prueba;
     cmc_registra_error_prueba(ME);
     rethrow(ME)
 end
@@ -88,6 +90,9 @@ if ~isempty(GS)
     catch
     end
 end
+
+
+function cmc_libera_tarjeta_prueba
 try
     daqreset
 catch
