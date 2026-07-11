@@ -220,6 +220,15 @@ SampleRate = 20000
 
 Por eso el uso de `15000` en el manual corresponde a ruido blanco en el codigo.
 
+### Verificacion Real
+
+El 2026-07-11 se ejecuto `cmc_prueba_audio_estereo` en MATLAB R2011a de la
+computadora del laboratorio. El operador confirmo salida solo izquierda y luego
+solo derecha. La funcion que se ejecuto provino de la copia aislada del
+Escritorio. Por tanto, si durante una sesion parece sonar del lado equivocado,
+primero confirmar la atencion al lado y el contexto del evento; no hay evidencia
+actual de que MATLAB duplique el audio en ambas bocinas.
+
 ## Linea 24
 
 `OA_ValentiaInicio`, `OA_CtrlDispIzq` y `OA_CtrlDispIzqCero` escriben `0` en la
@@ -237,7 +246,6 @@ Antes de tocar control de hardware, confirmar:
 - que una interrupcion del programa no deje la descarga latcheada;
 - que la linea 24 no active nada peligroso;
 - que sensores de cruce sigan siendo activo bajo;
-- que el ruido blanco salga del lado esperado;
 - que dispensadores entreguen un pellet por pulso;
 - que contadores de palanca no saturen o den rollover inesperado.
 

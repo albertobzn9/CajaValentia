@@ -14,10 +14,13 @@
 - The expanded full suite was executed successfully in MATLAB R2026a. It covers
   risk `0`, `0.1`, `0.15`, `0.2`, `0.3`, and `0.6`, plus CP durations 30, 60,
   90, and 120 seconds.
+- On 2026-07-11, the lab computer ran the supervised R2011a stereo diagnostic
+  successfully. It resolved `OA_Sonidos.m` and `OA_PreparaSonidos.m` from the
+  isolated Desktop candidate, and the operator confirmed left-only then
+  right-only output. The audio path is not a bilateral-output bug.
 
 ## Pending
 
-- Confirm compatibility in MATLAB R2011a on the lab computer.
 - Check all GUI paths and physical hardware outputs with a trained operator
   present.
 - Confirm generated result columns and timestamps from a real session.
