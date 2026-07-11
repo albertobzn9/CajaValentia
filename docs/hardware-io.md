@@ -229,6 +229,11 @@ Escritorio. Por tanto, si durante una sesion parece sonar del lado equivocado,
 primero confirmar la atencion al lado y el contexto del evento; no hay evidencia
 actual de que MATLAB duplique el audio en ambas bocinas.
 
+La caja puede transmitir parte del sonido por eco: se puede percibir el pulso
+desde el lado contrario aun cuando el canal correcto sea claramente mas fuerte.
+La comprobacion operativa es comparar ambas bocinas al mismo volumen, no exigir
+silencio absoluto en la opuesta.
+
 ## Linea 24
 
 `OA_ValentiaInicio`, `OA_CtrlDispIzq` y `OA_CtrlDispIzqCero` escriben `0` en la

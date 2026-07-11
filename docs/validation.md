@@ -18,6 +18,9 @@
   successfully. It resolved `OA_Sonidos.m` and `OA_PreparaSonidos.m` from the
   isolated Desktop candidate, and the operator confirmed left-only then
   right-only output. The audio path is not a bilateral-output bug.
+- On the same computer, the supervised 10-second sound-only diagnostic passed
+  for both requested sides. It produced noise, threat LED, and grid, without
+  food light or pellet; its result artifact and logs were saved automatically.
 
 ## Pending
 
