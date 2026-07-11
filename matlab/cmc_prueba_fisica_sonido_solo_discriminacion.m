@@ -88,6 +88,10 @@ if ~isempty(GS)
     catch
     end
 end
+try
+    daqreset
+catch
+end
 
 
 function cmc_registra_error_prueba(ME)
