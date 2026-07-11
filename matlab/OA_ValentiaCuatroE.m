@@ -111,7 +111,8 @@ OA_ValentiaPalanca(handles.OA,'D',1); %sacar las palancas
 CT_Ejecuta=0;
 CT_Pausa=0;
 CT_Ensayos=0;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
 set(handles.edit1,'String','0');
 set(handles.edit2,'String','0');   %retardo antes de la recompensa
@@ -132,6 +133,15 @@ set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
+set(handles.Terminarn2,'String','Detener ahora');
+handles.FinalizarTrasEnsayo = uicontrol('Parent', hObject, ...
+    'Style', 'pushbutton', ...
+    'String', 'Finalizar tras ensayo', ...
+    'Tag', 'FinalizarTrasEnsayo', ...
+    'Units', 'characters', ...
+    'Position', [122 13.3076923076923 29 2.46153846153846], ...
+    'Callback', @FinalizarTrasEnsayo_Callback);
+guidata(hObject, handles);
 
 
 
@@ -175,7 +185,8 @@ end
 
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 CT_Ejecuta=1;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
 Ensayo=0;
 Resultados=[];
@@ -373,6 +384,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 break;
             end
             set(handles.edit9,'String',num2str(toc(LatMI)));
+            drawnow;
+            load('ControlTarea','CT_Ejecuta');
+            if(CT_Ejecuta==0)
+                CDurMaxEns=-1;
+                break;
+            end
             pause(.01);
         end
         
@@ -397,7 +414,11 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             
             while(1)
-                
+                drawnow;
+                load('ControlTarea','CT_Ejecuta');
+                if(CT_Ejecuta==0)
+                    break;
+                end
                 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
                 [DI DIA PalXRec]
 %                 if(DI==2)
@@ -534,6 +555,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 break;
             end
             set(handles.edit9,'String',num2str(toc(LatMD)));
+            drawnow;
+            load('ControlTarea','CT_Ejecuta');
+            if(CT_Ejecuta==0)
+                CDurMaxEns=-1;
+                break;
+            end
             pause(.01);
         end
 
@@ -560,6 +587,11 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             
             while(1)
+                drawnow;
+                load('ControlTarea','CT_Ejecuta');
+                if(CT_Ejecuta==0)
+                    break;
+                end
                 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
                 if(DD==2)
                     DD=0;
@@ -624,8 +656,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     OA_ValentiaEstimuloD(handles.OA,0,0)
     pause(.2);
     OA_CtrlDispIzqCero(handles.OA);
-    load('ControlTarea');
-    if(CT_Ejecuta==0)
+    drawnow;
+    load('ControlTarea','CT_Ejecuta','CT_FinalizarTrasEnsayo');
+    if(CT_Ejecuta==0 || CT_FinalizarTrasEnsayo==1)
         break;
     end
     if(ModoSonidoSolo==1)
@@ -693,7 +726,19 @@ function Terminarn2_Callback(hObject, eventdata, handles)
 
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 CT_Ejecuta=0;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+
+
+function FinalizarTrasEnsayo_Callback(hObject, eventdata, handles)
+%FINALIZARTRASENSAYO_CALLBACK Cierra al terminar el evento actual.
+
+load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+if(CT_Ejecuta==1)
+    CT_FinalizarTrasEnsayo=1;
+    save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+    set(hObject,'String','Finalizando tras ensayo');
+end
 
 
 % --- Executes when user attempts to close figure1.
