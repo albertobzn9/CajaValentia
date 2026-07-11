@@ -1,5 +1,9 @@
-function [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = OA_MonitoreaSonidoSolo(OA,Duracion,ContadorTI,ContadorTD)
+function [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = OA_MonitoreaSonidoSolo(OA,Duracion,ContadorTI,ContadorTD,Reloj)
 %OA_MONITOREASONIDOSOLO Registra conducta sin terminar ni recompensar.
+
+if nargin < 5
+    Reloj = [];
+end
 
 OA_ValentiaResetPalancas(OA);
 [DI,DD] = OA_ValentiaRevisaPalanca(OA);
@@ -12,6 +16,11 @@ Detenido = 0;
 R = tic;
 
 while toc(R) < Duracion
+    if ~isempty(Reloj) && ishandle(Reloj)
+        set(Reloj, 'String', num2str(toc(R)));
+        drawnow;
+    end
+
     PI = OA_ValentiaBuscaIzquierda(OA);
     if PI == 1
         PI = OA_ValentiaBuscaIzquierda(OA);

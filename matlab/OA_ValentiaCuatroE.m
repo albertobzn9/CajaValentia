@@ -280,7 +280,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         R2=tic;
 
         [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = ...
-            OA_MonitoreaSonidoSolo(handles.OA,DuracionSonidoSolo,ContadorTI,ContadorTD);
+            OA_MonitoreaSonidoSolo(handles.OA,DuracionSonidoSolo,ContadorTI,ContadorTD,handles.edit9);
         set(handles.edit6,'String',num2str(ContadorTI));
         set(handles.edit7,'String',num2str(ContadorTD));
 
