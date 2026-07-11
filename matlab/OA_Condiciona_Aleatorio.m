@@ -76,7 +76,7 @@ set(handles.edit3,'String',1) %minimo intervalo varaible
 set(handles.edit4,'String',10) %maximo intervalo variable
 set(handles.edit5,'String',0) % contador de repeticiones
 set(handles.edit11,'String',0.5) %duracion del pulso electrico
-set(handles.edit12,'String',5000); %frecuencia auditiva
+set(handles.edit12,'String',num2str(cmc_frecuencia_ruido_predeterminada)); %frecuencia auditiva
 set(handles.edit13,'String',300); %tiempo de habituacion
 
 DetenerC=0;

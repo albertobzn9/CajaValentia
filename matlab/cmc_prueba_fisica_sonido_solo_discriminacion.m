@@ -5,6 +5,16 @@ function cmc_prueba_fisica_sonido_solo_discriminacion
 
 cmc_setup_paths();
 duracion = 10;
+archivoLog = fullfile(cmc_results_dir(), 'prueba_sonido_solo_discriminacion.txt');
+if exist(archivoLog, 'file')
+    delete(archivoLog);
+end
+diary(archivoLog);
+limpiaLog = onCleanup(@() diary('off'));
+fprintf('Inicio de prueba fisica de sonido solo.\n');
+fprintf('OA_Sonidos: %s\n', which('OA_Sonidos'));
+fprintf('OA_PreparaSonidos: %s\n', which('OA_PreparaSonidos'));
+fprintf('OA_ValentiaInicio: %s\n', which('OA_ValentiaInicio'));
 
 respuesta = questdlg([ ...
     'Prueba fisica de sonido solo: activara ruido, LED de amenaza y parrilla ', ...
@@ -50,13 +60,15 @@ try
     assert(size(ResultadosPrueba, 2) == 9, ...
         'La prueba debe registrar nueve columnas.');
     save(fullfile(cmc_results_dir(), 'prueba_sonido_solo_discriminacion.mat'), ...
-        'ResultadosPrueba');
+        'ResultadosPrueba', 'lado', 'frecuencia');
 
     cmc_apaga_estimulos_prueba(OA, GS);
+    fprintf('OK: prueba terminada sin luz de comida ni pellet.\n');
     msgbox('OK: termino la prueba. Revise que no hubo luz de comida ni pellet.', ...
         'CajaValentia');
 catch ME
     cmc_apaga_estimulos_prueba(OA, GS);
+    cmc_registra_error_prueba(ME);
     rethrow(ME)
 end
 
@@ -75,4 +87,11 @@ if ~isempty(GS)
         stop(GS);
     catch
     end
+end
+
+
+function cmc_registra_error_prueba(ME)
+fprintf('ERROR [%s]: %s\n', ME.identifier, ME.message);
+for k = 1:length(ME.stack)
+    fprintf('  en %s (linea %d)\n', ME.stack(k).name, ME.stack(k).line);
 end
