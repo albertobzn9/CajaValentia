@@ -13,6 +13,7 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 | MATLAB podia abrir codigo viejo por accidente. | `abrir1`, el lanzador RC3 y `cmc_prepara_entorno_r2011a` restauran el path y cargan solo la copia portable del Escritorio. | Ya compartido por todo el programa. |
 | Una falla era dificil de repetir o diagnosticar. | Se agregaron lanzadores y pruebas sin hardware para secuencia, audio, sonido solo y resultados. | Reutilizable sin cambio. |
 | El ruido blanco podia iniciar en 5000 Hz. | `cmc_frecuencia_ruido_predeterminada` fija 15000 Hz para todos los modulos que ya la usan; se valido la separacion estereo fisicamente. | Ya compartido. |
+| Abrir `ValentiaE` podia dispensar un pellet. | `OA_ValentiaInicio` ahora deja las lineas 17:23 en cero al arrancar; se eliminó una secuencia de salida equivalente a la recompensa izquierda. | Pendiente prueba fisica; aplicar a todo programa que abra esta tarjeta. |
 
 ### Conducta Y Eventos
 
@@ -30,7 +31,7 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 | Problema simple | Resolucion tecnica | Estado para CP |
 |---|---|---|
 | La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El `.mat` conserva precision completa; la vista muestra 0.01 s. | Aplicar. |
-| La columna 9 no cabia en R2011a. | Se compactaron encabezados y columnas; la anchura se ajusto varias veces en la PC del lab. | Aun falta recortar el rectangulo exterior. |
+| La columna 9 no cabia en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior ahora se ajusta al ancho real de las nueve columnas. | Pendiente inspeccion visual R2011a. |
 | Habia demasiadas opciones que nadie usa. | Se ocultaron controles muertos: palancas, sonido inicial, luz intermitente, retardo y audio izquierdo/derecho. Valores utiles por defecto: luz segura; luz y sonido de riesgo; secuencia y sonido 1:10 activados. | Aplicar solo despues de revisar GUI CP. |
 | `Secuencia Aleatoria` genera ansiedad si desaparece. | Se conserva visible y marcada, aunque el callback historico no cambia la secuencia. | Mantener por compatibilidad de uso. |
 | Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crea un `.mat` y un CSV hermano. | Aplicar despues de validar el contador fisico. |
@@ -112,7 +113,8 @@ referencia para medir el ITI visual exacto.
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
 | Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y guarda `.mat` y CSV juntos. Cancelar conserva el estado temporal para el boton manual. Falta prueba fisica de esta ruta, cronometros visibles y aviso LED opcional. |
 | Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar columnas nuevas, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
-| Ajustar el rectangulo exterior de `uitable1`. | El ancho exterior de la tabla coincide con sus nueve columnas, sin espacio interno sobrante ni columna oculta en R2011a. |
+| Ajustar el rectangulo exterior de `uitable1`. | **Implementado en `fix/startup-and-table`:** el ancho exterior se calcula desde las nueve columnas. Falta inspeccion visual R2011a. |
+| Centrar los valores de `uitable1`. | En GUIDE/R2011a no existe una propiedad estable para centrar celdas. Revisar visualmente; no introducir un hack Java o espacios variables sin necesidad real. |
 | Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
 
 ## Regla De Trabajo

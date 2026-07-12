@@ -7,6 +7,15 @@ nombres = {'Ens.','Lado','Est.','Lat.','T. abs.','Pal. I', ...
 anchos = {59, 53, 67, 73, 86, 67, 67, 86, 69};
 set(tabla, 'ColumnName', nombres, 'ColumnWidth', anchos);
 
+% Ajusta el contenedor al ancho real de las nueve columnas, mas bordes y
+% encabezado de filas. Evita el espacio vacio que dejaba GUIDE a la derecha.
+unidadesOriginales = get(tabla, 'Units');
+set(tabla, 'Units', 'pixels');
+posPixeles = get(tabla, 'Position');
+posPixeles(3) = sum([anchos{:}]) + 24;
+set(tabla, 'Position', posPixeles);
+set(tabla, 'Units', unidadesOriginales);
+
 % Conserva el borde superior y crea abajo el mismo margen que Sin luz.
 posTabla = get(tabla, 'Position');
 campoSinLuz = findobj(get(tabla, 'Parent'), 'Tag', 'edit23');
