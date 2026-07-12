@@ -70,7 +70,7 @@ end
 
 
 function [patrones, lado, promedio] = cmc_captura_posicion(OA, paso)
-duracion = 2;
+duracion = 7;
 intervalo = .1;
 patrones = [];
 R = tic;
