@@ -30,12 +30,28 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 
 | Problema simple | Resolucion tecnica | Estado para CP |
 |---|---|---|
-| La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El `.mat` conserva precision completa; la vista muestra 0.01 s. | Aplicar. |
+| La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El CSV principal conserva precision completa; la vista muestra 0.01 s. | Aplicar. |
 | La columna 9 no cabia en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior ahora se ajusta al ancho real de las nueve columnas. | Pendiente inspeccion visual R2011a. |
 | Habia demasiadas opciones que nadie usa. | Se ocultaron controles muertos: palancas, sonido inicial, luz intermitente, retardo y audio izquierdo/derecho. Valores utiles por defecto: luz segura; luz y sonido de riesgo; secuencia y sonido 1:10 activados. | Aplicar solo despues de revisar GUI CP. |
 | `Secuencia Aleatoria` genera ansiedad si desaparece. | Se conserva visible y marcada, aunque el callback historico no cambia la secuencia. | Mantener por compatibilidad de uso. |
-| Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crea un `.mat` y un CSV hermano. | Aplicar despues de validar el contador fisico. |
+| Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crean dos CSV hermanos. | Aplicar despues de validar el contador fisico. |
 | El contador de ensayos ignoraba los no-cruces. | **En rama `feature/sensor-validated-crosses`:** `Ensayos terminados` es el numero de filas en `Resultados`. Incluye cruce, repeticion, `-2` y sonido solo completo; no cuenta un ensayo abortado sin fila. | Validado en Discriminacion; pendiente transferencia a CP. |
+
+## Exportacion Final CSV
+
+Los `.mat` de `Valentia/` se conservan solo durante la sesion porque MATLAB los
+usa como estado interno. Al guardar, el programa ya no exporta un `.mat` final:
+crea dos archivos CSV con el mismo nombre base.
+
+- `nombre.csv`: una fila por ensayo terminado, con las nueve columnas de
+  `Resultados`:
+  `ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento`.
+- `nombre_palanqueos.csv`: una fila por presion detectada:
+  `evento_sesion,tiempo_s,fase,ensayo,tipo_evento,lado,contador_lado_sesion,contador_hardware`.
+
+Ambos usan punto decimal y seis decimales en los tiempos de ensayos. Esto
+preserva mas precision de la que muestra la tabla y permite leerlos directo en
+Python, Excel o R. La columna `ensayo` de palanqueos usa `NA` fuera de ensayo.
 
 ## Registro De Palanqueos
 
@@ -48,7 +64,7 @@ Resolucion tecnica actual:
 
 - `cmc_registrar_palanqueos` interpreta los contadores de cuatro bits y
   registra cada incremento, incluso si pasa de 15 a 0.
-- `EventosPalanqueo` se guarda dentro del `.mat` junto con `Resultados`.
+- `EventosPalanqueo` se exporta en el CSV hermano de palanqueos.
 - `nombre_palanqueos.csv` contiene las mismas filas con estas columnas:
   `evento_sesion`, `tiempo_s`, `fase`, `ensayo`, `tipo_evento`, `lado`,
   `contador_lado_sesion`, `contador_hardware`.
@@ -111,8 +127,8 @@ referencia para medir el ITI visual exacto.
 | Contar no-cruces como ensayos terminados. | **Probado fisicamente en `prueba2044.mat`:** una fila con lado `-2` sumo como ensayo 1; una repeticion y un cruce lento completaron los ensayos 2 y 3. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Completado y probado:** `prueba2044.mat` tuvo tres filas (`-2`, repeticion y cruce) y la secuencia cerró sola tras la tercera. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
-| Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y guarda `.mat` y CSV juntos. Cancelar conserva el estado temporal para el boton manual. Incluye cronometros visibles y aviso LED opcional; falta prueba fisica completa. |
-| Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar columnas nuevas, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
+| Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y exporta `nombre.csv` mas `nombre_palanqueos.csv`. Cancelar conserva el estado temporal para el boton manual. Incluye cronometros visibles y aviso LED opcional; falta prueba fisica completa. |
+| Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar ambos CSV, nueve columnas de ensayos, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
 | Ajustar el rectangulo exterior de `uitable1`. | **Implementado en `fix/startup-and-table`:** el ancho exterior se calcula desde las nueve columnas. Falta inspeccion visual R2011a. |
 | Centrar los valores de `uitable1`. | En GUIDE/R2011a no existe una propiedad estable para centrar celdas. Revisar visualmente; no introducir un hack Java o espacios variables sin necesidad real. |
 | Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
@@ -132,10 +148,10 @@ de exito. Si uno falla, se corrige ese modulo antes de continuar.
 | Modulo | Que se prueba | Exito esperado | Estado actual |
 |---|---|---|---|
 | 1. Arranque seguro | Abrir `ValentiaE` sin rata. | No cae pellet, no se enciende luz, parrilla ni audio. | Cambio de codigo y prueba sin hardware listos; falta caja. |
-| 2. Tabla | Abrir la GUI y guardar una corrida corta. | Nueve columnas visibles, sin traslape; MAT conserva la columna `Tipo`. | Logica lista; falta inspeccion visual R2011a. |
+| 2. Tabla y CSV | Abrir la GUI y guardar una corrida corta. | Nueve columnas visibles, sin traslape; CSV principal conserva la columna `Tipo`. | Logica lista; falta inspeccion visual R2011a. |
 | 3. Conteo de ensayos | Simular cruce, mismo lado y no-cruce. | Cada fila valida cuenta una vez; un inicio en centro no infla el conteo. | Probado fisicamente en la rama de cruces por sensores. |
-| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, y queda en MAT/CSV. | Prueba inicial funcional; falta validar CSV con una palanqueada real. |
-| 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar MAT mas CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
+| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, y queda en ambos CSV. | Prueba inicial funcional; falta validar CSV con una palanqueada real. |
+| 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar dos CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
 | 6. Palanqueos | Una presion lenta y varias rapidas en cada fase. | CSV ordenado, `NA` fuera de ensayo y contadores de sesion consecutivos. | Esquema probado sin hardware; falta validar el CSV nuevo. |
 | 7. Aviso final | Casilla `Aviso LED al finalizar` activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Implementado y probado sin hardware; falta caja. |
 

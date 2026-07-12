@@ -818,7 +818,7 @@ else
 end
 viejo=pwd;
 cd(cmc_results_dir());
-[fname,pname]=uiputfile('*.mat','nombre y ruta para guardar resultados');
+[fname,pname]=uiputfile('*.csv','nombre y ruta para guardar resultados');
 if isequal(fname,0)
     cd(viejo);
     return
