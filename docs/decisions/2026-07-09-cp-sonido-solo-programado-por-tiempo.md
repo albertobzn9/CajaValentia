@@ -25,6 +25,11 @@ solo (`2`).
 deben usar el lado opuesto: `cmc_lado_objetivo_cp` hace esa conversion y evita
 la inversion historica del sonido.
 
+Un ensayo CP no puede esperar una palanqueada indefinidamente. Desde el inicio
+del ensayo, el limite total es `duracion maxima + 10 s` (por ejemplo, 30 s se
+cierran a 40 s). Si la rata cruzo pero no palanqueo antes del limite, se guarda
+el cruce, no se entrega pellet y el programa continua.
+
 ## Consecuencia
 
 La hora es aproximada por diseno: preserva el ITI aleatorio y evita cortar un

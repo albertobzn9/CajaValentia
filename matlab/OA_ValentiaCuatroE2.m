@@ -427,7 +427,16 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             
             
+            LimiteRespuesta=cmc_limite_respuesta_cp(DurMaxEns);
             while(1)
+                % Tras cruzar, CP deja solo 10 s extra para palanquear.
+                % Si no hay respuesta, se conserva el cruce pero no hay pellet.
+                if(toc(LatMI)>=LimiteRespuesta)
+                    Resultados=[Resultados;[NumeroEvento 1 Secuencia(Ensayo,2) ...
+                        LimiteRespuesta toc(R0) ContadorTI ContadorTD LatMotIzq 1]];
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
+                    break
+                end
                 
                 [EstadoPalanqueos,EventosPalanqueo,~,~,DI,DD]=cmc_observar_palanqueos( ...
                     handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
@@ -593,7 +602,16 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
 %             end
             
             
+            LimiteRespuesta=cmc_limite_respuesta_cp(DurMaxEns);
             while(1)
+                % Tras cruzar, CP deja solo 10 s extra para palanquear.
+                % Si no hay respuesta, se conserva el cruce pero no hay pellet.
+                if(toc(LatMD)>=LimiteRespuesta)
+                    Resultados=[Resultados;[NumeroEvento 0 Secuencia(Ensayo,2) ...
+                        LimiteRespuesta toc(R0) ContadorTI ContadorTD LatMotDer 1]];
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
+                    break
+                end
                 [EstadoPalanqueos,EventosPalanqueo,~,~,DI,DD]=cmc_observar_palanqueos( ...
                     handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
                     'ensayo',NumeroEvento,'riesgo');

@@ -10,6 +10,8 @@ y la copia portable del programa.
    riesgo `1`, frecuencia riesgo `15000`, duracion manual correcta.
 3. Con una prueba corta y operador frente a la caja: confirmar que cada lado
    normal entrega un pellet por una presion valida.
+   Si se cruza sin palanquear, confirmar que el evento se cierra a
+   `duracion maxima + 10 s` y no entrega pellet.
 4. Hacer sonar un control: el lado de audio debe corresponder al lado objetivo
    opuesto al lado de origen de `Secuencia`.
 5. Probar `Terminar` durante ITI y durante un ensayo: luces, parrilla y audio
