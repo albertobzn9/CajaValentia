@@ -3,7 +3,7 @@
 1. Start from a short-lived branch; do not edit a release tag.
 2. Describe the intended behavioral change before changing MATLAB code.
 3. Run the pure-logic test/simulation scripts first.
-4. Record MATLAB version, machine, USB path, and hardware result when testing a
+4. Record MATLAB version, machine, Desktop deployment path, and hardware result when testing a
    physical box.
 5. Keep generated results and animal data out of Git.
 

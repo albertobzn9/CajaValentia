@@ -1,6 +1,6 @@
 # Inventario De Modulos Del MATLAB Limpio
 
-Alcance: archivos `.m` de `06_matlab_limpio_usb` que participan en el menu
+Alcance: archivos `.m` de la copia desplegada en el Escritorio que participan en el menu
 operativo. Las funciones dentro de una GUI son callbacks del mismo archivo.
 
 ## Arranque
@@ -8,8 +8,8 @@ operativo. Las funciones dentro de una GUI son callbacks del mismo archivo.
 | Archivo | Hace | Depende de |
 |---|---|---|
 | `abrir.m` | Redirige el comando historico al menu limpio. | `abrir1` |
-| `abrir1.m` | Muestra las cinco tareas activas. | Rutas USB y GUIs. |
-| `cmc_root.m` | Encuentra la raiz de la carpeta USB. | Nada. |
+| `abrir1.m` | Muestra las cinco tareas activas. | Rutas de la instalacion y GUIs. |
+| `cmc_root.m` | Encuentra la raiz de la carpeta desplegada. | Nada. |
 | `cmc_setup_paths.m` | Agrega carpetas necesarias a MATLAB. | `cmc_root`, `cmc_results_dir`. |
 | `cmc_state_dir.m` | Ubica los archivos de estado. | `cmc_root`. |
 | `cmc_results_dir.m` | Ubica o crea `resultados`. | `cmc_root`. |
@@ -64,7 +64,7 @@ parametros y resultados: `ControlTarea`, `Riesgo`, `RetardoRecomp`,
 `PelletsEventoRiesgo.mat` se crea al editar ese parametro; no necesita venir
 preinstalado para abrir el programa.
 
-## Dependencias Fuera Del USB
+## Dependencias Externas
 
 La carpeta contiene todo el codigo propio. Aun requiere MATLAB R2011a, el
 driver/tarjeta National Instruments disponible como `Dev2` y audio de Windows.

@@ -1,6 +1,6 @@
 # Mapa Del MATLAB Limpio
 
-Alcance: solo `06_matlab_limpio_usb`, la copia estable usada en sesiones.
+Alcance: la copia estable desplegada en `C:\Users\Alberto\Desktop\CajaValentia`.
 
 ## Lectura Rapida
 
@@ -40,7 +40,7 @@ flowchart LR
 | Condicionamiento | `OA_Condiciona_Aleatorio.m` | Ruido/LED y descarga aleatoria. |
 
 `abrir.m` solo llama a `abrir1.m`. `abrir1.m` prepara las rutas correctas del
-USB y muestra estas cinco opciones.
+instalacion desplegada y muestra estas cinco opciones.
 
 ## Flujo De Un Ensayo De Cruce
 
@@ -65,7 +65,7 @@ flowchart TD
 
 | Grupo | Archivos principales | Funcion simple |
 |---|---|---|
-| Rutas USB | `cmc_root`, `cmc_setup_paths`, `cmc_state_dir`, `cmc_results_dir` | Evitan depender de carpetas viejas del disco C. |
+| Rutas de la instalacion | `cmc_root`, `cmc_setup_paths`, `cmc_state_dir`, `cmc_results_dir` | Evitan depender de carpetas viejas del disco C. |
 | Tarjeta | `OA_ValentiaInicio`, `escribePto` | Conectan MATLAB con la tarjeta NI y escriben sus salidas. |
 | Audio | `OA_PreparaSonidos`, `OA_Sonidos` | Preparan y reproducen tono o ruido por los dos canales. |
 | Ensayos | `OA_Secuencia`, `OA_SecuenciaEnsayos3`, `OA_SecuenciaEnsayos4`, `OA_ValentiaRiesgo` | Deciden lado y si el ensayo es seguro o de riesgo. |

@@ -93,12 +93,12 @@ Ejemplos sencillos:
 - `OA_Resultados.mat` guarda los resultados de cruces durante la sesion.
 
 Los `.mat` de estado estan en `Valentia/`. Los resultados finales se exportan
-a `resultados/` dentro del USB.
+a `resultados/` dentro de la copia desplegada.
 
 ## Que Son Las Rutas
 
 MATLAB solo puede usar un archivo si sabe donde buscarlo. Las funciones
-`cmc_root` y `cmc_setup_paths` le dicen: “usa esta carpeta USB y sus
+`cmc_root` y `cmc_setup_paths` le dicen: “usa esta carpeta desplegada y sus
 subcarpetas”. Esto evita que por accidente use una copia vieja del programa en
 la computadora.
 

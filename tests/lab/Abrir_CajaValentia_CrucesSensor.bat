@@ -1,9 +1,5 @@
 @echo off
-net session >nul 2>&1
-if not %errorlevel%==0 (
-    powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
-    exit /b
-)
+rem Ejecutar como usuario normal: no autoelevar a administrador.
 set "ROOT=%~dp0CajaValentia_R2011a_CrucesSensor"
 cd /d "%ROOT%"
 if exist "%ROOT%\resultados\launcher_cruces_sensor.txt" del /q "%ROOT%\resultados\launcher_cruces_sensor.txt"

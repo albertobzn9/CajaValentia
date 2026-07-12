@@ -1,4 +1,4 @@
-# Uso Desde USB En MATLAB R2011a
+# Uso Desde El Escritorio En MATLAB R2011a
 
 Esta carpeta es una copia depurada y autocontenida del MATLAB funcional de la
 Caja CMC. Contiene solo las rutas activas del manual y sus dependencias
@@ -14,28 +14,34 @@ Tambien existe `abrir.m` como redireccion local, pero el comando de operacion
 debe ser siempre `abrir1`. En la computadora del lab hay otros menus llamados
 `abrir` en rutas antiguas; MATLAB podria abrir uno de ellos.
 
+## Instalacion Operativa
+
+La copia usada diariamente vive en la computadora del laboratorio, bajo el
+perfil normal de Alberto. Ruta recomendada:
+
+```text
+C:\Users\Alberto\Desktop\CajaValentia
+```
+
+No se opera desde USB. GitHub conserva el codigo fuente; el Escritorio contiene
+la copia desplegada y probada con la caja.
+
 ## Instrucciones Para El Operador
 
-1. Copiar la carpeta `matlab` de esta version al USB y renombrarla
-   `CajaValentia`.
-2. Abrir MATLAB R2011a.
-3. En MATLAB, cambiar el **Current Folder** a la carpeta del USB:
-
-   ```text
-   Z:\CajaValentia
-   ```
-
-4. En la Command Window escribir:
+1. Abrir `Abrir_CajaValentia_R2011a.bat` con doble clic dentro de la carpeta
+   `CajaValentia` del Escritorio. El lanzador usa el usuario normal: no elegir
+   **Ejecutar como administrador**.
+2. Esperar a que abra MATLAB R2011a y elegir la tarea del menu depurado.
+3. Si se necesita diagnosticar una ruta desde MATLAB, escribir:
 
    ```matlab
    which abrir1 -all
-   abrir1
    ```
 
    La primera ruta de `which abrir1 -all` debe apuntar a
-   `Z:\CajaValentia\abrir1.m`.
+   `C:\Users\Alberto\Desktop\CajaValentia\abrir1.m`.
 
-5. Elegir una opcion del menu depurado:
+4. Elegir una opcion del menu depurado:
 
    - `Entrena - moldeamiento / palanqueo`
    - `EntrenaE - luz-comida`
@@ -54,38 +60,27 @@ Se agrego `abrir1.m`, un menu depurado que:
 Tambien se agrego `abrir.m` como wrapper local para evitar que MATLAB resuelva
 el `abrir` viejo desde rutas persistidas en la computadora del lab.
 
-Tambien se cambiaron las rutas absolutas antiguas de la copia limpia para que
-apunten a esta carpeta del USB. La carpeta original legacy puede borrarse y esta
-copia debe seguir funcionando.
+Tambien se cambiaron las rutas absolutas antiguas. `cmc_root` detecta la carpeta
+que contiene el propio programa, por lo que no depende de `fsotres`, `Alberto`,
+la letra `Z:` ni las carpetas legacy.
 
-## Nota Importante Sobre USB
+## Permisos
 
-La unidad esperada en Windows es `Z:` y la carpeta debe quedar asi:
+El uso diario no requiere privilegios de administrador. El programa escribe
+solo en su propia carpeta (`Valentia` y `resultados`) y en `Documents`; esas
+rutas pertenecen al usuario normal. MATLAB R2011a y el driver NI USB-6501 deben
+estar instalados previamente por quien tenga permisos administrativos.
 
-```text
-Z:\CajaValentia
-```
-
-El codigo no depende de rutas locales antiguas ni de la carpeta
-`04_codigo_matlab_legacy`. Los archivos de estado se usan desde:
-
-```text
-Z:\CajaValentia\Valentia
-```
-
-Los resultados se guardan/cargan por defecto desde:
-
-```text
-Z:\CajaValentia\resultados
-```
+Si el lanzador falla como usuario normal, guardar el texto de
+`resultados\launcher_menu.txt`. No usar administrador como solucion rutinaria:
+primero hay que identificar si falta un driver, una ruta o un permiso local.
 
 ## Recomendacion De Prueba
 
 Antes de usar con animales:
 
 1. Abrir MATLAB R2011a.
-2. Cambiar el **Current Folder** a `Z:\CajaValentia`.
-3. Ejecutar `abrir1`.
+2. Abrir `Abrir_CajaValentia_R2011a.bat` con doble clic.
 4. Probar que cada opcion del menu abre su GUI.
 5. Cerrar sin iniciar sesion.
 6. Confirmar que no aparece error de ruta ni de archivo `.mat` faltante.

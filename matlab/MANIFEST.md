@@ -1,6 +1,6 @@
 # Manifest De La Carpeta Limpia
 
-Carpeta: `06_matlab_limpio_usb`
+Carpeta actual desplegada: `C:\Users\Alberto\Desktop\CajaValentia`
 
 Objetivo: conservar solo el MATLAB esencial para operar la Caja CMC segun el
 manual, sin copiar variantes historicas ni pruebas.
@@ -10,16 +10,16 @@ manual, sin copiar variantes historicas ni pruebas.
 Esta version fue realineada con el diagnostico del lab del 2026-06-11. Para
 cada funcion se tomo como base la ruta que MATLAB resolvia con `which` en la
 computadora del lab y despues se quitaron rutas absolutas antiguas para que la
-copia funcione desde USB.
+copia funcione desde su propia carpeta, sin rutas antiguas.
 
 ## Entrada
 
 - `abrir.m`: wrapper local; redirige el comando historico a `abrir1`.
 - `abrir1.m`: menu depurado nuevo.
-- `cmc_root.m`: calcula la raiz de la copia USB.
+- `cmc_root.m`: calcula la raiz de la copia desplegada.
 - `cmc_setup_paths.m`: agrega rutas necesarias.
 - `cmc_state_dir.m`: apunta a `Valentia`, donde viven `.mat` de estado.
-- `cmc_results_dir.m`: apunta a `resultados`, dentro del USB.
+- `cmc_results_dir.m`: apunta a `resultados`, dentro de la copia desplegada.
 
 ## GUIs Activas
 
@@ -76,7 +76,7 @@ incluyendo:
 
 ## Carpeta De Resultados
 
-- `resultados/`: destino local para guardar/cargar `.mat` desde el USB.
+- `resultados/`: destino local para guardar/cargar resultados de la caja.
 
 ## Excluido A Proposito
 

@@ -13,27 +13,33 @@ por el MATLAB que se abrio y por la carpeta de codigo que se esta usando.
 
 ## R2011a: Prueba Principal Con La Caja
 
-Usar la rama candidata:
+La copia operativa queda desplegada en el Escritorio de la computadora del lab:
 
 ```text
-release/v2.0.0-rc.3-resultados-9-columnas
+C:\Users\Alberto\Desktop\CajaValentia
 ```
 
-Copiar su carpeta `matlab` al USB como `Z:\CajaValentia`. En MATLAB R2011a:
+Abrir con doble clic:
+
+```text
+C:\Users\Alberto\Desktop\CajaValentia\Abrir_CajaValentia_R2011a.bat
+```
+
+El lanzador abre MATLAB R2011a, limpia las rutas viejas y abre `abrir1`. Debe
+ejecutarse como usuario normal, sin **Ejecutar como administrador**. Para
+diagnostico, dentro de MATLAB:
 
 ```matlab
-cd('Z:\CajaValentia')
 which abrir1 -all
-abrir1
 ```
 
-La primera ruta que muestre `which abrir1 -all` debe ser:
+La primera ruta debe ser:
 
 ```text
-Z:\CajaValentia\abrir1.m
+C:\Users\Alberto\Desktop\CajaValentia\abrir1.m
 ```
 
-Esta es la version que se valida primero con el hardware real.
+Esta es la copia que se valida primero con el hardware real.
 
 ## R2026a: Prueba Moderna Separada
 
@@ -61,5 +67,5 @@ usarse como rutina diaria. La computadora del lab conserva menus viejos y
 MATLAB puede resolver primero otro archivo llamado `abrir.m` si su ruta esta
 activa. Eso puede abrir una version historica sin los cambios actuales.
 
-Si aparece un menu inesperado, cerrar la GUI, volver a la carpeta correcta y
-repetir `which abrir1 -all` antes de escribir `abrir1`.
+Si aparece un menu inesperado, cerrar la GUI, abrir de nuevo el lanzador del
+Escritorio y revisar `which abrir1 -all`.

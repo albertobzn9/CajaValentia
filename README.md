@@ -15,10 +15,23 @@ the historical program needed to understand old data and behavior.
 
 ## Read First
 
-- [`matlab/README_USO_USB.md`](matlab/README_USO_USB.md): operating from USB.
+- [`matlab/README_USO_ESCRITORIO.md`](matlab/README_USO_ESCRITORIO.md): daily operation from the lab Desktop.
 - [`docs/README.md`](docs/README.md): protocol, hardware, architecture, and decisions.
 - [`HISTORY.md`](HISTORY.md): why the releases exist.
 - [`AGENTS.md`](AGENTS.md): safety rules for people and coding agents changing the program.
+
+## Daily Lab Deployment
+
+The active laboratory copy is deployed at:
+
+```text
+C:\Users\Alberto\Desktop\CajaValentia
+```
+
+Open `Abrir_CajaValentia_R2011a.bat` from that folder with a normal user
+double-click. It starts MATLAB R2011a and the cleaned menu without using USB or
+administrator elevation. The GitHub repository remains the source of truth;
+the Desktop copy is the validated runtime.
 
 ## Scope and Safety
 

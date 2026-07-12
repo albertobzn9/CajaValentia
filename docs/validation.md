@@ -31,6 +31,8 @@
 
 ## Pending
 
+- Confirm the Desktop launcher opens MATLAB R2011a as user Alberto without a
+  UAC administrator prompt.
 - Check all GUI paths and physical hardware outputs with a trained operator
   present.
 - Confirm the two checkbox states in the R2011a GUI after deployment.

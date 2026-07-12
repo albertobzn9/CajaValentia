@@ -1,6 +1,6 @@
 # Que Hace `ValentiaE` Detras De La GUI
 
-Esta guia explica la version estable del programa: `06_matlab_limpio_usb`.
+Esta guia explica la version estable desplegada en el Escritorio del laboratorio.
 No necesitas leer codigo para usarla.
 
 ## Idea Central
