@@ -429,6 +429,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotIzq=toc(LatMI);
             CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotIzq);
+            fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
+                Ensayo,ZonaInicio,Lado,LatMotIzq,CruceValido);
             if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
@@ -583,6 +585,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotDer=toc(LatMD);
             CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotDer);
+            fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
+                Ensayo,ZonaInicio,Lado,LatMotDer,CruceValido);
             if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
