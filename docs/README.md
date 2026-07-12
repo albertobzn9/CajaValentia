@@ -16,3 +16,4 @@ Start with the item closest to the question:
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
 - [`validation.md`](validation.md): what has and has not been tested.
 - [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): chronological lab log of the current `ValentiaE` validation, deployments, evidence, and pending tests.
+- [`version-map.md`](version-map.md): stable release, historical references, and work intentionally kept outside `main`.
