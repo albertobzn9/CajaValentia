@@ -16,3 +16,4 @@ Start with the item closest to the question:
 - [`decisions/2026-07-11-contrato-temporal-para-reescritura.md`](decisions/2026-07-11-contrato-temporal-para-reescritura.md): timing and ITI requirements for a future rewrite.
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
 - [`validation.md`](validation.md): what has and has not been tested.
+- [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): chronological lab log of the current `ValentiaE` validation, deployments, evidence, and pending tests.

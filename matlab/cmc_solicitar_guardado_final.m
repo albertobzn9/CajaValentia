@@ -13,16 +13,17 @@ end
 aviso = [];
 if ActivarAvisoLed
     aviso = cmc_iniciar_aviso_led_final(OA);
+    limpiezaAviso = onCleanup(@() cmc_detener_aviso_led_final(aviso, OA));
 end
-limpiezaAviso = onCleanup(@() cmc_detener_aviso_led_final(aviso, OA));
 
 carpetaInicial = fullfile(getenv('USERPROFILE'), 'Documents');
 if ~exist(carpetaInicial, 'dir')
     carpetaInicial = pwd;
 end
 
-[nombre, carpeta] = uiputfile(fullfile(carpetaInicial, 'resultados.csv'), ...
-    'Guardar resultados de la sesion');
+filtroCsv = {'*.csv', 'CSV (*.csv)'; '*.*', 'Todos los archivos'};
+[nombre, carpeta] = uiputfile(filtroCsv, 'Guardar resultados de la sesion', ...
+    fullfile(carpetaInicial, 'resultados.csv'));
 if isequal(nombre,0) || isequal(carpeta,0)
     guardado = false;
     return

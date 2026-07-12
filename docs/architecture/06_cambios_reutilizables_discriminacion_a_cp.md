@@ -4,6 +4,10 @@ Alcance: cambios aplicados en `OA_ValentiaCuatroE` (Discriminacion). Este
 documento es la lista de transferencia para `OA_ValentiaCuatroE2` (Cruces
 Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 
+Nota operativa actual: para la validacion de Discriminacion del 12-jul-2026,
+incluyendo el contador, CSV y archivos desplegados, leer primero la
+[bitacora de laboratorio](../bitacora-lab-2026-07-12-valentiae.md).
+
 ## Cambios Ya Aplicados En Discriminacion
 
 ### Arranque Y Aislamiento
@@ -30,12 +34,12 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 
 | Problema simple | Resolucion tecnica | Estado para CP |
 |---|---|---|
-| La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El CSV principal conserva precision completa; la vista muestra 0.01 s. | **Transferido a CP.** |
-| La columna 9 no cabia en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior ahora se ajusta al ancho real de las nueve columnas. | Pendiente inspeccion visual R2011a. |
+| La tabla no distinguia tipo ni contribucion al objetivo. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo; columna 10 `E. cruce`: 1 cuenta, 0 no cuenta, NA no aplica. El CSV conserva precision completa; la vista muestra 0.01 s. | Transferir a CP solo despues de definir su regla propia. |
+| Las columnas no cabian en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior se ajusta al ancho real de las diez columnas. | Pendiente inspeccion visual final R2011a. |
 | Habia demasiadas opciones que nadie usa. | Se ocultaron controles muertos: palancas, sonido inicial, luz intermitente, retardo y audio izquierdo/derecho. Valores utiles por defecto: luz segura; luz y sonido de riesgo; secuencia y sonido 1:10 activados. | Aplicar solo despues de revisar GUI CP. |
 | `Secuencia Aleatoria` genera ansiedad si desaparece. | Se conserva visible y marcada, aunque el callback historico no cambia la secuencia. | Mantener por compatibilidad de uso. |
 | Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crean dos CSV hermanos. | **Transferido a CP; falta validacion fisica CP.** |
-| Un inicio en centro podia inflar los cruces. | **En rama `feature/sensor-validated-crosses`:** cruce real exige cambio de lado, inicio lateral confirmado y desplazamiento de al menos 1 s. | **Transferido a CP para su contador visible; CP termina por tiempo, no por ese contador.** |
+| Un inicio en centro podia inflar los cruces. | El cruce fisico real exige cambio de lado, inicio lateral confirmado y desplazamiento de al menos 1 s. Un no-cruce lateral tambien cuenta como ensayo de cruce; centro y mismo lado no. | CP termina por tiempo; no copiar el cierre automatico sin revisar su protocolo. |
 
 ## Exportacion Final CSV
 
@@ -43,9 +47,9 @@ Los `.mat` de `Valentia/` se conservan solo durante la sesion porque MATLAB los
 usa como estado interno. Al guardar, el programa ya no exporta un `.mat` final:
 crea dos archivos CSV con el mismo nombre base.
 
-- `nombre.csv`: una fila por ensayo terminado, con las nueve columnas de
+- `nombre.csv`: una fila por ensayo terminado, con las diez columnas de
   `Resultados`:
-  `ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento`.
+  `ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento,ensayo_cruce`.
 - `nombre_palanqueos.csv`: una fila por presion detectada:
   `evento_sesion,tiempo_s,fase,ensayo,tipo_evento,lado,contador_lado_sesion,contador_hardware`.
 
@@ -123,13 +127,12 @@ referencia para medir el ITI visual exacto.
 | Pendiente | Criterio de terminado |
 |---|---|
 | Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
-| Definir ensayo valido para el contador de cruces. | **Completado y probado en rama `feature/sensor-validated-crosses`:** un cruce real exige cambio de lado programado, posicion inicial lateral confirmada, llegada al lado opuesto y desplazamiento de al menos 1 s. El umbral replica el analisis posterior. Un inicio desde el centro no infla el contador. |
-| Contar no-cruces como ensayos terminados. | **Probado fisicamente en `prueba2044.mat`:** una fila con lado `-2` sumo como ensayo 1; una repeticion y un cruce lento completaron los ensayos 2 y 3. |
-| Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Completado y probado:** `prueba2044.mat` tuvo tres filas (`-2`, repeticion y cruce) y la secuencia cerró sola tras la tercera. |
+| Definir ensayo de cruce para el contador. | Implementado: cruce lateral real o no-cruce lateral ante un cambio de lado cuentan; centro y mismo lado no. Falta repetir la prueba fisica tras agregar columna 10. |
+| Hacer que `Ensayos a realizar` use ensayos de cruce. | Implementado: el cierre automatico consulta el mismo contador que muestra la GUI. Falta prueba fisica `no_cruce1.csv`. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
 | Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y exporta `nombre.csv` mas `nombre_palanqueos.csv`. Cancelar conserva el estado temporal para el boton manual. Incluye cronometros visibles y aviso LED opcional; falta prueba fisica completa. |
-| Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar ambos CSV, nueve columnas de ensayos, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
-| Ajustar el rectangulo exterior de `uitable1`. | **Implementado en `fix/startup-and-table`:** el ancho exterior se calcula desde las nueve columnas. Falta inspeccion visual R2011a. |
+| Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar ambos CSV, diez columnas de ensayos, `ensayo_cruce` 1/0/NA, `NA` fuera de ensayo y acumulados secuenciales. |
+| Ajustar el rectangulo exterior de `uitable1`. | Implementado: el ancho exterior se calcula desde las diez columnas. Falta inspeccion visual R2011a. |
 | Centrar los valores de `uitable1`. | En GUIDE/R2011a no existe una propiedad estable para centrar celdas. Revisar visualmente; no introducir un hack Java o espacios variables sin necesidad real. |
 | Planificar 3 controles sin luz en una sesion CP. | **Implementado y simulado:** objetivos 9/18/27 min, ITI final limitado solo cuando hace falta. |
 | Confirmar lado fisico del sonido de control. | **Implementado en codigo:** `Secuencia` usa origen y `cmc_lado_objetivo_cp` manda estimulo al opuesto; falta oido/caja. |
@@ -150,9 +153,9 @@ de exito. Si uno falla, se corrige ese modulo antes de continuar.
 | Modulo | Que se prueba | Exito esperado | Estado actual |
 |---|---|---|---|
 | 1. Arranque seguro | Abrir `ValentiaE` sin rata. | No cae pellet, no se enciende luz, parrilla ni audio. | Cambio de codigo y prueba sin hardware listos; falta caja. |
-| 2. Tabla y CSV | Abrir la GUI y guardar una corrida corta. | Nueve columnas visibles, sin traslape; CSV principal conserva la columna `Tipo`. | Logica lista; falta inspeccion visual R2011a. |
-| 3. Conteo de ensayos | Simular cruce, mismo lado y no-cruce. | Cada fila valida cuenta una vez; un inicio en centro no infla el conteo. | Probado fisicamente en la rama de cruces por sensores. |
-| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, y queda en ambos CSV. | Prueba inicial funcional; falta validar CSV con una palanqueada real. |
+| 2. Tabla y CSV | Abrir la GUI y guardar una corrida corta. | Diez columnas visibles, sin traslape; CSV principal conserva `Tipo` y `ensayo_cruce`. | Logica lista; falta inspeccion visual final R2011a. |
+| 3. Conteo de ensayos | Simular cruce, mismo lado y no-cruce. | Cruce lateral y no-cruce lateral cuentan; centro y mismo lado no. | Logica lista; falta prueba `no_cruce1.csv`. |
+| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, `ensayo_cruce=NA` y contador sin cambio. | Prueba inicial funcional; falta validar CSV nuevo con una palanqueada real. |
 | 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar dos CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
 | 6. Palanqueos | Una presion lenta y varias rapidas en cada fase. | CSV ordenado, `NA` fuera de ensayo y contadores de sesion consecutivos. | Esquema probado sin hardware; falta validar el CSV nuevo. |
 | 7. Aviso final | Casilla `Aviso LED al finalizar` activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Implementado y probado sin hardware; falta caja. |
