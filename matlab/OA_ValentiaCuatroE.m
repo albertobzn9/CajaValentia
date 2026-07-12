@@ -714,7 +714,6 @@ load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 if(CT_Ejecuta==1)
     CT_FinalizarTrasEnsayo=1;
     save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
-    set(hObject,'String','Deteniendo tras ensayo');
 end
 
 

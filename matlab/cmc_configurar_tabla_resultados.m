@@ -4,7 +4,7 @@ function cmc_configurar_tabla_resultados(tabla)
 
 nombres = {'Ens.','Lado','Est.','Lat.','T. abs.','Pal. I', ...
     'Pal. D','Despl.','Tipo'};
-anchos = {52, 47, 59, 65, 76, 59, 59, 76, 62};
+anchos = {59, 53, 67, 73, 86, 67, 67, 86, 69};
 set(tabla, 'ColumnName', nombres, 'ColumnWidth', anchos);
 
 % Conserva el borde superior y crea abajo el mismo margen que Sin luz.
