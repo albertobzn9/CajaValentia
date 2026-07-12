@@ -127,7 +127,8 @@ set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
-set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
+set(handles.text19,'String','Ensayos terminados');
+set(handles.edit19,'String','0'); %ensayos que dejaron una fila de resultado
 set(handles.Terminarn2,'String','Detener ahora');
 set(handles.checkbox1,'Value',1); %secuencia aleatoria (informativa)
 set(handles.checkbox4,'Value',1); %luz en ensayo seguro
@@ -262,11 +263,13 @@ OA_ValentiaResetPalancas(handles.OA);
 EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 
-EnsayoValido=0;
-set(handles.edit19,'String',num2str(EnsayoValido));
+CrucesValidos=0;
+EnsayosTerminados=0;
+set(handles.edit19,'String',num2str(EnsayosTerminados));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
+    FilasAntesDelEnsayo=size(Resultados,1);
     
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
@@ -432,8 +435,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
                 Ensayo,ZonaInicio,Lado,LatMotIzq,CruceValido);
             if(CruceValido)
-                EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
-                set(handles.edit19,'String',num2str(EnsayoValido));
+                CrucesValidos=CrucesValidos+1;
             end    
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues de cruzar
@@ -588,8 +590,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
                 Ensayo,ZonaInicio,Lado,LatMotDer,CruceValido);
             if(CruceValido)
-                EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
-                set(handles.edit19,'String',num2str(EnsayoValido));
+                CrucesValidos=CrucesValidos+1;
             end  
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues del cruce
@@ -653,6 +654,14 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         stop(handles.GS);
     end  %ensayo lado derecho
     end  %sonido solo o ensayo con comida
+
+    if(size(Resultados,1)>FilasAntesDelEnsayo)
+        EnsayosTerminados=cmc_ensayos_terminados(Resultados);
+        CT_Ensayos=EnsayosTerminados;
+        set(handles.edit19,'String',num2str(EnsayosTerminados));
+        fprintf('Ensayos terminados=%d, cruces validos=%d\n', ...
+            EnsayosTerminados,CrucesValidos);
+    end
     
     OA_ValentiaElectrico(handles.OA,0)
     pause(.5)
@@ -670,7 +679,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     else
         FinEnsayos=str2num(get(handles.edit4,'String'));
     end
-    if(Ensayo>=FinEnsayos+1)
+    if(EnsayosTerminados>=FinEnsayos)
         break
     end
     
