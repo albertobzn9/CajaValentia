@@ -205,11 +205,20 @@ Ensayo=0;
 Resultados=[];
 ContadorTD=0;
 ContadorTI=0;
+[EstadoPalanqueos, EventosPalanqueo] = cmc_nuevo_registro_palanqueos;
+ContadorHabI=0;
+ContadorHabD=0;
+ContadorSinLuzI=0;
+ContadorSinLuzD=0;
 TultimaP=0;
 
 %limpiamos contadores de palanqueos
 set(handles.edit6,'String','0'); %lado izq
 set(handles.edit7,'String','0'); %lado der
+set(handles.edit20,'String','0'); %habituacion izq
+set(handles.edit21,'String','0'); %habituacion der
+set(handles.edit22,'String','0'); %sin luz izq
+set(handles.edit23,'String','0'); %sin luz der
 
 set(handles.Inicio,'String','Ejecutando');
 
@@ -234,28 +243,23 @@ THabitua=str2num(get(handles.edit15,'String'));
 msgbox('Cerrar mensaje para iniciar habituacion')
 
 NumCiclosHabitua=round(THabitua/0.42);
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    DDAI=DI;
-    DDAD=DD;
+[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 for i=1:NumCiclosHabitua
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    if(DI~=DDAI)
-        handles.PalancasIzqHabitua=handles.PalancasIzqHabitua+1;
-        set(handles.edit20,'String',num2str(handles.PalancasIzqHabitua));
-        DDAI=DI;
-    end
-    if(DD~=DDAD)
-        handles.PalancasDerHabitua=handles.PalancasDerHabitua+1;
-        set(handles.edit21,'String',num2str(handles.PalancasDerHabitua));
-        DDAD=DD;
-    end
+    [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
+        handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+        'habituacion_inicial',0,'ninguno');
+    ContadorHabI=ContadorHabI+NuevaI;
+    ContadorHabD=ContadorHabD+NuevaD;
+    set(handles.edit20,'String',num2str(ContadorHabI));
+    set(handles.edit21,'String',num2str(ContadorHabD));
     pause(0.3) %esperamos 300 ms
 end
 
-
-
 OA_ValentiaResetPalancas(handles.OA);
+[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 
 EnsayoValido=0;
@@ -266,6 +270,14 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
+
+    [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
+        handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+        'sin_luz',0,'ninguno');
+    ContadorSinLuzI=ContadorSinLuzI+NuevaI;
+    ContadorSinLuzD=ContadorSinLuzD+NuevaD;
+    set(handles.edit22,'String',num2str(ContadorSinLuzI));
+    set(handles.edit23,'String',num2str(ContadorSinLuzD));
     
     EnsayoMismoLado=0;
     if((Ensayo>1)&&(Secuencia(Ensayo-1,1)==Secuencia(Ensayo,1)))
@@ -284,6 +296,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     end
 
     TipoEvento=Secuencia(Ensayo,2);
+    if(TipoEvento==0)
+        TipoEventoTexto='seguro';
+    elseif(TipoEvento==1)
+        TipoEventoTexto='riesgo';
+    else
+        TipoEventoTexto='sonido_solo';
+    end
     if(TipoEvento==2)
         DuracionSonidoSolo=180;
         DuracionAudio=DuracionSonidoSolo+1;
@@ -298,8 +317,10 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         OA_ValentiaElectrico(handles.OA,1);
         R2=tic;
 
-        [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = ...
-            OA_MonitoreaSonidoSolo(handles.OA,DuracionSonidoSolo,ContadorTI,ContadorTD,handles.edit9);
+        [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido, ...
+            EstadoPalanqueos,EventosPalanqueo] = OA_MonitoreaSonidoSolo( ...
+            handles.OA,DuracionSonidoSolo,ContadorTI,ContadorTD,handles.edit9, ...
+            EstadoPalanqueos,EventosPalanqueo,R0,Ensayo);
         set(handles.edit6,'String',num2str(ContadorTI));
         set(handles.edit7,'String',num2str(ContadorTD));
 
@@ -361,8 +382,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         R2=tic;
         OA_ValentiaResetPalancas(handles.OA);
         [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
-        DIA=DI;
-        DDA=DD;
+        EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         P=0;
         LatMI=tic;
         CDurMaxEns=1;
@@ -371,7 +391,14 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             if(P==1)
                 P=0;
                 [P]=OA_ValentiaBuscaIzquierda(handles.OA);
-            end    
+            end
+            [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
+                handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                'ensayo',Ensayo,TipoEventoTexto);
+            ContadorTI=ContadorTI+NuevaI;
+            ContadorTD=ContadorTD+NuevaD;
+            set(handles.edit6,'String',num2str(ContadorTI));
+            set(handles.edit7,'String',num2str(ContadorTD));
             if(toc(LatMI)>DurMaxEns)
                 CDurMaxEns=0;
                 break;
@@ -412,20 +439,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if(CT_Ejecuta==0)
                     break;
                 end
-                [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
-                [DI DIA PalXRec]
-%                 if(DI==2)
-%                     DI=0;
-%                 end    
-
-                if(DIA~=DI)
-                    ContadorTI=ContadorTI+1;
-                    set(handles.edit6,'String',num2str(ContadorTI)); %lado izq
-                end
-                if(DDA~=DD)
-                    ContadorTD=ContadorTD+1;
-                    set(handles.edit7,'String',num2str(ContadorTD)); %lado der
-                end
+                [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD,DI,DD]=cmc_observar_palanqueos( ...
+                    handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                    'ensayo',Ensayo,TipoEventoTexto);
+                ContadorTI=ContadorTI+NuevaI;
+                ContadorTD=ContadorTD+NuevaD;
+                set(handles.edit6,'String',num2str(ContadorTI));
+                set(handles.edit7,'String',num2str(ContadorTD));
                 if((DI>=PalXRec)&& EnsayoMismoLado==0) %%si no se repite el mismo lado
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
@@ -455,8 +475,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 end
                 
                 
-                DIA=DI;
-                DDA=DD;
                 pause(.1);
                 load('ControlTarea');
                 if(CT_Ejecuta==0)
@@ -520,13 +538,19 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         R2=tic;
         OA_ValentiaResetPalancas(handles.OA);
         [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
-        DDA=DD; %guardamos cuenta de palanca D
-        DIA=DI; %guardamos cuenta de palanca I
+        EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         P=0;
         LatMD=tic;
         CDurMaxEns=1;
         while(P==0)
             [P]=OA_ValentiaBuscaDerecha(handles.OA);
+            [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
+                handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                'ensayo',Ensayo,TipoEventoTexto);
+            ContadorTI=ContadorTI+NuevaI;
+            ContadorTD=ContadorTD+NuevaD;
+            set(handles.edit6,'String',num2str(ContadorTI));
+            set(handles.edit7,'String',num2str(ContadorTD));
             if(toc(LatMD)>DurMaxEns)
                 CDurMaxEns=0;
                 break;
@@ -569,18 +593,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if(CT_Ejecuta==0)
                     break;
                 end
-                [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
-                if(DD==2)
-                    DD=0;
-                end    
-                if(DIA~=DI)
-                    ContadorTI=ContadorTI+1;
-                    set(handles.edit6,'String',num2str(ContadorTI)); %lado izq
-                end
-                if(DDA~=DD)
-                    ContadorTD=ContadorTD+1;
-                    set(handles.edit7,'String',num2str(ContadorTD)); %lado der
-                end
+                [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD,DI,DD]=cmc_observar_palanqueos( ...
+                    handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                    'ensayo',Ensayo,TipoEventoTexto);
+                ContadorTI=ContadorTI+NuevaI;
+                ContadorTD=ContadorTD+NuevaD;
+                set(handles.edit6,'String',num2str(ContadorTI));
+                set(handles.edit7,'String',num2str(ContadorTD));
                 if((DD>=PalXRec)&& EnsayoMismoLado==0)
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
@@ -607,8 +626,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     end
                 end
                 
-                DDA=DD;
-                DIA=DI;
                 pause(.1);
                 load('ControlTarea');
                 if(CT_Ejecuta==0)
@@ -651,33 +668,25 @@ end
 
 
 set(handles.Inicio,'String','Inicio');
-save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados');
-msgbox('Fin de la secuencia')
-
-
 THabitua=str2num(get(handles.edit15,'String'));
-
 NumCiclosHabitua=round(THabitua/0.42);
 
-[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-DDAI=DI;
-DDAD=DD;
+[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 for i=1:NumCiclosHabitua
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    if(DI~=DDAI)
-        handles.PalancasIzqHabitua=handles.PalancasIzqHabitua+1;
-        set(handles.edit20,'String',num2str(handles.PalancasIzqHabitua));
-        DDAI=DI;
-    end
-    if(DD~=DDAD)
-        handles.PalancasDerHabitua=handles.PalancasDerHabitua+1;
-        set(handles.edit21,'String',num2str(handles.PalancasDerHabitua));
-        DDAD=DD;
-    end
+    [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
+        handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+        'habituacion_final',0,'ninguno');
+    ContadorHabI=ContadorHabI+NuevaI;
+    ContadorHabD=ContadorHabD+NuevaD;
+    set(handles.edit20,'String',num2str(ContadorHabI));
+    set(handles.edit21,'String',num2str(ContadorHabD));
     pause(0.3) %esperamos 300 ms
 end
 
+save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
+msgbox('Fin de la secuencia')
 
 
 
@@ -761,11 +770,21 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-load(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados');
+datosSesion=load(fullfile(cmc_state_dir(), 'OA_Resultados'));
+Resultados=datosSesion.Resultados;
+if isfield(datosSesion,'EventosPalanqueo')
+    EventosPalanqueo=datosSesion.EventosPalanqueo;
+else
+    [~,EventosPalanqueo]=cmc_nuevo_registro_palanqueos;
+end
 viejo=pwd;
 cd(cmc_results_dir());
 [fname,pname]=uiputfile('*.mat','nombre y ruta para guardar resultados');
-save(strcat(pname,fname),'Resultados');
+if isequal(fname,0)
+    cd(viejo);
+    return
+end
+cmc_guardar_resultados_sesion(fullfile(pname,fname),Resultados,EventosPalanqueo);
 cd(viejo);
 
 
