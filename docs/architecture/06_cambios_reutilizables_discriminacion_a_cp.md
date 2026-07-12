@@ -122,3 +122,37 @@ referencia para medir el ITI visual exacto.
 Cada pendiente se implementa primero en Discriminacion, se prueba sin hardware,
 luego con la caja y solo entonces se adapta a Cruces Peligrosos. No copiar una
 GUI completa sin revisar sus diferencias conductuales.
+
+## Pruebas Modulares Para La Siguiente Visita Al Laboratorio
+
+La interfaz y el hardware son antiguos; por eso no se debe probar toda la
+sesion como una sola cosa. Cada modulo tiene una pregunta simple y un criterio
+de exito. Si uno falla, se corrige ese modulo antes de continuar.
+
+| Modulo | Que se prueba | Exito esperado | Estado actual |
+|---|---|---|---|
+| 1. Arranque seguro | Abrir `ValentiaE` sin rata. | No cae pellet, no se enciende luz, parrilla ni audio. | Cambio de codigo y prueba sin hardware listos; falta caja. |
+| 2. Tabla | Abrir la GUI y guardar una corrida corta. | Nueve columnas visibles, sin traslape; MAT conserva la columna `Tipo`. | Logica lista; falta inspeccion visual R2011a. |
+| 3. Conteo de ensayos | Simular cruce, mismo lado y no-cruce. | Cada fila valida cuenta una vez; un inicio en centro no infla el conteo. | Probado fisicamente en la rama de cruces por sensores. |
+| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, y queda en MAT/CSV. | Prueba inicial funcional; falta validar CSV con una palanqueada real. |
+| 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar MAT mas CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
+| 6. Palanqueos | Una presion lenta y varias rapidas en cada fase. | CSV ordenado, `NA` fuera de ensayo y contadores de sesion consecutivos. | Esquema probado sin hardware; falta validar el CSV nuevo. |
+| 7. Aviso final | Casilla de aviso LED activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Pendiente de implementar y validar. |
+
+El reloj de la GUI tambien funciona como cronometro de fase: durante
+`habituacion_inicial` y `habituacion_final` muestra `transcurrido / total`.
+Al comenzar los ensayos recupera su etiqueta y formato de reloj de ensayo.
+Esta parte paso prueba sin hardware; falta inspeccion visual R2011a.
+
+### Mejoras Pendientes De Implementar En Esta Rama
+
+- Agregar una casilla opcional, apagada por defecto, para el aviso LED final.
+  El aviso no debe dispensar pellet ni encender audio; solo usa el LED marcador
+  que ya identifica la estimulacion electrica.
+
+### Limite Conocido De La Tabla
+
+`uitable` clasico de GUIDE/R2011a no ofrece una propiedad estable para centrar
+el texto de las celdas. No se agregara un hack Java ni espacios manuales: ambos
+pueden romperse entre R2011a y versiones modernas. El ancho, encabezados y la
+precision de los valores si estan bajo control del codigo.

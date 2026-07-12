@@ -31,8 +31,8 @@ cmc_configurar_tabla_resultados(tabla);
 
 nombres = get(tabla,'ColumnName');
 assert(length(nombres) == 9, 'La tabla debe mostrar nueve columnas.');
-assert(strcmp(nombres{9},'Tipo evento'), ...
-    'La columna 9 debe llamarse Tipo evento.');
+assert(strcmp(nombres{9},'Tipo'), ...
+    'La columna 9 debe llamarse Tipo.');
 
 
 function cmc_borra_archivo_prueba(archivo)

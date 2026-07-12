@@ -243,11 +243,12 @@ end
 THabitua=str2num(get(handles.edit15,'String'));
 msgbox('Cerrar mensaje para iniciar habituacion')
 
-NumCiclosHabitua=round(THabitua/0.42);
 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
 EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
-for i=1:NumCiclosHabitua
+RHabituacion=tic;
+cmc_actualizar_reloj_fase(handles.edit9,'Habituacion inicial (s)',0,THabitua);
+while toc(RHabituacion)<THabitua
     [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
         handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
         'habituacion_inicial',0,'ninguno');
@@ -255,8 +256,11 @@ for i=1:NumCiclosHabitua
     ContadorHabD=ContadorHabD+NuevaD;
     set(handles.edit20,'String',num2str(ContadorHabI));
     set(handles.edit21,'String',num2str(ContadorHabD));
-    pause(0.3) %esperamos 300 ms
+    cmc_actualizar_reloj_fase(handles.edit9,'Habituacion inicial (s)', ...
+        toc(RHabituacion),THabitua);
+    pause(min(0.3,max(0,THabitua-toc(RHabituacion))));
 end
+cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
 
 OA_ValentiaResetPalancas(handles.OA);
 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
@@ -688,12 +692,13 @@ end
 
 set(handles.Inicio,'String','Inicio');
 THabitua=str2num(get(handles.edit15,'String'));
-NumCiclosHabitua=round(THabitua/0.42);
 
 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
 EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
-for i=1:NumCiclosHabitua
+RHabituacion=tic;
+cmc_actualizar_reloj_fase(handles.edit9,'Habituacion final (s)',0,THabitua);
+while toc(RHabituacion)<THabitua
     [EstadoPalanqueos,EventosPalanqueo,NuevaI,NuevaD]=cmc_observar_palanqueos( ...
         handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
         'habituacion_final',0,'ninguno');
@@ -701,8 +706,11 @@ for i=1:NumCiclosHabitua
     ContadorHabD=ContadorHabD+NuevaD;
     set(handles.edit20,'String',num2str(ContadorHabI));
     set(handles.edit21,'String',num2str(ContadorHabD));
-    pause(0.3) %esperamos 300 ms
+    cmc_actualizar_reloj_fase(handles.edit9,'Habituacion final (s)', ...
+        toc(RHabituacion),THabitua);
+    pause(min(0.3,max(0,THabitua-toc(RHabituacion))));
 end
+cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
 
 save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
 cmc_solicitar_guardado_final(Resultados,EventosPalanqueo);
