@@ -705,7 +705,7 @@ for i=1:NumCiclosHabitua
 end
 
 save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
-msgbox('Fin de la secuencia')
+cmc_solicitar_guardado_final(Resultados,EventosPalanqueo);
 
 
 

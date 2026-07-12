@@ -96,7 +96,7 @@ referencia para medir el ITI visual exacto.
 | Contar no-cruces como ensayos terminados. | **Probado fisicamente en `prueba2044.mat`:** una fila con lado `-2` sumo como ensayo 1; una repeticion y un cruce lento completaron los ensayos 2 y 3. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Implementado:** el programa termina al llegar al numero de filas/ensayos completos, sin contar un paro a mitad de evento. Falta confirmar visualmente el cierre automatico tras el ultimo ensayo. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
-| Finalizacion automatica. | Tras detener: habituacion final, aviso LED opcional por palomita, dialogo de guardado y retorno seguro a espera. |
+| Finalizacion automatica. | **En rama `feature/sensor-validated-crosses`:** tras la habituacion final se abre el dialogo nativo de guardado desde `C:\` para elegir USB en Este equipo; guarda `.mat` y CSV juntos. Cancelar conserva el estado temporal para el boton manual. Falta aviso LED opcional y prueba fisica. |
 | Ajustar el rectangulo exterior de `uitable1`. | El ancho exterior de la tabla coincide con sus nueve columnas, sin espacio interno sobrante ni columna oculta en R2011a. |
 | Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
 
