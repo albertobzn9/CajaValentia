@@ -33,9 +33,10 @@ while toc(reloj) < duracion
     izqAnterior = izq;
     derAnterior = der;
 
+    cmc_actualizar_reloj_fase(handles.edit9, 'Sin luz / ITI (s)', toc(reloj), duracion);
     drawnow;
-    control = load('ControlTarea','CT_Ejecuta');
-    if control.CT_Ejecuta == 0
+    control = load('ControlTarea','CT_Ejecuta','CT_FinalizarTrasEnsayo');
+    if control.CT_Ejecuta == 0 || control.CT_FinalizarTrasEnsayo == 1
         detenido = true;
         return
     end

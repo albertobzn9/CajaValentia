@@ -15,7 +15,10 @@ plan = struct('limite_conducta_s', limiteConducta, ...
     'max_iti_s', max(0, ultimoInicioPermitido - tiempoConducta));
 
 if proximoSonido > numel(objetivos)
-    plan.finalizar_sin_nuevo_ensayo = tiempoConducta >= ultimoInicioPermitido;
+    % Sin controles pendientes, un CP normal puede iniciar hasta los 30 min.
+    % Ese ultimo evento puede terminar despues del limite conductual.
+    plan.finalizar_sin_nuevo_ensayo = tiempoConducta >= limiteConducta;
+    plan.max_iti_s = max(0, limiteConducta - tiempoConducta);
     return
 end
 

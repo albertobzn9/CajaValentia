@@ -23,7 +23,7 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 | Sonido solo aparecia aun en cruces seguros. | En Discriminacion solo se agrega con riesgo mayor que cero y checkbox `Agregar evento sonido 1:10` activo. | No copiar literalmente: CP usa programacion por tiempo. |
 | Riesgo y sonido solo no debian existir si la rata no cambia de lado. | La secuencia los coloca solo en cambios de lado; los repetidos siguen siendo seguros. | Regla comun que CP debe conservar. |
 | El reloj se congelaba durante sonido solo al cruzar. | `OA_MonitoreaSonidoSolo` sigue toda la duracion programada y actualiza el reloj visual. | **Transferido a CP.** |
-| Detener podia perder datos o cortar un ensayo a medias. | `Detener ahora` termina sin inventar una fila; `Detener tras ensayo` cierra el evento actual. Los textos de ambos botones quedan estables. | CP ahora revisa `Terminar` durante ITI y eventos; falta boton equivalente a `Detener tras ensayo`. |
+| Detener podia perder datos o cortar un ensayo a medias. | `Detener ahora` termina sin inventar una fila; `Detener tras ensayo` cierra el evento actual. Los textos de ambos botones quedan estables. | **Transferido a CP:** ambos botones; el segundo no inicia otro ensayo si se pulsa durante ITI. |
 | La habituacion final quedaba fuera de los datos. | La rutina final se ejecuta antes de guardar el estado temporal y el registro admite fase `habituacion_final`. | **Transferido a CP:** inicia tras el limite de 30 min o terminacion manual. |
 
 ### Datos, Tabla Y GUI

@@ -21,6 +21,7 @@ cmc_prueba_aviso_led_final;
 cmc_prueba_planificador_cp_sonido_solo;
 cmc_prueba_lado_objetivo_cp;
 cmc_prueba_limite_respuesta_cp;
+cmc_prueba_layout_detener_cp;
 textoCP = evalc('cmc_prueba_plan_sonido_solo_cp;');
 assert(~isempty(strfind(textoCP, 'OK: CP')), ...
     'La prueba de planificacion de CP no termino correctamente.');

@@ -16,6 +16,8 @@ y la copia portable del programa.
    opuesto al lado de origen de `Secuencia`.
 5. Probar `Terminar` durante ITI y durante un ensayo: luces, parrilla y audio
    se apagan; despues ocurre habituacion final y se ofrece guardar.
+   Probar tambien `Detener tras ensayo`: en ITI no inicia otro ensayo; durante
+   un ensayo espera su cierre normal y luego inicia habituacion final.
 6. Guardar: deben salir `nombre.csv` y `nombre_palanqueos.csv`. El segundo
    debe registrar fases `habituacion_inicial`, `sin_luz`, `ensayo`,
    `sonido_solo` y `habituacion_final` cuando se hayan producido.

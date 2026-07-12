@@ -18,8 +18,9 @@ conserva el ITI aleatorio de 60--180 s, pero limita solo el ITI final necesario
 para que un control pendiente inicie antes de 30 min. Si iniciar un CP normal
 podria dejarlo fuera de ese limite, el control toma prioridad. Un ensayo ya
 iniciado puede terminar despues de los 30 min; enseguida inicia habituacion
-final. La novena columna de `Resultados` distingue CP normal (`1`) de sonido
-solo (`2`).
+final. Cuando ya no hay controles pendientes, un CP normal aun puede iniciar
+hasta el min 30 exacto; tambien puede terminar despues. La novena columna de
+`Resultados` distingue CP normal (`1`) de sonido solo (`2`).
 
 `OA_SecuenciaEnsayos4` guarda lado de origen. Los altavoces y LED del control
 deben usar el lado opuesto: `cmc_lado_objetivo_cp` hace esa conversion y evita
@@ -28,7 +29,9 @@ la inversion historica del sonido.
 Un ensayo CP no puede esperar una palanqueada indefinidamente. Desde el inicio
 del ensayo, el limite total es `duracion maxima + 10 s` (por ejemplo, 30 s se
 cierran a 40 s). Si la rata cruzo pero no palanqueo antes del limite, se guarda
-el cruce, no se entrega pellet y el programa continua.
+el cruce, no se entrega pellet y el programa continua. En ese caso la columna
+`latencia_s` toma el limite configurado; el CSV hermano de palanqueos muestra
+que no hubo presion durante el evento.
 
 ## Consecuencia
 

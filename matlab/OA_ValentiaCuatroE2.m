@@ -117,8 +117,8 @@ save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo
 set(handles.edit1,'String','1');
 set(handles.edit2,'String','0');   %retardo antes de la recompensa
 set(handles.edit3,'String','1');  %pellets por recompensa ensayo seguro
-set(handles.edit4,'String','300'); %ensayos a realizar
-set(handles.edit5,'String','1'); %palancas por recompensa
+set(handles.edit4,'String','30'); %conducta CP en minutos
+set(handles.edit5,'String','1'); %una palanca por recompensa
 set(handles.edit6,'String','0'); %ensayos a realizar
 set(handles.edit7,'String','0'); %palancas por recompensa
 set(handles.edit8,'String','120'); %maxima duracion de ensayo seguro (s)
@@ -135,6 +135,38 @@ set(handles.edit17,'String','1');  %CP siempre entrega un pellet por respuesta
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
 set(handles.checkbox7,'Value',1); %luz de comida en ensayo CP
 set(handles.checkbox8,'Value',1); %ruido blanco en ensayo CP
+
+% Parametros fijos del protocolo CP: visibles para el operador, pero no
+% editables para evitar que la GUI contradiga la logica de la tarea.
+set(handles.text1,'String','Riesgo CP (fijo)');
+set(handles.edit1,'Enable','inactive');
+set(handles.text4,'String','Conducta (min)');
+set(handles.edit4,'Enable','inactive');
+set(handles.text5,'String','Palancas/recompensa (fijo)');
+set(handles.edit5,'Enable','inactive');
+set(handles.text14,'String','Frecuencia riesgo (fija)');
+set(handles.edit14,'Enable','inactive');
+set(handles.text16,'String','Max repeticiones (fijo)');
+set(handles.edit16,'Enable','inactive');
+set(handles.text17,'String','Pellets/recompensa (fijo)');
+set(handles.edit17,'Enable','inactive');
+set(handles.checkbox7,'Enable','off');
+set(handles.checkbox8,'Enable','off');
+set(handles.text19,'String','Cruces validos');
+set(handles.Terminarn2,'String','Detener ahora');
+
+% Espacio libre entre Detener ahora y Guardar Datos en el .fig original.
+% Se crea aqui para conservar compatibilidad con GUIDE/R2011a sin editar .fig.
+posDetener=get(handles.Terminarn2,'Position');
+handles.DetenerTrasEnsayo=uicontrol('Parent',hObject, ...
+    'Style','pushbutton', ...
+    'String','Detener tras ensayo', ...
+    'Tag','DetenerTrasEnsayo', ...
+    'Units',get(handles.Terminarn2,'Units'), ...
+    'Position',cmc_posicion_detener_tras_ensayo(posDetener), ...
+    'FontSize',8, ...
+    'Callback',@(src,evt) DetenerTrasEnsayo_Callback(src,evt,guidata(src)));
+guidata(hObject,handles);
 
 
 
@@ -212,12 +244,13 @@ TultimaPalanca=toc(R1);
 THabitua=str2num(get(handles.edit15,'String'));
 msgbox('Cerrar mensaje para iniciar habituacion')
 
-[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD]= ...
+[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD,~]= ...
     cmc_ejecutar_habituacion(handles,THabitua,EstadoPalanqueos, ...
     EventosPalanqueo,R0,'habituacion_inicial',ContadorHabI,ContadorHabD);
 
 control=load('ControlTarea','CT_Ejecuta');
 CT_Ejecuta=control.CT_Ejecuta;
+cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
 
 
 
@@ -240,6 +273,11 @@ set(handles.edit19,'String',num2str(EnsayoValido));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
+    control=load('ControlTarea','CT_Ejecuta');
+    CT_Ejecuta=control.CT_Ejecuta;
+    if(CT_Ejecuta==0)
+        break
+    end
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
 
@@ -273,6 +311,10 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         NumeroEvento=NumeroEvento+1;
         ProximoSonidoSolo=ProximoSonidoSolo+1;
+        control=load('ControlTarea','CT_FinalizarTrasEnsayo');
+        if(control.CT_FinalizarTrasEnsayo==1)
+            break
+        end
         continue
     end
 
@@ -286,6 +328,10 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         set(handles.edit6,'String',num2str(ContadorTI));
         set(handles.edit7,'String',num2str(ContadorTD));
         if(Detenido)
+            break
+        end
+        control=load('ControlTarea','CT_FinalizarTrasEnsayo');
+        if(control.CT_FinalizarTrasEnsayo==1)
             break
         end
         % El reloj pudo llegar al objetivo durante el ITI. Se reevalua antes
@@ -309,6 +355,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     freqAD=str2num(get(handles.edit12,'String'));
     AmpAD=str2num(get(handles.edit13,'String'));
     freqRiesgo=str2num(get(handles.edit14,'String'));
+    cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
     
     
     caso=Secuencia(Ensayo,1);
@@ -675,8 +722,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     OA_ValentiaEstimuloD(handles.OA,0,0)
     pause(.2);
     OA_CtrlDispIzqCero(handles.OA);
-    load('ControlTarea');
-    if(CT_Ejecuta==0)
+    control=load('ControlTarea','CT_Ejecuta','CT_FinalizarTrasEnsayo');
+    if(control.CT_Ejecuta==0 || control.CT_FinalizarTrasEnsayo==1)
         break;
     end
     % CP se gobierna por los 30 min de conducta; edit4 queda solo como
@@ -688,9 +735,10 @@ end
 set(handles.Inicio,'String','Inicio');
 THabitua=str2num(get(handles.edit15,'String'));
 
-[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD]= ...
+[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD,~]= ...
     cmc_ejecutar_habituacion(handles,THabitua,EstadoPalanqueos, ...
     EventosPalanqueo,R0,'habituacion_final',ContadorHabI,ContadorHabD);
+cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
 
 save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
 cmc_solicitar_guardado_final(Resultados,EventosPalanqueo,handles.OA,false);
@@ -721,6 +769,17 @@ function Terminarn2_Callback(hObject, eventdata, handles)
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 CT_Ejecuta=0;
 save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+
+
+function DetenerTrasEnsayo_Callback(hObject, eventdata, handles)
+% Solicita cierre al acabar el evento actual, sin apagarlo a la mitad.
+
+control=load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_Ejecuta=control.CT_Ejecuta;
+CT_Pausa=control.CT_Pausa;
+CT_Ensayos=control.CT_Ensayos;
+CT_FinalizarTrasEnsayo=1;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
 
 % --- Executes when user attempts to close figure1.
