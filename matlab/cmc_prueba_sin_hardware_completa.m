@@ -2,6 +2,8 @@ function cmc_prueba_sin_hardware_completa
 %CMC_PRUEBA_SIN_HARDWARE_COMPLETA Verifica la logica v2 sin DAQ, audio ni GUI.
 
 cmc_setup_paths();
+raizProyecto = fileparts(fileparts(mfilename('fullpath')));
+addpath(fullfile(raizProyecto,'tests'));
 cmc_prueba_discriminacion(0);
 cmc_prueba_discriminacion(0.1);
 cmc_prueba_discriminacion(0.15);
@@ -11,8 +13,9 @@ cmc_prueba_discriminacion(0.6);
 cmc_prueba_modo_historico_sin_sonido;
 cmc_prueba_secuencia_sonido_solo;
 cmc_prueba_registro_palanqueos;
-cmc_prueba_resultados_nueve_columnas;
-cmc_prueba_ensayos_terminados;
+cmc_prueba_resultados_diez_columnas;
+cmc_prueba_contador_ensayos_cruce;
+cmc_prueba_limite_sin_cruce;
 cmc_prueba_clasificador_posicion;
 cmc_prueba_inicio_seguro;
 cmc_prueba_ancho_tabla_resultados;
@@ -30,6 +33,26 @@ for k = 1:length(DuracionesCP)
 end
 
 disp('OK: suite completa sin hardware aprobada.');
+end
+
+
+function cmc_prueba_contador_ensayos_cruce
+% El contador incluye no-cruces desde una posicion lateral valida.
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',1.0,1) == 1);
+assert(cmc_cuenta_ensayo_cruce(0,'D','D',1.2,1) == 1);
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',[],0) == 1);
+assert(cmc_cuenta_ensayo_cruce(1,'I','I',[],0) == 0);
+assert(cmc_cuenta_ensayo_cruce(0,'C','I',[],0) == 0);
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',0.99,1) == 0);
+disp('OK: contador incluye cruces y no-cruces validos.');
+end
+
+
+function cmc_prueba_limite_sin_cruce
+assert(cmc_limite_duracion_sin_cruce(180) == 60);
+assert(cmc_limite_duracion_sin_cruce(60) == 60);
+assert(cmc_limite_duracion_sin_cruce(30) == 30);
+disp('OK: los no-cruces y mismo lado se limitan a 60 s.');
 end
 
 

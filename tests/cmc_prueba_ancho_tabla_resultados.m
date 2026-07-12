@@ -7,5 +7,5 @@ tabla = uitable('Parent', f, 'Tag', 'uitable1', 'Units', 'pixels', ...
     'Position', [20 20 900 200]);
 cmc_configurar_tabla_resultados(tabla);
 pos = get(tabla, 'Position');
-assert(pos(3) == 651);
-disp('OK: ancho de tabla ajustado a nueve columnas.');
+assert(pos(3) == 649);
+disp('OK: ancho de tabla ajustado a diez columnas.');

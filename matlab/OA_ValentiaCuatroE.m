@@ -55,6 +55,7 @@ end
 %ContadorTotalIzq
 %ContadorTotalDer
 %TipoEvento: 0 seguro, 1 conflicto con comida, 2 sonido/parrilla sin comida
+%EnsayoCruce: 1 cuenta hacia el objetivo, 0 no cuenta, -1 no aplica.
 
 
 
@@ -127,8 +128,8 @@ set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
-set(handles.text19,'String','Ensayos terminados');
-set(handles.edit19,'String','0'); %ensayos que dejaron una fila de resultado
+set(handles.text19,'String','Ensayos de cruce');
+set(handles.edit19,'String','0'); %cruces validos que cuentan hacia el objetivo
 set(handles.Terminarn2,'String','Detener ahora');
 set(handles.checkbox1,'Value',1); %secuencia aleatoria (informativa)
 set(handles.checkbox4,'Value',1); %luz en ensayo seguro
@@ -201,8 +202,12 @@ if(Riesgo==1)
 end
 
 try
+    % El objetivo de la interfaz son cruces validos, no intentos.  Se
+    % prepara una secuencia larga para que no se agote si hay no-cruces,
+    % repeticiones de lado o inicios desde la zona central.
+    NumEnsayosPlanificados=max(1000,NumEnsayos);
     [Secuencia,ModoSonidoSolo]=OA_SecuenciaDiscriminacionSonidoSolo( ...
-        NumEnsayos,NumRepLado,Riesgo,ActivarSonidoSolo);
+        NumEnsayosPlanificados,NumRepLado,Riesgo,ActivarSonidoSolo);
 catch ME
     errordlg(ME.message,'Discriminacion experimental');
     return
@@ -278,9 +283,8 @@ OA_ValentiaResetPalancas(handles.OA);
 EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 
-CrucesValidos=0;
-EnsayosTerminados=0;
-set(handles.edit19,'String',num2str(EnsayosTerminados));
+EnsayosCruce=0;
+set(handles.edit19,'String',num2str(EnsayosCruce));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
@@ -350,7 +354,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
 
         if(Detenido==0)
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,LadoResultado,1,DuracionSonidoSolo, ...
-                toc(R0),ContadorTI,ContadorTD,LatenciaCruce,2,ModoSonidoSolo)];
+                toc(R0),ContadorTI,ContadorTD,LatenciaCruce,2,-1)];
             cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end
         Ensayo=Ensayo+1;
@@ -409,6 +413,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         P=0;
         LatMI=tic;
+        DurMaxSinCruce=cmc_limite_duracion_sin_cruce(DurMaxEns);
         CDurMaxEns=1;
         while(P==0)
             [P]=OA_ValentiaBuscaIzquierda(handles.OA);
@@ -423,7 +428,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             ContadorTD=ContadorTD+NuevaD;
             set(handles.edit6,'String',num2str(ContadorTI));
             set(handles.edit7,'String',num2str(ContadorTD));
-            if(toc(LatMI)>DurMaxEns)
+            if(toc(LatMI)>DurMaxSinCruce)
                 CDurMaxEns=0;
                 break;
             end
@@ -438,19 +443,25 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
         
         if(CDurMaxEns==0) %si la rata NO cruzo
+            CuentaEnsayoCruce=cmc_cuenta_ensayo_cruce(EnsayoMismoLado, ...
+                ZonaInicio,Lado,[],0);
+            if(CuentaEnsayoCruce)
+                EnsayosCruce=EnsayosCruce+1;
+            end
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
-                toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                toc(R0),ContadorTI,ContadorTD,DurMaxSinCruce,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
             cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
         
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotIzq=toc(LatMI);
-            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotIzq);
+            CuentaEnsayoCruce=cmc_cuenta_ensayo_cruce(EnsayoMismoLado, ...
+                ZonaInicio,Lado,LatMotIzq,1);
             fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
-                Ensayo,ZonaInicio,Lado,LatMotIzq,CruceValido);
-            if(CruceValido)
-                CrucesValidos=CrucesValidos+1;
+                Ensayo,ZonaInicio,Lado,LatMotIzq,CuentaEnsayoCruce);
+            if(CuentaEnsayoCruce)
+                EnsayosCruce=EnsayosCruce+1;
             end    
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues de cruzar
@@ -472,10 +483,18 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 ContadorTD=ContadorTD+NuevaD;
                 set(handles.edit6,'String',num2str(ContadorTI));
                 set(handles.edit7,'String',num2str(ContadorTD));
+                if(EnsayoMismoLado==1 && toc(R2)>=DurMaxSinCruce)
+                    % En un ensayo sin cambio de lado no se debe esperar la
+                    % palanca indefinidamente: el evento completo dura 60 s.
+                    Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
+                        toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
+                    break
+                end
                 if((DI>=PalXRec)&& EnsayoMismoLado==0) %%si no se repite el mismo lado
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
-                        toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                        toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
                     cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         'recomp'
@@ -489,7 +508,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     if(toc(R1)>(TultimaPalanca+IntVar))
                         TultimaPalanca=toc(R1);  %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
-                            toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                            toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
                         cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                              'recomp'
@@ -567,6 +586,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         P=0;
         LatMD=tic;
+        DurMaxSinCruce=cmc_limite_duracion_sin_cruce(DurMaxEns);
         CDurMaxEns=1;
         while(P==0)
             [P]=OA_ValentiaBuscaDerecha(handles.OA);
@@ -577,7 +597,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             ContadorTD=ContadorTD+NuevaD;
             set(handles.edit6,'String',num2str(ContadorTI));
             set(handles.edit7,'String',num2str(ContadorTD));
-            if(toc(LatMD)>DurMaxEns)
+            if(toc(LatMD)>DurMaxSinCruce)
                 CDurMaxEns=0;
                 break;
             end
@@ -592,8 +612,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
 
         if(CDurMaxEns==0) %si la rata NO cruzo
+            CuentaEnsayoCruce=cmc_cuenta_ensayo_cruce(EnsayoMismoLado, ...
+                ZonaInicio,Lado,[],0);
+            if(CuentaEnsayoCruce)
+                EnsayosCruce=EnsayosCruce+1;
+            end
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
-                toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                toc(R0),ContadorTI,ContadorTD,DurMaxSinCruce,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
             cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
@@ -601,11 +626,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotDer=toc(LatMD);
-            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotDer);
+            CuentaEnsayoCruce=cmc_cuenta_ensayo_cruce(EnsayoMismoLado, ...
+                ZonaInicio,Lado,LatMotDer,1);
             fprintf('Cruce %d: inicio=%s, lado=%s, desplazamiento=%.3f s, valido=%d\n', ...
-                Ensayo,ZonaInicio,Lado,LatMotDer,CruceValido);
-            if(CruceValido)
-                CrucesValidos=CrucesValidos+1;
+                Ensayo,ZonaInicio,Lado,LatMotDer,CuentaEnsayoCruce);
+            if(CuentaEnsayoCruce)
+                EnsayosCruce=EnsayosCruce+1;
             end
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues del cruce
@@ -626,10 +652,18 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 ContadorTD=ContadorTD+NuevaD;
                 set(handles.edit6,'String',num2str(ContadorTI));
                 set(handles.edit7,'String',num2str(ContadorTD));
+                if(EnsayoMismoLado==1 && toc(R2)>=DurMaxSinCruce)
+                    % En un ensayo sin cambio de lado no se debe esperar la
+                    % palanca indefinidamente: el evento completo dura 60 s.
+                    Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
+                        toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
+                    break
+                end
                 if((DD>=PalXRec)&& EnsayoMismoLado==0)
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
-                        toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                        toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
                     cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         OA_ValentiaRecompensaD(handles.OA);
@@ -642,7 +676,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     if(toc(R1)>(TultimaPalanca+IntVar)) %verificamos que la respuesta se presente despues de un retardo
                         TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
-                            toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
+                            toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),CuentaEnsayoCruce)];
                         cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                             OA_ValentiaRecompensaD(handles.OA);
@@ -670,13 +704,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     end  %ensayo lado derecho
     end  %sonido solo o ensayo con comida
 
-    if(size(Resultados,1)>FilasAntesDelEnsayo)
-        EnsayosTerminados=cmc_ensayos_terminados(Resultados);
-        CT_Ensayos=EnsayosTerminados;
-        set(handles.edit19,'String',num2str(EnsayosTerminados));
-        fprintf('Ensayos terminados=%d, cruces validos=%d\n', ...
-            EnsayosTerminados,CrucesValidos);
-    end
+    CT_Ensayos=EnsayosCruce;
+    set(handles.edit19,'String',num2str(EnsayosCruce));
+    fprintf('Ensayos de cruce=%d\n',EnsayosCruce);
     
     OA_ValentiaElectrico(handles.OA,0)
     pause(.5)
@@ -689,12 +719,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(CT_Ejecuta==0 || CT_FinalizarTrasEnsayo==1)
         break;
     end
-    if(ModoSonidoSolo==1)
-        FinEnsayos=size(Secuencia,1);
-    else
-        FinEnsayos=str2num(get(handles.edit4,'String'));
-    end
-    if(EnsayosTerminados>=FinEnsayos)
+    FinCruces=str2num(get(handles.edit4,'String'));
+    if(EnsayosCruce>=FinCruces)
         break
     end
     
@@ -818,7 +844,8 @@ else
 end
 viejo=pwd;
 cd(cmc_results_dir());
-[fname,pname]=uiputfile('*.csv','nombre y ruta para guardar resultados');
+[fname,pname]=uiputfile({'*.csv','CSV (*.csv)'; '*.*','Todos los archivos'}, ...
+    'Guardar resultados de la sesion','resultados.csv');
 if isequal(fname,0)
     cd(viejo);
     return
@@ -1800,7 +1827,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-function Fila = cmc_fila_resultado(Ensayo,Lado,Electrico,Latencia,TiempoAbs,ContadorTI,ContadorTD,Desplazamiento,TipoEvento,ModoSonidoSolo)
-% ModoSonidoSolo se conserva como argumento por compatibilidad con llamadas previas.
-% Desde v2.0.0-rc.3 todos los resultados llevan TipoEvento en la columna 9.
-Fila = [Ensayo Lado Electrico Latencia TiempoAbs ContadorTI ContadorTD Desplazamiento TipoEvento];
+function Fila = cmc_fila_resultado(Ensayo,Lado,Electrico,Latencia,TiempoAbs,ContadorTI,ContadorTD,Desplazamiento,TipoEvento,EnsayoCruce)
+% La columna 10 deja trazable si el evento conto como ensayo de cruce.
+Fila = [Ensayo Lado Electrico Latencia TiempoAbs ContadorTI ContadorTD ...
+    Desplazamiento TipoEvento EnsayoCruce];

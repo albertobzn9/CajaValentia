@@ -38,7 +38,7 @@ assert(~isempty(strfind(primeraFila, ',NA,')));
 delete(ruta);
 
 rutaResultados = [tempname '.csv'];
-Resultados = [1 0 0 1.23 5.67 0 0 2.34 0];
+Resultados = [1 0 0 1.23 5.67 0 0 2.34 0 1];
 cmc_guardar_resultados_sesion(rutaResultados, Resultados, eventos);
 assert(exist(rutaResultados, 'file') == 2);
 [carpeta, nombre] = fileparts(rutaResultados);
