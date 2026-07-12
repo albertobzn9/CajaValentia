@@ -1,16 +1,15 @@
 function guardado = cmc_solicitar_guardado_final(Resultados, EventosPalanqueo)
 %CMC_SOLICITAR_GUARDADO_FINAL Pide ruta al terminar y guarda MAT mas CSV.
-% En Windows inicia en C: para que el usuario pueda elegir la USB desde
-% Este equipo. Cancelar o presionar Esc no escribe ningun archivo nuevo.
+% En Windows inicia en Documents del usuario. Cancelar o presionar Esc no
+% escribe ningun archivo nuevo.
 
-unidadSistema = getenv('SystemDrive');
-if isempty(unidadSistema)
-    unidadSistema = 'C:';
+carpetaInicial = fullfile(getenv('USERPROFILE'), 'Documents');
+if ~exist(carpetaInicial, 'dir')
+    carpetaInicial = pwd;
 end
-rutaInicial = [unidadSistema '\resultados.mat'];
 
-[nombre, carpeta] = uiputfile(rutaInicial, ...
-    'Guardar resultados de la sesion - elegir USB en Este equipo');
+[nombre, carpeta] = uiputfile(fullfile(carpetaInicial, 'resultados.mat'), ...
+    'Guardar resultados de la sesion');
 if isequal(nombre,0) || isequal(carpeta,0)
     guardado = false;
     return
