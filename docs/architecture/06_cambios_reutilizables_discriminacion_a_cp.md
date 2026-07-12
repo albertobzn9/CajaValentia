@@ -110,7 +110,7 @@ referencia para medir el ITI visual exacto.
 | Contar no-cruces como ensayos terminados. | **Probado fisicamente en `prueba2044.mat`:** una fila con lado `-2` sumo como ensayo 1; una repeticion y un cruce lento completaron los ensayos 2 y 3. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Completado y probado:** `prueba2044.mat` tuvo tres filas (`-2`, repeticion y cruce) y la secuencia cerró sola tras la tercera. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
-| Finalizacion automatica. | Tras la habituacion final, el dialogo de guardado inicia en `C:\Users\Alberto\Documents`; guarda `.mat` y CSV juntos. Cancelar conserva el estado temporal para el boton manual. Falta prueba fisica de esta ruta, cronometros visibles y aviso LED opcional. |
+| Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y guarda `.mat` y CSV juntos. Cancelar conserva el estado temporal para el boton manual. Falta prueba fisica de esta ruta, cronometros visibles y aviso LED opcional. |
 | Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar columnas nuevas, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
 | Ajustar el rectangulo exterior de `uitable1`. | El ancho exterior de la tabla coincide con sus nueve columnas, sin espacio interno sobrante ni columna oculta en R2011a. |
 | Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
