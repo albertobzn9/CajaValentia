@@ -65,7 +65,7 @@ rata o el operador intentaban completar la deteccion corporal por los laseres.
 | Pendiente | Criterio de terminado |
 |---|---|
 | Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
-| Definir ensayo valido para el contador de cruces. | Un cruce real usa posicion inicial confirmada por sensores y llegada al lado opuesto; un inicio desde el centro no infla el contador. La latencia menor a 1 s queda como bandera de calidad, no como unica regla. |
+| Definir ensayo valido para el contador de cruces. | **En rama `feature/sensor-validated-crosses`:** un cruce real exige cambio de lado programado, posicion inicial lateral confirmada, llegada al lado opuesto y desplazamiento de al menos 1 s. El umbral replica el analisis posterior. Un inicio desde el centro no infla el contador. |
 | Contar no-cruces como ensayos terminados. | Una fila con lado `-2` suma al avance experimental aunque no sume al contador de cruces reales. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | El programa termina solo al llegar al numero correcto de ensayos completados, sin depender de cortar manualmente. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |

@@ -38,9 +38,9 @@ try
 
     for paso = 1:numel(nombres)
         respuesta = questdlg(instrucciones{paso}, ...
-            'CajaValentia - siguiente zona', 'Capturar 2 segundos', 'Cancelar', ...
-            'Capturar 2 segundos');
-        if ~strcmp(respuesta, 'Capturar 2 segundos')
+            'CajaValentia - siguiente zona', 'Capturar 7 segundos', 'Cancelar', ...
+            'Capturar 7 segundos');
+        if ~strcmp(respuesta, 'Capturar 7 segundos')
             disp('Prueba cancelada por el operador.');
             break
         end
@@ -91,18 +91,6 @@ while toc(R) < duracion
     patrones = [patrones; paso toc(R) lugar];
     pause(intervalo);
 end
-
-
-function lugar = cmc_lee_posicion_cruda(OA)
-selectores = [0 0 0 0; 1 0 0 0; 0 1 0 0];
-datos = [];
-for i = 1:3
-    escribePto(OA, 9:16, [selectores(i,:) 0 0 0 0]);
-    pause(.01);
-    datos = [datos getvalue(OA.Line(1:8))];
-end
-lugar = not(datos(2:19));
-lugar = fliplr(lugar);
 
 
 function cmc_escribir_csv_posicion(rutaArchivo, patrones)

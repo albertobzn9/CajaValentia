@@ -303,6 +303,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     else
         TipoEventoTexto='sonido_solo';
     end
+    % La zona se confirma antes de encender estimulos solo en ensayos con
+    % comida. Sonido solo mantiene su flujo independiente de cruces.
+    ZonaInicio = 'no_aplica';
+    if(TipoEvento~=2)
+        ZonaInicio = cmc_lee_zona_posicion(handles.OA);
+    end
     if(TipoEvento==2)
         DuracionSonidoSolo=180;
         DuracionAudio=DuracionSonidoSolo+1;
@@ -422,7 +428,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotIzq=toc(LatMI);
-            if(EnsayoMismoLado==0)
+            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotIzq);
+            if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
             end    
@@ -574,13 +581,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         
         
         if(CDurMaxEns==1) %si la rata cruzo
-            
-            if(EnsayoMismoLado==0)
+            LatMotDer=toc(LatMD);
+            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotDer);
+            if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
             end  
-            
-            LatMotDer=toc(LatMD);
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues del cruce
 %                 OA_ValentiaPalanca(handles.OA,'I',2); %se mete la palanca del otro lado
