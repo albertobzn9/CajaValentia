@@ -835,8 +835,9 @@ else
 end
 
 carpetaInicial=cmc_results_dir();
-[fname,pname]=uiputfile(fullfile(carpetaInicial,'resultados.csv'), ...
-    'Guardar resultados de la sesion');
+filtroCsv={'*.csv','CSV (*.csv)'; '*.*','Todos los archivos'};
+[fname,pname]=uiputfile(filtroCsv,'Guardar resultados de la sesion', ...
+    fullfile(carpetaInicial,'resultados.csv'));
 if isequal(fname,0) || isequal(pname,0)
     return
 end
