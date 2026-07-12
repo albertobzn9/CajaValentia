@@ -80,10 +80,11 @@ caja:
 | 3 | I | I | 1.954 s | valido |
 
 La prueba de software cubre el limite: `0.99 s` se rechaza y `1.00 s` se
-acepta. En esta corrida, el intervalo oscuro entre el registro de una respuesta
-y el inicio de la siguiente luz fue `6.75-6.79 s`; por ello una rata puede
-legitimamente quedar en el centro entre ensayos. El programa viejo no resolvia
-esa excepcion y podia inflar el contador.
+acepta. En esta corrida, el intervalo interno entre el registro de una respuesta
+y el inicio MATLAB del siguiente evento fue `6.75-6.79 s`; por ello una rata
+puede legitimamente quedar en el centro entre ensayos. El programa viejo no
+resolvia esa excepcion y podia inflar el contador. El video sigue siendo la
+referencia para medir el ITI visual exacto.
 
 ## Pendientes Antes De Copiar A CP
 

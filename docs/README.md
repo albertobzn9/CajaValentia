@@ -12,5 +12,6 @@ Start with the item closest to the question:
 - [`sound-only-controls.md`](sound-only-controls.md): exact behavioral contract for the v2 candidate.
 - [`ejecutar-r2011a-y-r2026a.md`](ejecutar-r2011a-y-r2026a.md): how to open the correct version without invoking an old menu.
 - [`migration-matlab-2026.md`](migration-matlab-2026.md): what migration requires and why it is feasible.
+- [`decisions/2026-07-11-contrato-temporal-para-reescritura.md`](decisions/2026-07-11-contrato-temporal-para-reescritura.md): timing and ITI requirements for a future rewrite.
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
 - [`validation.md`](validation.md): what has and has not been tested.
