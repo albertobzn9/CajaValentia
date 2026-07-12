@@ -53,18 +53,18 @@ Resolucion tecnica actual:
 - Fases actuales: `habituacion_inicial`, `sin_luz`, `ensayo` y
   `habituacion_final`.
 
-La primera prueba real genero el archivo correctamente. Tambien mostro saltos
-rapidos del contador fisico, por ejemplo varios incrementos durante una sola
-lectura. Antes de usarlo como medida biologica se debe hacer una prueba
-controlada: una presion lenta por vez, por ambos lados, y comparar video,
-palanca real y CSV. El CSV es ahora la evidencia para diagnosticar ese
-problema; aun no demuestra que cada incremento sea una presion real.
+La prueba de sesion con rata genero el archivo correctamente y mostro saltos
+rapidos del contador. La prueba fisica controlada posterior los aclaro: una
+presion lenta por lado genero exactamente un incremento; tres presiones rapidas
+generaron exactamente tres. No se observo rebote en esa prueba. Por tanto, los
+saltos de la sesion probablemente fueron presiones reales repetidas mientras la
+rata o el operador intentaban completar la deteccion corporal por los laseres.
 
 ## Pendientes Antes De Copiar A CP
 
 | Pendiente | Criterio de terminado |
 |---|---|
-| Validar palanqueos con prueba fisica controlada. | Una presion conocida produce una sola fila; cualquier rebote queda caracterizado. |
+| Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
 | Definir ensayo valido para el contador de cruces. | Un cruce real usa posicion inicial confirmada por sensores y llegada al lado opuesto; un inicio desde el centro no infla el contador. La latencia menor a 1 s queda como bandera de calidad, no como unica regla. |
 | Contar no-cruces como ensayos terminados. | Una fila con lado `-2` suma al avance experimental aunque no sume al contador de cruces reales. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | El programa termina solo al llegar al numero correcto de ensayos completados, sin depender de cortar manualmente. |
