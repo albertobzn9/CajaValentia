@@ -60,12 +60,37 @@ generaron exactamente tres. No se observo rebote en esa prueba. Por tanto, los
 saltos de la sesion probablemente fueron presiones reales repetidas mientras la
 rata o el operador intentaban completar la deteccion corporal por los laseres.
 
+## Cruces Validos: Rama De Sensores
+
+La version estable RC3 conserva el contador historico. El cambio fundamental
+vive aislado en la rama `feature/sensor-validated-crosses`.
+
+Un cruce valido requiere las cuatro condiciones: cambio de lado programado,
+inicio lateral confirmado por sensores, llegada al lado opuesto y
+desplazamiento de al menos `1 s`. La ultima condicion iguala el criterio usado
+en el analisis posterior.
+
+Prueba fisica del 11-jul-2016 con mano extendida y sin retirar la mano de la
+caja:
+
+| Ensayo | Inicio detectado | Lado programado | Desplazamiento | Contador |
+|---|---:|---:|---:|---|
+| 1 | I | I | 7.036 s | valido |
+| 2 | C | D | 3.714 s | rechazado por inicio en centro |
+| 3 | I | I | 1.954 s | valido |
+
+La prueba de software cubre el limite: `0.99 s` se rechaza y `1.00 s` se
+acepta. En esta corrida, el intervalo oscuro entre el registro de una respuesta
+y el inicio de la siguiente luz fue `6.75-6.79 s`; por ello una rata puede
+legitimamente quedar en el centro entre ensayos. El programa viejo no resolvia
+esa excepcion y podia inflar el contador.
+
 ## Pendientes Antes De Copiar A CP
 
 | Pendiente | Criterio de terminado |
 |---|---|
 | Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
-| Definir ensayo valido para el contador de cruces. | **En rama `feature/sensor-validated-crosses`:** un cruce real exige cambio de lado programado, posicion inicial lateral confirmada, llegada al lado opuesto y desplazamiento de al menos 1 s. El umbral replica el analisis posterior. Un inicio desde el centro no infla el contador. |
+| Definir ensayo valido para el contador de cruces. | **Completado y probado en rama `feature/sensor-validated-crosses`:** un cruce real exige cambio de lado programado, posicion inicial lateral confirmada, llegada al lado opuesto y desplazamiento de al menos 1 s. El umbral replica el analisis posterior. Un inicio desde el centro no infla el contador. |
 | Contar no-cruces como ensayos terminados. | Una fila con lado `-2` suma al avance experimental aunque no sume al contador de cruces reales. |
 | Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | El programa termina solo al llegar al numero correcto de ensayos completados, sin depender de cortar manualmente. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
