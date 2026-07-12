@@ -61,6 +61,12 @@ generaron exactamente tres. No se observo rebote en esa prueba. Por tanto, los
 saltos de la sesion probablemente fueron presiones reales repetidas mientras la
 rata o el operador intentaban completar la deteccion corporal por los laseres.
 
+Validacion ampliada en `pruebachecar.mat` (11-jul-2016): el `.mat` y su CSV
+hermano contienen las mismas 48 palanqueadas. Cobertura por fase: 33 en
+`habituacion_inicial`, 6 en `sin_luz` (ITI), 4 en `ensayo` y 5 en
+`habituacion_final`. El contador derecho tambien cruzo de 15 a 0 sin perder
+eventos. Esta sesion tuvo seguros y riesgos; no incluyo un evento `sonido_solo`.
+
 ## Cruces Validos: Rama De Sensores
 
 La version estable RC3 conserva el contador historico. El cambio fundamental
