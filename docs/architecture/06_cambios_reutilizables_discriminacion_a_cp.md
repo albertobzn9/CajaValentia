@@ -49,8 +49,13 @@ Resolucion tecnica actual:
   registra cada incremento, incluso si pasa de 15 a 0.
 - `EventosPalanqueo` se guarda dentro del `.mat` junto con `Resultados`.
 - `nombre_palanqueos.csv` contiene las mismas filas con estas columnas:
-  `tiempo_s`, `fase`, `ensayo`, `tipo_evento`, `lado`,
-  `contador_hardware`.
+  `evento_sesion`, `tiempo_s`, `fase`, `ensayo`, `tipo_evento`, `lado`,
+  `contador_lado_sesion`, `contador_hardware`.
+- `evento_sesion` es consecutivo para toda la sesion. `contador_lado_sesion`
+  es consecutivo por lado. `contador_hardware` se conserva como valor crudo de
+  la tarjeta: es independiente por lado, vuelve de 15 a 0 y puede resetearse.
+- En habituacion y `sin_luz`, `ensayo` es `NA` en CSV y `NaN` en `.mat`; no es
+  un inexistente "ensayo 0". Python puede leer `NA` directamente como faltante.
 - Fases actuales: `habituacion_inicial`, `sin_luz`, `ensayo` y
   `habituacion_final`.
 

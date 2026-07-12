@@ -7,9 +7,17 @@ if fid == -1
 end
 
 limpieza = onCleanup(@() fclose(fid));
-fprintf(fid, 'tiempo_s,fase,ensayo,tipo_evento,lado,contador_hardware\n');
+fprintf(fid, ['evento_sesion,tiempo_s,fase,ensayo,tipo_evento,lado,' ...
+    'contador_lado_sesion,contador_hardware\n']);
 for i = 1:numel(eventos)
     e = eventos(i);
-    fprintf(fid, '%.3f,%s,%d,%s,%s,%d\n', e.tiempo_s, e.fase, ...
-        e.ensayo, e.tipo_evento, e.lado, e.contador_hardware);
+    if isnan(e.ensayo)
+        ensayoTexto = 'NA';
+    else
+        ensayoTexto = num2str(e.ensayo);
+    end
+    fprintf(fid, '%d,%.3f,%s,%s,%s,%s,%d,%d\n', ...
+        e.evento_sesion, e.tiempo_s, e.fase, ensayoTexto, ...
+        e.tipo_evento, e.lado, e.contador_lado_sesion, ...
+        e.contador_hardware);
 end
