@@ -10,9 +10,9 @@ El comando de entrada es:
 abrir1
 ```
 
-Tambien existe `abrir.m` como seguro: si por costumbre se escribe `abrir`
-estando dentro de esta carpeta, redirige a `abrir1` y no al menu viejo del disco
-C.
+Tambien existe `abrir.m` como redireccion local, pero el comando de operacion
+debe ser siempre `abrir1`. En la computadora del lab hay otros menus llamados
+`abrir` en rutas antiguas; MATLAB podria abrir uno de ellos.
 
 ## Instrucciones Para El Operador
 
@@ -28,11 +28,12 @@ C.
 4. En la Command Window escribir:
 
    ```matlab
+   which abrir1 -all
    abrir1
    ```
 
-   Si se escribe `abrir` por error, esta copia local tambien abre el menu
-   depurado.
+   La primera ruta de `which abrir1 -all` debe apuntar a
+   `Z:\CajaValentia\abrir1.m`.
 
 5. Elegir una opcion del menu depurado:
 
@@ -93,9 +94,10 @@ Si aparece un error, guardar el mensaje exacto y en que opcion del menu ocurrio.
 
 ## Cambios En Esta Version Candidata
 
-- `ValentiaE`: con riesgo mayor que cero, cada bloque de diez eventos de comida
-  agrega un evento de sonido/parrilla sin luz ni pellet. Con riesgo cero no se
-  agrega ese evento.
+- `ValentiaE`: la casilla `Agregar 1 solo sonido / 10 eventos` activa el modo
+  nuevo. Con riesgo mayor que cero, cada bloque de diez eventos de comida agrega
+  un evento de sonido/parrilla sin luz ni pellet. Sin marcarla, la secuencia de
+  riesgo conserva el comportamiento historico.
 - `ValentiaE2`: programa eventos de sonido/parrilla sin luz ni pellet cerca de
   los minutos 9, 18 y 27 de la conducta. La duracion se toma del campo de
   ensayo de riesgo.

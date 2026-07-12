@@ -11,3 +11,7 @@ runnable program:
 
 They are intended to exercise task logic without DAQ hardware. They are not a
 substitute for a supervised physical-box test.
+
+`tests/lab/` contains Windows launchers for supervised R2011a checks. Each
+launcher records a MATLAB launcher log under `resultados/`; the audio and
+sound-only diagnostics also save their own `.txt` log and `.mat` artifact.

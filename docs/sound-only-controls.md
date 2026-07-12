@@ -6,7 +6,10 @@ review and for any future maintenance.
 ## Discrimination: `ValentiaE`
 
 - Risk `0`: unchanged safe-crossing behavior; no sound-only event.
-- Risk greater than `0`: each ten food-event block gains one sound-only event.
+- The GUI checkbox `Agregar 1 solo sonido / 10 eventos` enables the new mode.
+  With the checkbox off, risk sessions use the historical sequence unchanged.
+- With the checkbox on and risk greater than `0`, each ten food-event block
+  gains one sound-only event.
 - Example: risk `0.3` becomes seven safe, three food-plus-danger, and one
   sound-only event per block. `300` creates thirty blocks, or 330 events.
 - Food-plus-danger and sound-only events are allowed only when the target side

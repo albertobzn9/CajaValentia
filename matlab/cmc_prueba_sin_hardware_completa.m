@@ -2,12 +2,28 @@ function cmc_prueba_sin_hardware_completa
 %CMC_PRUEBA_SIN_HARDWARE_COMPLETA Verifica la logica v2 sin DAQ, audio ni GUI.
 
 cmc_setup_paths();
+raizProyecto = fileparts(fileparts(mfilename('fullpath')));
+addpath(fullfile(raizProyecto,'tests'));
 cmc_prueba_discriminacion(0);
 cmc_prueba_discriminacion(0.1);
 cmc_prueba_discriminacion(0.15);
 cmc_prueba_discriminacion(0.2);
 cmc_prueba_discriminacion(0.3);
 cmc_prueba_discriminacion(0.6);
+cmc_prueba_modo_historico_sin_sonido;
+cmc_prueba_secuencia_sonido_solo;
+cmc_prueba_registro_palanqueos;
+cmc_prueba_resultados_diez_columnas;
+cmc_prueba_contador_ensayos_cruce;
+cmc_prueba_limite_sin_cruce;
+cmc_prueba_clasificador_posicion;
+cmc_prueba_inicio_seguro;
+cmc_prueba_ancho_tabla_resultados;
+cmc_prueba_reloj_habituacion;
+cmc_prueba_aviso_led_final;
+textoCP = evalc('cmc_prueba_plan_sonido_solo_cp;');
+assert(~isempty(strfind(textoCP, 'OK: CP')), ...
+    'La prueba de planificacion de CP no termino correctamente.');
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
@@ -17,6 +33,27 @@ for k = 1:length(DuracionesCP)
 end
 
 disp('OK: suite completa sin hardware aprobada.');
+end
+
+
+function cmc_prueba_contador_ensayos_cruce
+% El contador incluye no-cruces desde una posicion lateral valida.
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',1.0,1) == 1);
+assert(cmc_cuenta_ensayo_cruce(0,'D','D',1.2,1) == 1);
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',[],0) == 1);
+assert(cmc_cuenta_ensayo_cruce(1,'I','I',[],0) == 0);
+assert(cmc_cuenta_ensayo_cruce(0,'C','I',[],0) == 0);
+assert(cmc_cuenta_ensayo_cruce(0,'I','I',0.99,1) == 0);
+disp('OK: contador incluye cruces y no-cruces validos.');
+end
+
+
+function cmc_prueba_limite_sin_cruce
+assert(cmc_limite_duracion_sin_cruce(180) == 60);
+assert(cmc_limite_duracion_sin_cruce(60) == 60);
+assert(cmc_limite_duracion_sin_cruce(30) == 30);
+disp('OK: los no-cruces y mismo lado se limitan a 60 s.');
+end
 
 
 function cmc_prueba_discriminacion(Riesgo)
@@ -47,4 +84,15 @@ for i = 2:size(Secuencia,1)
         assert(Secuencia(i,1) ~= Secuencia(i-1,1), ...
             'Riesgo o sonido solo aparecio sin cambio de lado.');
     end
+end
+end
+
+
+function cmc_prueba_modo_historico_sin_sonido
+evalc('[Secuencia,Modo] = OA_SecuenciaDiscriminacionSonidoSolo(300,3,0.3,0);');
+assert(Modo == 0, 'La casilla apagada debe conservar el modo historico.');
+assert(size(Secuencia,1) == 1000, 'El modo historico debe preparar 1000 eventos.');
+assert(all(Secuencia(:,2) == 0 | Secuencia(:,2) == 1), ...
+    'El modo historico no debe incluir eventos de sonido solo.');
+assert(Secuencia(1,2) == 0, 'El primer evento historico debe ser seguro.');
 end

@@ -14,7 +14,7 @@ pause(.1);
 OA_ValentiaElectrico(handles.OA,1);
 
 [LadoResultado,LatenciaCruce,ContadorTI,ContadorTD,Detenido] = ...
-    OA_MonitoreaSonidoSolo(handles.OA,Duracion,ContadorTI,ContadorTD);
+    OA_MonitoreaSonidoSolo(handles.OA,Duracion,ContadorTI,ContadorTD,handles.edit9);
 
 % Columna 4: duracion completa del evento. Columna 8: primer cruce, o
 % Duracion si no hubo cruce. Columna 9 identifica sonido solo.

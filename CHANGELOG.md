@@ -3,6 +3,13 @@
 This changelog records behaviorally meaningful changes. Git commits retain the
 lower-level implementation history.
 
+## Unreleased - v2.0.0-rc.3 Candidate
+
+- Records `Tipo evento` as a ninth column in all discrimination and
+  dangerous-crossing result rows, including safe-only discrimination sessions.
+- Displays the ninth column in both legacy GUIDE result tables and verifies it
+  can be saved and loaded without hardware.
+
 ## v2.0.0-rc.2 - Software Validation
 
 - Adds one no-hardware suite for the relevant discrimination risks and CP
