@@ -21,11 +21,19 @@
 - On the same computer, the supervised 10-second sound-only diagnostic passed
   for both requested sides. It produced noise, threat LED, and grid, without
   food light or pellet; its result artifact and logs were saved automatically.
+- The R2011a `ValentiaE` session-stop controls were supervised successfully.
+  `Detener ahora` kept completed rows without adding a false timeout for the
+  interrupted event. `Detener tras ensayo` let the current trial reward and
+  register its final row, then prevented the next event.
+- The no-hardware suite confirms the new sound-only checkbox: checked uses the
+  extra type-2 event per ten food events; unchecked uses the historical risk
+  sequence with no type-2 events.
 
 ## Pending
 
 - Check all GUI paths and physical hardware outputs with a trained operator
   present.
+- Confirm the two checkbox states in the R2011a GUI after deployment.
 - Confirm generated result columns and timestamps from a real session.
 
 Until these steps pass, `v2.0.0-rc.1` is a candidate, not a production release.

@@ -94,9 +94,10 @@ Si aparece un error, guardar el mensaje exacto y en que opcion del menu ocurrio.
 
 ## Cambios En Esta Version Candidata
 
-- `ValentiaE`: con riesgo mayor que cero, cada bloque de diez eventos de comida
-  agrega un evento de sonido/parrilla sin luz ni pellet. Con riesgo cero no se
-  agrega ese evento.
+- `ValentiaE`: la casilla `Agregar 1 solo sonido / 10 eventos` activa el modo
+  nuevo. Con riesgo mayor que cero, cada bloque de diez eventos de comida agrega
+  un evento de sonido/parrilla sin luz ni pellet. Sin marcarla, la secuencia de
+  riesgo conserva el comportamiento historico.
 - `ValentiaE2`: programa eventos de sonido/parrilla sin luz ni pellet cerca de
   los minutos 9, 18 y 27 de la conducta. La duracion se toma del campo de
   ensayo de riesgo.

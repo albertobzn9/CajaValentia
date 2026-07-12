@@ -8,6 +8,7 @@ cmc_prueba_discriminacion(0.15);
 cmc_prueba_discriminacion(0.2);
 cmc_prueba_discriminacion(0.3);
 cmc_prueba_discriminacion(0.6);
+cmc_prueba_modo_historico_sin_sonido;
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
@@ -17,6 +18,7 @@ for k = 1:length(DuracionesCP)
 end
 
 disp('OK: suite completa sin hardware aprobada.');
+end
 
 
 function cmc_prueba_discriminacion(Riesgo)
@@ -47,4 +49,15 @@ for i = 2:size(Secuencia,1)
         assert(Secuencia(i,1) ~= Secuencia(i-1,1), ...
             'Riesgo o sonido solo aparecio sin cambio de lado.');
     end
+end
+end
+
+
+function cmc_prueba_modo_historico_sin_sonido
+evalc('[Secuencia,Modo] = OA_SecuenciaDiscriminacionSonidoSolo(300,3,0.3,0);');
+assert(Modo == 0, 'La casilla apagada debe conservar el modo historico.');
+assert(size(Secuencia,1) == 1000, 'El modo historico debe preparar 1000 eventos.');
+assert(all(Secuencia(:,2) == 0 | Secuencia(:,2) == 1), ...
+    'El modo historico no debe incluir eventos de sonido solo.');
+assert(Secuencia(1,2) == 0, 'El primer evento historico debe ser seguro.');
 end
