@@ -93,8 +93,8 @@ referencia para medir el ITI visual exacto.
 |---|---|
 | Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
 | Definir ensayo valido para el contador de cruces. | **Completado y probado en rama `feature/sensor-validated-crosses`:** un cruce real exige cambio de lado programado, posicion inicial lateral confirmada, llegada al lado opuesto y desplazamiento de al menos 1 s. El umbral replica el analisis posterior. Un inicio desde el centro no infla el contador. |
-| Contar no-cruces como ensayos terminados. | **Implementado en rama `feature/sensor-validated-crosses`:** una fila con lado `-2` suma al avance experimental aunque no sume a `CrucesValidos`. Falta prueba fisica. |
-| Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Implementado en rama `feature/sensor-validated-crosses`:** el programa termina al llegar al numero de filas/ensayos completos, sin contar un paro a mitad de evento. Falta prueba fisica. |
+| Contar no-cruces como ensayos terminados. | **Probado fisicamente en `prueba2044.mat`:** una fila con lado `-2` sumo como ensayo 1; una repeticion y un cruce lento completaron los ensayos 2 y 3. |
+| Hacer que `Ensayos a realizar` use ensayos terminados segun la regla acordada. | **Implementado:** el programa termina al llegar al numero de filas/ensayos completos, sin contar un paro a mitad de evento. Falta confirmar visualmente el cierre automatico tras el ultimo ensayo. |
 | Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
 | Finalizacion automatica. | Tras detener: habituacion final, aviso LED opcional por palomita, dialogo de guardado y retorno seguro a espera. |
 | Ajustar el rectangulo exterior de `uitable1`. | El ancho exterior de la tabla coincide con sus nueve columnas, sin espacio interno sobrante ni columna oculta en R2011a. |
