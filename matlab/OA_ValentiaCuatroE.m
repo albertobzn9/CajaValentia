@@ -115,7 +115,6 @@ CT_FinalizarTrasEnsayo=0;
 save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
 set(handles.edit1,'String','0');
-set(handles.edit2,'String','0');   %retardo antes de la recompensa
 set(handles.edit3,'String','1');  %pellets por recompensa ensayo seguro
 set(handles.edit4,'String','300'); %ensayos a realizar
 set(handles.edit5,'String','1'); %palancas por recompensa
@@ -123,10 +122,6 @@ set(handles.edit6,'String','0'); %ensayos a realizar
 set(handles.edit7,'String','0'); %palancas por recompensa
 set(handles.edit8,'String','180'); %maxima duracion de ensayo seguro (s)
 set(handles.edit9,'String','0'); %reloj
-set(handles.edit10,'String','1000'); %frecuencia del estimulo auditivo I
-set(handles.edit11,'String','1'); %amplitud del estimulo auditivo I
-set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
-set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
 set(handles.edit14,'String',num2str(cmc_frecuencia_ruido_predeterminada)); %Frecuencia del estimulo auditivo de Riesgo D
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
@@ -134,6 +129,11 @@ set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
 set(handles.Terminarn2,'String','Detener ahora');
+set(handles.checkbox1,'Value',1); %secuencia aleatoria (informativa)
+set(handles.checkbox4,'Value',1); %luz en ensayo seguro
+set(handles.checkbox7,'Value',1); %luz en ensayo de riesgo
+set(handles.checkbox8,'Value',1); %sonido en ensayo de riesgo
+cmc_ocultar_controles_legacy(handles);
 handles.ActivarSonidoSolo = uicontrol('Parent', hObject, ...
     'Style', 'checkbox', ...
     'String', 'Agregar evento sonido 1:10', ...
@@ -141,7 +141,7 @@ handles.ActivarSonidoSolo = uicontrol('Parent', hObject, ...
     'Units', 'characters', ...
     'Position', [139.8 58.1 33 2], ...
     'FontSize', 8, ...
-    'Value', 0, ...
+    'Value', 1, ...
     'TooltipString', ['Con riesgo mayor que 0, agrega un evento de solo sonido ', ...
         'por cada 10 eventos con comida.']);
 handles.DetenerTrasEnsayo = uicontrol('Parent', hObject, ...
@@ -270,14 +270,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     EnsayoMismoLado=0;
     if((Ensayo>1)&&(Secuencia(Ensayo-1,1)==Secuencia(Ensayo,1)))
         EnsayoMismoLado=1
-        RetardoRecomp=str2double(get(handles.edit2,'String'));
-        IntVar=2*RetardoRecomp*rand(1,1) %intervalo variable uniformemente distribuido
+        IntVar=0;
     end
     
-    freqAI=str2num(get(handles.edit10,'String'));
-    AmpAI=str2num(get(handles.edit11,'String'));
-    freqAD=str2num(get(handles.edit12,'String'));
-    AmpAD=str2num(get(handles.edit13,'String'));
     freqRiesgo=str2num(get(handles.edit14,'String'));
     
     
@@ -311,21 +306,15 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         if(Detenido==0)
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,LadoResultado,1,DuracionSonidoSolo, ...
                 toc(R0),ContadorTI,ContadorTD,LatenciaCruce,2,ModoSonidoSolo)];
-            set(handles.uitable1,'Data',Resultados);
+            cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end
         Ensayo=Ensayo+1;
         stop(handles.GS);
     else
-    SonidoIniS=get(handles.checkbox2,'Value');
-    SonidoIniR=get(handles.checkbox12,'Value');
     %realizar ensayo lado izquierdo
     if(strcmp(Lado,'D')==1)
         
         if(Secuencia(Ensayo,2)==0) %ensayo seguro
-            if(SonidoIniS==1) %sonido inicial
-                OA_Sonidos(handles.GS,.1,1000,1,0,0);
-                pause(.5);
-            end
             if(get(handles.checkbox4,'Value')==1)
                 OA_ValentiaEstimuloI(handles.OA,0,1); %dejamos sonido apagado luz prendida
             end
@@ -342,10 +331,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             
             
-            if(SonidoIniR==1) %sonido inicial
-                OA_Sonidos(handles.GS,.1,1000,1,0,0);
-                pause(.5);
-            end
             DurMaxEns=str2num(get(handles.edit18,'String'));
             if(get(handles.checkbox8,'Value')==1)
                 OA_Sonidos(handles.GS,DurMaxEns,freqRiesgo,1,0,0); %mandamos ruido blanco del lado izq
@@ -358,11 +343,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             if(get(handles.checkbox7,'Value')==1)
                 OA_ValentiaEstimuloI(handles.OA,0,1); %dejamos sonido apagado luz prendida
             end
-            pause(.1)
-            if(get(handles.checkbox10,'Value')==1)
-                OA_ValentiaEstimuloI(handles.OA,0,2); %dejamos sonido apagado luz intermitente
-            end
-            pause(.1)
             ES=2;
             EL=2;
             PelletsEvento=str2num(get(handles.edit17,'String'));
@@ -409,7 +389,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         if(CDurMaxEns==0) %si la rata NO cruzo
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
                 toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
-            set(handles.uitable1,'Data',Resultados);
+            cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
         
@@ -450,7 +430,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
                         toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
-                    set(handles.uitable1,'Data',Resultados);
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         'recomp'
                         OA_ValentiaRecompensaI(handles.OA);
@@ -464,7 +444,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                         TultimaPalanca=toc(R1);  %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;cmc_fila_resultado(Ensayo,1,Secuencia(Ensayo,2),toc(R2), ...
                             toc(R0),ContadorTI,ContadorTD,LatMotIzq,Secuencia(Ensayo,2),ModoSonidoSolo)];
-                        set(handles.uitable1,'Data',Resultados);
+                        cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                              'recomp'
                             OA_ValentiaRecompensaI(handles.OA);
@@ -499,11 +479,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(strcmp(Lado,'I')==1)
         
         if(Secuencia(Ensayo,2)==0) %ensayo seguro
-            if(SonidoIniS==1) %sonido inicial
-                OA_Sonidos(handles.GS,.1,0,0,1000,1);
-                pause(.5);
-            end
-            
             if(get(handles.checkbox4,'Value')==1)
                 OA_ValentiaEstimuloD(handles.OA,0,1);  %dejamos sonido apagado luz prendida
             end
@@ -515,13 +490,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
         end
         if(Secuencia(Ensayo,2)==1) %ensayo con  riesgo
-            
-            
-            if(SonidoIniR==1) %sonido inicial
-                OA_Sonidos(handles.GS,.1,0,0,1000,1);
-                pause(.5);
-            end
-            
             DurMaxEns=str2num(get(handles.edit18,'String'));
             if(get(handles.checkbox8,'Value')==1)
                 OA_Sonidos(handles.GS,DurMaxEns,0,0,freqRiesgo,1); %mandamos tono der
@@ -534,10 +502,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
            
             if(get(handles.checkbox7,'Value')==1)
                 OA_ValentiaEstimuloD(handles.OA,2,1); %dejamos sonido apagado luz prendida
-                pause(.1)
-            end
-            if(get(handles.checkbox10,'Value')==1)
-                OA_ValentiaEstimuloD(handles.OA,2,2); %dejamos sonido apagado luz prendida
                 pause(.1)
             end
             PelletsEvento=str2num(get(handles.edit17,'String'));
@@ -580,7 +544,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         if(CDurMaxEns==0) %si la rata NO cruzo
             Resultados=[Resultados;cmc_fila_resultado(Ensayo,-2,Secuencia(Ensayo,2),toc(R2), ...
                 toc(R0),ContadorTI,ContadorTD,DurMaxEns,Secuencia(Ensayo,2),ModoSonidoSolo)];
-            set(handles.uitable1,'Data',Resultados);
+            cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
         
@@ -621,7 +585,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
                         toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
-                    set(handles.uitable1,'Data',Resultados);
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         OA_ValentiaRecompensaD(handles.OA);
                         pause(.1)
@@ -634,7 +598,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                         TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;cmc_fila_resultado(Ensayo,0,Secuencia(Ensayo,2),toc(R2), ...
                             toc(R0),ContadorTI,ContadorTD,LatMotDer,Secuencia(Ensayo,2),ModoSonidoSolo)];
-                        set(handles.uitable1,'Data',Resultados);
+                        cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                             OA_ValentiaRecompensaD(handles.OA);
                             pause(.1)
