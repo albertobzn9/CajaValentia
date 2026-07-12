@@ -606,7 +606,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 Ensayo,ZonaInicio,Lado,LatMotDer,CruceValido);
             if(CruceValido)
                 CrucesValidos=CrucesValidos+1;
-            end  
+            end
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues del cruce
 %                 OA_ValentiaPalanca(handles.OA,'I',2); %se mete la palanca del otro lado

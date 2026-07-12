@@ -14,7 +14,7 @@ aviso = [];
 if ActivarAvisoLed
     aviso = cmc_iniciar_aviso_led_final(OA);
 end
-limpiezaAviso = onCleanup(@() cmc_detener_aviso_led_final(aviso, OA)); %#ok<NASGU>
+limpiezaAviso = onCleanup(@() cmc_detener_aviso_led_final(aviso, OA));
 
 carpetaInicial = fullfile(getenv('USERPROFILE'), 'Documents');
 if ~exist(carpetaInicial, 'dir')

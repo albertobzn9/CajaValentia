@@ -12,7 +12,7 @@ fid = fopen(rutaCsv, 'wt');
 if fid == -1
     error('CajaValentia:CSV', 'No se pudo abrir el archivo: %s', rutaCsv);
 end
-limpieza = onCleanup(@() fclose(fid)); %#ok<NASGU>
+limpieza = onCleanup(@() fclose(fid));
 
 fprintf(fid, ['ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,' ...
     'palancas_izq,palancas_der,desplazamiento_s,tipo_evento\n']);
