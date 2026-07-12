@@ -13,11 +13,20 @@ Agenda sonido/LED + parrilla cerca de los min 9, 18 y 27 del bloque conductual.
 Cada evento dura el valor manual de riesgo, no ofrece luz ni pellet y no termina
 por cruce o palanca.
 
-Si el tiempo llega durante un ensayo o ITI, el evento se ejecuta despues del ITI
-y antes del siguiente ensayo CP. La novena columna de `Resultados` distingue CP
-normal (`1`) de sonido solo (`2`).
+Los objetivos son los min 9, 18 y 27 del bloque conductual. El planificador
+conserva el ITI aleatorio de 60--180 s, pero limita solo el ITI final necesario
+para que un control pendiente inicie antes de 30 min. Si iniciar un CP normal
+podria dejarlo fuera de ese limite, el control toma prioridad. Un ensayo ya
+iniciado puede terminar despues de los 30 min; enseguida inicia habituacion
+final. La novena columna de `Resultados` distingue CP normal (`1`) de sonido
+solo (`2`).
+
+`OA_SecuenciaEnsayos4` guarda lado de origen. Los altavoces y LED del control
+deben usar el lado opuesto: `cmc_lado_objetivo_cp` hace esa conversion y evita
+la inversion historica del sonido.
 
 ## Consecuencia
 
 La hora es aproximada por diseno: preserva el ITI aleatorio y evita cortar un
-ensayo. Falta validar MATLAB R2011a y la caja fisica antes de uso experimental.
+ensayo. El planificador y sus cuatro duraciones fueron simulados sin hardware;
+falta validar MATLAB R2011a y la caja fisica antes de uso experimental.

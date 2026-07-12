@@ -19,6 +19,7 @@ cmc_prueba_ancho_tabla_resultados;
 cmc_prueba_reloj_habituacion;
 cmc_prueba_aviso_led_final;
 cmc_prueba_planificador_cp_sonido_solo;
+cmc_prueba_lado_objetivo_cp;
 textoCP = evalc('cmc_prueba_plan_sonido_solo_cp;');
 assert(~isempty(strfind(textoCP, 'OK: CP')), ...
     'La prueba de planificacion de CP no termino correctamente.');

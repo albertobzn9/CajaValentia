@@ -19,23 +19,23 @@ Peligrosos), no una afirmacion de que ya esten aplicados ahi.
 
 | Problema simple | Resolucion tecnica | Estado para CP |
 |---|---|---|
-| Faltaba un evento de solo sonido. | Tipo `2`: ruido blanco, LED marcador y parrilla, sin luz de comida ni pellet. Dura 180 s completos aunque la rata cruce. | CP ya tiene la planificacion de tipo `2`; falta validar su flujo completo. |
+| Faltaba un evento de solo sonido. | Tipo `2`: ruido blanco, LED marcador y parrilla, sin luz de comida ni pellet. Dura el valor CP manual completo aunque la rata cruce. | **Transferido a CP:** planificador de 9/18/27 min y flujo de tipo `2`; falta caja. |
 | Sonido solo aparecia aun en cruces seguros. | En Discriminacion solo se agrega con riesgo mayor que cero y checkbox `Agregar evento sonido 1:10` activo. | No copiar literalmente: CP usa programacion por tiempo. |
 | Riesgo y sonido solo no debian existir si la rata no cambia de lado. | La secuencia los coloca solo en cambios de lado; los repetidos siguen siendo seguros. | Regla comun que CP debe conservar. |
-| El reloj se congelaba durante sonido solo al cruzar. | `OA_MonitoreaSonidoSolo` sigue los 180 s completos y actualiza el reloj visual. | Aplicar al monitor CP. |
-| Detener podia perder datos o cortar un ensayo a medias. | `Detener ahora` termina sin inventar una fila; `Detener tras ensayo` cierra el evento actual. Los textos de ambos botones quedan estables. | Aplicar. |
-| La habituacion final quedaba fuera de los datos. | La rutina final se ejecuta antes de guardar el estado temporal y el registro admite fase `habituacion_final`. | Falta el flujo automatico completo en ambos programas. |
+| El reloj se congelaba durante sonido solo al cruzar. | `OA_MonitoreaSonidoSolo` sigue toda la duracion programada y actualiza el reloj visual. | **Transferido a CP.** |
+| Detener podia perder datos o cortar un ensayo a medias. | `Detener ahora` termina sin inventar una fila; `Detener tras ensayo` cierra el evento actual. Los textos de ambos botones quedan estables. | CP ahora revisa `Terminar` durante ITI y eventos; falta boton equivalente a `Detener tras ensayo`. |
+| La habituacion final quedaba fuera de los datos. | La rutina final se ejecuta antes de guardar el estado temporal y el registro admite fase `habituacion_final`. | **Transferido a CP:** inicia tras el limite de 30 min o terminacion manual. |
 
 ### Datos, Tabla Y GUI
 
 | Problema simple | Resolucion tecnica | Estado para CP |
 |---|---|---|
-| La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El CSV principal conserva precision completa; la vista muestra 0.01 s. | Aplicar. |
+| La tabla no distinguia los tres tipos de evento. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo. El CSV principal conserva precision completa; la vista muestra 0.01 s. | **Transferido a CP.** |
 | La columna 9 no cabia en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior ahora se ajusta al ancho real de las nueve columnas. | Pendiente inspeccion visual R2011a. |
 | Habia demasiadas opciones que nadie usa. | Se ocultaron controles muertos: palancas, sonido inicial, luz intermitente, retardo y audio izquierdo/derecho. Valores utiles por defecto: luz segura; luz y sonido de riesgo; secuencia y sonido 1:10 activados. | Aplicar solo despues de revisar GUI CP. |
 | `Secuencia Aleatoria` genera ansiedad si desaparece. | Se conserva visible y marcada, aunque el callback historico no cambia la secuencia. | Mantener por compatibilidad de uso. |
-| Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crean dos CSV hermanos. | Aplicar despues de validar el contador fisico. |
-| El contador de ensayos ignoraba los no-cruces. | **En rama `feature/sensor-validated-crosses`:** `Ensayos terminados` es el numero de filas en `Resultados`. Incluye cruce, repeticion, `-2` y sonido solo completo; no cuenta un ensayo abortado sin fila. | Validado en Discriminacion; pendiente transferencia a CP. |
+| Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crean dos CSV hermanos. | **Transferido a CP; falta validacion fisica CP.** |
+| Un inicio en centro podia inflar los cruces. | **En rama `feature/sensor-validated-crosses`:** cruce real exige cambio de lado, inicio lateral confirmado y desplazamiento de al menos 1 s. | **Transferido a CP para su contador visible; CP termina por tiempo, no por ese contador.** |
 
 ## Exportacion Final CSV
 
@@ -118,7 +118,7 @@ puede legitimamente quedar en el centro entre ensayos. El programa viejo no
 resolvia esa excepcion y podia inflar el contador. El video sigue siendo la
 referencia para medir el ITI visual exacto.
 
-## Pendientes Antes De Copiar A CP
+## Estado De Transferencia A CP
 
 | Pendiente | Criterio de terminado |
 |---|---|
@@ -131,7 +131,9 @@ referencia para medir el ITI visual exacto.
 | Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar ambos CSV, nueve columnas de ensayos, `NA` fuera de ensayo, acumulados secuenciales y, si es posible, una palanqueada durante sonido solo. |
 | Ajustar el rectangulo exterior de `uitable1`. | **Implementado en `fix/startup-and-table`:** el ancho exterior se calcula desde las nueve columnas. Falta inspeccion visual R2011a. |
 | Centrar los valores de `uitable1`. | En GUIDE/R2011a no existe una propiedad estable para centrar celdas. Revisar visualmente; no introducir un hack Java o espacios variables sin necesidad real. |
-| Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
+| Planificar 3 controles sin luz en una sesion CP. | **Implementado y simulado:** objetivos 9/18/27 min, ITI final limitado solo cuando hace falta. |
+| Confirmar lado fisico del sonido de control. | **Implementado en codigo:** `Secuencia` usa origen y `cmc_lado_objetivo_cp` manda estimulo al opuesto; falta oido/caja. |
+| Validar CP completo con R2011a y caja. | Probar arranque, un pellet, ambos lados de sonido, 30-min limite, habituacion final y ambos CSV. |
 
 ## Regla De Trabajo
 

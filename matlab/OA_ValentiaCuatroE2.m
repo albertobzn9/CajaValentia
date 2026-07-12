@@ -111,9 +111,10 @@ OA_ValentiaPalanca(handles.OA,'D',1); %sacar las palancas
 CT_Ejecuta=0;
 CT_Pausa=0;
 CT_Ensayos=0;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
-set(handles.edit1,'String','0');
+set(handles.edit1,'String','1');
 set(handles.edit2,'String','0');   %retardo antes de la recompensa
 set(handles.edit3,'String','1');  %pellets por recompensa ensayo seguro
 set(handles.edit4,'String','300'); %ensayos a realizar
@@ -128,10 +129,12 @@ set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
 set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
 set(handles.edit14,'String',num2str(cmc_frecuencia_ruido_predeterminada)); %frecuencia del estimulo auditivo de riesgo
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
-set(handles.edit16,'String','2'); %máximo número de repeticiones por lado
-set(handles.edit17,'String','2');  %pellets por recompensa ensayo riesgo
+set(handles.edit16,'String','1'); %máximo número de repeticiones por lado
+set(handles.edit17,'String','1');  %CP siempre entrega un pellet por respuesta
     set(handles.edit18,'String','30'); %dia 17; operador cambia 30/30/60/90/120 s
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
+set(handles.checkbox7,'Value',1); %luz de comida en ensayo CP
+set(handles.checkbox8,'Value',1); %ruido blanco en ensayo CP
 
 
 
@@ -160,13 +163,17 @@ function Inicio_Callback(hObject, eventdata, handles)
 
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 CT_Ejecuta=1;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
 Ensayo=0;
 Resultados=[];
 ContadorTD=0;
 ContadorTI=0;
 TultimaP=0;
+[EstadoPalanqueos,EventosPalanqueo]=cmc_nuevo_registro_palanqueos;
+ContadorHabI=0;
+ContadorHabD=0;
 
 Riesgo=str2num(get(handles.edit1,'String'));
 NumRepLado=str2num(get(handles.edit16,'String'));
@@ -205,36 +212,23 @@ TultimaPalanca=toc(R1);
 THabitua=str2num(get(handles.edit15,'String'));
 msgbox('Cerrar mensaje para iniciar habituacion')
 
-NumCiclosHabitua=round(THabitua/0.42);
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    DDAI=DI;
-    DDAD=DD;
+[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD]= ...
+    cmc_ejecutar_habituacion(handles,THabitua,EstadoPalanqueos, ...
+    EventosPalanqueo,R0,'habituacion_inicial',ContadorHabI,ContadorHabD);
 
-for i=1:NumCiclosHabitua
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    if(DI~=DDAI)
-        handles.PalancasIzqHabitua=handles.PalancasIzqHabitua+1;
-        set(handles.edit20,'String',num2str(handles.PalancasIzqHabitua));
-        DDAI=DI;
-    end
-    if(DD~=DDAD)
-        handles.PalancasDerHabitua=handles.PalancasDerHabitua+1;
-        set(handles.edit21,'String',num2str(handles.PalancasDerHabitua));
-        DDAD=DD;
-    end
-    pause(0.3) %esperamos 300 ms
-end
+control=load('ControlTarea','CT_Ejecuta');
+CT_Ejecuta=control.CT_Ejecuta;
 
 
 
 OA_ValentiaResetPalancas(handles.OA);
 
-TiemposSonidoSolo=[9 18 27]*60;
 ProximoSonidoSolo=1;
 
 msgbox(sprintf(['Modo experimental CP: sonido solo cerca de los min 9, 18 y 27.\n' ...
     'Cada evento dura lo que indique "maxima duracion de ensayo riesgo".\n' ...
-    'No hay luz ni pellet; el evento no termina si la rata cruza.']))
+    'No hay luz ni pellet; el evento no termina si la rata cruza.\n' ...
+    'La fase conductual termina tras 30 min y luego inicia habituacion final.']))
 
 % Este reloj excluye la habituacion inicial y el mensaje de confirmacion.
 % Los eventos de sonido solo se programan durante los 30 min de conducta.
@@ -246,30 +240,28 @@ set(handles.edit19,'String',num2str(EnsayoValido));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
-    if(Ensayo>1)
-    PausaIni=60+round(120*rand(1,1)) %Ely pausa
-    pause(PausaIni)
-    'Fin de pausa'
-    end
-    
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
 
-    % El boton Terminar puede haberse presionado durante el ITI bloqueante.
-    load('ControlTarea','CT_Ejecuta');
-    if(CT_Ejecuta==0)
+    DuracionNormal=str2double(get(handles.edit18,'String'));
+    Plan=cmc_planificador_cp_sonido_solo(toc(RComportamiento), ...
+        DuracionNormal,ProximoSonidoSolo);
+    if(Plan.finalizar_sin_nuevo_ensayo)
         break
     end
 
-    % No interrumpimos un ensayo ni su ITI. Si ya toca un sonido solo,
-    % corre aqui: despues del ITI y antes del siguiente ensayo normal.
-    if(ProximoSonidoSolo<=size(TiemposSonidoSolo,2) && ...
-            toc(RComportamiento)>=TiemposSonidoSolo(ProximoSonidoSolo))
+    % Un control pendiente tiene prioridad al llegar a su minuto objetivo,
+    % o cuando un CP normal podria dejarlo fuera de los 30 min conductuales.
+    if(Plan.ejecutar_sonido)
         DuracionSonidoSolo=str2num(get(handles.edit18,'String'));
         freqRiesgo=str2num(get(handles.edit14,'String'));
-        [FilaSonidoSolo,ContadorTI,ContadorTD,Detenido] = ...
-            OA_EjecutaSonidoSoloCP(handles,Secuencia(Ensayo,1), ...
-            DuracionSonidoSolo,freqRiesgo,NumeroEvento,R0,ContadorTI,ContadorTD);
+        % Secuencia guarda el lado de origen; el objetivo es el lado opuesto.
+        LadoObjetivo=cmc_lado_objetivo_cp(Secuencia(Ensayo,1));
+        [FilaSonidoSolo,ContadorTI,ContadorTD,Detenido, ...
+            EstadoPalanqueos,EventosPalanqueo] = ...
+            OA_EjecutaSonidoSoloCP(handles,LadoObjetivo, ...
+            DuracionSonidoSolo,freqRiesgo,NumeroEvento,R0,ContadorTI,ContadorTD, ...
+            EstadoPalanqueos,EventosPalanqueo);
         set(handles.edit6,'String',num2str(ContadorTI));
         set(handles.edit7,'String',num2str(ContadorTD));
 
@@ -278,9 +270,31 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         end
 
         Resultados=[Resultados;FilaSonidoSolo];
-        set(handles.uitable1,'Data',Resultados);
+        cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         NumeroEvento=NumeroEvento+1;
         ProximoSonidoSolo=ProximoSonidoSolo+1;
+        continue
+    end
+
+    % ITI aleatorio de 60--180 s. Solo se recorta al final si hace falta
+    % preservar el siguiente control dentro de la ventana conductual.
+    if(Ensayo>1)
+        PausaIni=min(60+round(120*rand(1,1)),Plan.max_iti_s);
+        [ContadorTI,ContadorTD,Detenido,EstadoPalanqueos,EventosPalanqueo]= ...
+            cmc_esperar_iti_cp(handles,PausaIni,ContadorTI,ContadorTD, ...
+            EstadoPalanqueos,EventosPalanqueo,R0);
+        set(handles.edit6,'String',num2str(ContadorTI));
+        set(handles.edit7,'String',num2str(ContadorTD));
+        if(Detenido)
+            break
+        end
+        % El reloj pudo llegar al objetivo durante el ITI. Se reevalua antes
+        % de encender un ensayo normal.
+        Plan=cmc_planificador_cp_sonido_solo(toc(RComportamiento), ...
+            DuracionNormal,ProximoSonidoSolo);
+        if(Plan.finalizar_sin_nuevo_ensayo || Plan.ejecutar_sonido)
+            continue
+        end
     end
     
     EnsayoMismoLado=0;
@@ -303,6 +317,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     elseif(caso==0)
         Lado='D';
     end
+    % Confirma la posicion antes de encender estimulos. Un inicio en centro
+    % no debe inflar el contador de cruces reales.
+    ZonaInicio=cmc_lee_zona_posicion(handles.OA);
     
     SonidoIniS=get(handles.checkbox2,'Value');
     SonidoIniR=get(handles.checkbox12,'Value');
@@ -345,7 +362,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             end
             ES=2;
             EL=2;
-            PelletsEvento=str2num(get(handles.edit17,'String'));
+            PelletsEvento=1; % Contrato CP: una presion valida entrega un pellet.
 %             if(get(handles.checkbox6,'Value')==1)
 %                 OA_ValentiaPalanca(handles.OA,'I',1); %nos aseguramos que la palanca izq este afuera
 %             end
@@ -361,6 +378,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         R2=tic;
         OA_ValentiaResetPalancas(handles.OA);
         [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+        EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         DIA=DI;
         DDA=DD;
         P=0;
@@ -372,23 +390,33 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 P=0;
                 [P]=OA_ValentiaBuscaIzquierda(handles.OA);
             end    
+            [EstadoPalanqueos,EventosPalanqueo]=cmc_observar_palanqueos( ...
+                handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                'ensayo',NumeroEvento,'riesgo');
             if(toc(LatMI)>DurMaxEns)
                 CDurMaxEns=0;
                 break;
             end
             set(handles.edit9,'String',num2str(toc(LatMI)));
+            drawnow;
+            control=load('ControlTarea','CT_Ejecuta');
+            if(control.CT_Ejecuta==0)
+                CDurMaxEns=-1;
+                break;
+            end
             pause(.01);
         end
         
         if(CDurMaxEns==0) %si la rata NO cruzo
             Resultados=[Resultados;[NumeroEvento -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns 1]];
-            set(handles.uitable1,'Data',Resultados);
+            cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
         
         if(CDurMaxEns==1) %si la rata cruzo
             LatMotIzq=toc(LatMI);
-            if(EnsayoMismoLado==0)
+            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotIzq);
+            if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
             end    
@@ -401,7 +429,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             while(1)
                 
-                [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+                [EstadoPalanqueos,EventosPalanqueo,~,~,DI,DD]=cmc_observar_palanqueos( ...
+                    handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                    'ensayo',NumeroEvento,'riesgo');
                 [DI DIA PalXRec]
 %                 if(DI==2)
 %                     DI=0;
@@ -418,7 +448,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DI>=PalXRec)&& EnsayoMismoLado==0) %%si no se repite el mismo lado
                     TultimaPalanca=toc(R1); %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;[NumeroEvento 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq 1]];
-                    set(handles.uitable1,'Data',Resultados);
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         'recomp'
                         OA_ValentiaRecompensaI(handles.OA);
@@ -431,7 +461,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     if(toc(R1)>(TultimaPalanca+IntVar))
                         TultimaPalanca=toc(R1);  %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;[NumeroEvento 1 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotIzq 1]];
-                        set(handles.uitable1,'Data',Resultados);
+                        cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                              'recomp'
                             OA_ValentiaRecompensaI(handles.OA);
@@ -501,7 +531,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             if(get(handles.checkbox10,'Value')==1)
                 OA_ValentiaEstimuloD(handles.OA,2,2); %dejamos sonido apagado luz prendida
             end
-            PelletsEvento=str2num(get(handles.edit17,'String'));
+            PelletsEvento=1; % Contrato CP: una presion valida entrega un pellet.
 %             if(get(handles.checkbox9,'Value')==1)
 %                 OA_ValentiaPalanca(handles.OA,'D',1); %nos aseguramos que la palanca der este afuera
 %             end
@@ -517,6 +547,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         R2=tic;
         OA_ValentiaResetPalancas(handles.OA);
         [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+        EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
         DDA=DD; %guardamos cuenta de palanca D
         DIA=DI; %guardamos cuenta de palanca I
         P=0;
@@ -524,29 +555,38 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
         CDurMaxEns=1;
         while(P==0)
             [P]=OA_ValentiaBuscaDerecha(handles.OA);
+            [EstadoPalanqueos,EventosPalanqueo]=cmc_observar_palanqueos( ...
+                handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                'ensayo',NumeroEvento,'riesgo');
             if(toc(LatMD)>DurMaxEns)
                 CDurMaxEns=0;
                 break;
             end
             set(handles.edit9,'String',num2str(toc(LatMD)));
+            drawnow;
+            control=load('ControlTarea','CT_Ejecuta');
+            if(control.CT_Ejecuta==0)
+                CDurMaxEns=-1;
+                break;
+            end
             pause(.01);
         end
 
         if(CDurMaxEns==0) %si la rata NO cruzo
             Resultados=[Resultados;[NumeroEvento -2 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD DurMaxEns 1]];
-            set(handles.uitable1,'Data',Resultados);
+            cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
         end    
         
         
         
         if(CDurMaxEns==1) %si la rata cruzo
             
-            if(EnsayoMismoLado==0)
+            LatMotDer=toc(LatMD);
+            CruceValido=cmc_es_cruce_valido(EnsayoMismoLado,ZonaInicio,Lado,LatMotDer);
+            if(CruceValido)
                 EnsayoValido=EnsayoValido+1;  %contamos ensayos donde la rata debia cruzar
                 set(handles.edit19,'String',num2str(EnsayoValido));
             end  
-            
-            LatMotDer=toc(LatMD);
             
 %             if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==1)) %si se pide meter la palanca despues del cruce
 %                 OA_ValentiaPalanca(handles.OA,'I',2); %se mete la palanca del otro lado
@@ -554,7 +594,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             
             
             while(1)
-                [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
+                [EstadoPalanqueos,EventosPalanqueo,~,~,DI,DD]=cmc_observar_palanqueos( ...
+                    handles.OA,EstadoPalanqueos,EventosPalanqueo,toc(R0), ...
+                    'ensayo',NumeroEvento,'riesgo');
                 if(DD==2)
                     DD=0;
                 end    
@@ -569,7 +611,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                 if((DD>=PalXRec)&& EnsayoMismoLado==0)
                     TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                     Resultados=[Resultados;[NumeroEvento 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer 1]];
-                    set(handles.uitable1,'Data',Resultados);
+                    cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                     for iR=1:PelletsEvento
                         OA_ValentiaRecompensaD(handles.OA);
                         pause(1)
@@ -581,7 +623,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     if(toc(R1)>(TultimaPalanca+IntVar)) %verificamos que la respuesta se presente despues de un retardo
                         TultimaPalanca=toc(R1) %guardamos el tiempo de la ultima palanca
                         Resultados=[Resultados;[NumeroEvento 0 Secuencia(Ensayo,2) toc(R2) toc(R0) ContadorTI ContadorTD LatMotDer 1]];
-                        set(handles.uitable1,'Data',Resultados);
+                        cmc_mostrar_tabla_resultados(handles.uitable1,Resultados);
                         for iR=1:PelletsEvento
                             OA_ValentiaRecompensaD(handles.OA);
                             pause(1)
@@ -619,41 +661,21 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(CT_Ejecuta==0)
         break;
     end
-    FinEnsayos=str2num(get(handles.edit4,'String'));
-    if(Ensayo>=FinEnsayos+1)
-        break
-    end
+    % CP se gobierna por los 30 min de conducta; edit4 queda solo como
+    % referencia visual heredada y no corta una sesion temporal.
     
 end
 
 
 set(handles.Inicio,'String','Inicio');
-save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados');
-msgbox('Fin de la secuencia')
-
-
 THabitua=str2num(get(handles.edit15,'String'));
 
-NumCiclosHabitua=round(THabitua/0.42);
+[EstadoPalanqueos,EventosPalanqueo,ContadorHabI,ContadorHabD]= ...
+    cmc_ejecutar_habituacion(handles,THabitua,EstadoPalanqueos, ...
+    EventosPalanqueo,R0,'habituacion_final',ContadorHabI,ContadorHabD);
 
-[DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-DDAI=DI;
-DDAD=DD;
-
-for i=1:NumCiclosHabitua
-    [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA); %revisamos el valor de la palanca
-    if(DI~=DDAI)
-        handles.PalancasIzqHabitua=handles.PalancasIzqHabitua+1;
-        set(handles.edit20,'String',num2str(handles.PalancasIzqHabitua));
-        DDAI=DI;
-    end
-    if(DD~=DDAD)
-        handles.PalancasDerHabitua=handles.PalancasDerHabitua+1;
-        set(handles.edit21,'String',num2str(handles.PalancasDerHabitua));
-        DDAD=DD;
-    end
-    pause(0.3) %esperamos 300 ms
-end
+save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
+cmc_solicitar_guardado_final(Resultados,EventosPalanqueo,handles.OA,false);
 
 
 
@@ -727,12 +749,21 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-load(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados');
-viejo=pwd;
-cd(cmc_results_dir());
-[fname,pname]=uiputfile('*.mat','nombre y ruta para guardar resultados');
-save(strcat(pname,fname),'Resultados');
-cd(viejo);
+datosSesion=load(fullfile(cmc_state_dir(), 'OA_Resultados'));
+Resultados=datosSesion.Resultados;
+if isfield(datosSesion,'EventosPalanqueo')
+    EventosPalanqueo=datosSesion.EventosPalanqueo;
+else
+    [~,EventosPalanqueo]=cmc_nuevo_registro_palanqueos;
+end
+
+carpetaInicial=cmc_results_dir();
+[fname,pname]=uiputfile(fullfile(carpetaInicial,'resultados.csv'), ...
+    'Guardar resultados de la sesion');
+if isequal(fname,0) || isequal(pname,0)
+    return
+end
+cmc_guardar_resultados_sesion(fullfile(pname,fname),Resultados,EventosPalanqueo);
 
 
 function edit2_Callback(hObject, eventdata, handles)
