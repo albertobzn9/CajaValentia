@@ -9,6 +9,18 @@ cmc_prueba_discriminacion(0.2);
 cmc_prueba_discriminacion(0.3);
 cmc_prueba_discriminacion(0.6);
 cmc_prueba_modo_historico_sin_sonido;
+cmc_prueba_secuencia_sonido_solo;
+cmc_prueba_registro_palanqueos;
+cmc_prueba_resultados_nueve_columnas;
+cmc_prueba_ensayos_terminados;
+cmc_prueba_clasificador_posicion;
+cmc_prueba_inicio_seguro;
+cmc_prueba_ancho_tabla_resultados;
+cmc_prueba_reloj_habituacion;
+cmc_prueba_aviso_led_final;
+textoCP = evalc('cmc_prueba_plan_sonido_solo_cp;');
+assert(~isempty(strfind(textoCP, 'OK: CP')), ...
+    'La prueba de planificacion de CP no termino correctamente.');
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
