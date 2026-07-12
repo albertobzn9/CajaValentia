@@ -137,18 +137,37 @@ de exito. Si uno falla, se corrige ese modulo antes de continuar.
 | 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, y queda en MAT/CSV. | Prueba inicial funcional; falta validar CSV con una palanqueada real. |
 | 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar MAT mas CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
 | 6. Palanqueos | Una presion lenta y varias rapidas en cada fase. | CSV ordenado, `NA` fuera de ensayo y contadores de sesion consecutivos. | Esquema probado sin hardware; falta validar el CSV nuevo. |
-| 7. Aviso final | Casilla de aviso LED activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Pendiente de implementar y validar. |
+| 7. Aviso final | Casilla `Aviso LED al finalizar` activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Implementado y probado sin hardware; falta caja. |
 
 El reloj de la GUI tambien funciona como cronometro de fase: durante
 `habituacion_inicial` y `habituacion_final` muestra `transcurrido / total`.
 Al comenzar los ensayos recupera su etiqueta y formato de reloj de ensayo.
 Esta parte paso prueba sin hardware; falta inspeccion visual R2011a.
 
-### Mejoras Pendientes De Implementar En Esta Rama
+### Aviso LED Final
 
-- Agregar una casilla opcional, apagada por defecto, para el aviso LED final.
-  El aviso no debe dispensar pellet ni encender audio; solo usa el LED marcador
-  que ya identifica la estimulacion electrica.
+La casilla `Aviso LED al finalizar` aparece debajo de `Agregar evento sonido
+1:10`, sin ocupar la tabla ni mover botones existentes. Por seguridad inicia
+apagada. Si se marca, al terminar la habituacion final se abre el dialogo de
+guardado y, mientras ese dialogo este abierto, el LED marcador de estimulacion
+electrica enciende 100 ms al inicio de cada ciclo de 2 s.
+
+El aviso no entrega pellet, no enciende las luces de comida y no inicia ruido
+blanco. Se detiene y apaga el LED al guardar, cancelar o cerrar el dialogo.
+La funcion legacy que controla el LED mantiene su pausa normal de 0.3 s para
+todo el codigo existente; el aviso final es la unica llamada que solicita pausa
+cero, porque necesita un pulso de 100 ms controlado por un `timer` de MATLAB.
+
+### Pendientes Fisicos Antes De Uso Experimental
+
+- Confirmar que el inicio seguro no entrega pellet al abrir la GUI.
+- Revisar en R2011a que tabla, casilla de sonido, casilla LED y boton
+  `Detener tras ensayo` no se traslapen.
+- Probar el cronometro de ambas habituaciones y la ruta de guardado Documents.
+- Con la casilla LED marcada, comprobar pulso visible de 100 ms cada 2 s y
+  apagado inmediato al cerrar el dialogo.
+- Generar una sesion corta para confirmar el CSV nuevo, incluyendo si es
+  posible una palanqueada durante `sonido_solo`.
 
 ### Limite Conocido De La Tabla
 
