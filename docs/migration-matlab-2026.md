@@ -74,6 +74,31 @@ puede editar con su editor grafico. Se puede editar el `.m` asociado o migrar
 la interfaz a App Designer. Por eso el rediseño de Eric no debe mezclarse con
 el primer cambio de tarjeta/audio: son dos riesgos distintos.
 
+### R2016a Como Puente
+
+R2016a es una opcion intermedia para una PC vieja, no una solucion que permita
+abrir el programa actual sin modificaciones. Sus requisitos para Windows son
+mucho menores que los de R2026a: 2 GB de RAM como minimo y soporte para
+Windows 10. En `DESKTOP-LAB-S` probablemente arrancaria y responderia mejor
+que R2021b/R2026a, aunque el HDD seguiria haciendo lentas las cargas.
+
+El limite importante aparece precisamente en R2016a: MATLAB pasa a ser solo
+de 64 bits y la interfaz DAQ legacy usada por la caja deja de ser la ruta
+soportada. Por tanto, `digitalio('nidaq','Dev2')` y
+`analogoutput('winsound',0)` no deben asumirse funcionales solo por instalar
+R2016a. Tarjeta y audio necesitan una capa nueva y una prueba fisica, igual
+que en R2026a.
+
+R2016a conserva GUIDE, asi que puede ser util para abrir y editar los `.fig`
+durante una transicion. La ruta de adquisicion de esa epoca se parece mas a la
+interfaz de sesiones que a la API actual, pero no existe una traduccion
+automatica ni esta validada aun con esta USB-6501, su driver y esta caja.
+
+**Decision recomendada:** mantener R2011a como produccion. Usar R2016a solo
+como banco de transicion si se quiere comprobar antes la tarjeta y el audio en
+esta PC con menor carga. No convertirlo en destino definitivo: duplicaria el
+trabajo de migracion y dejaria otra version obsoleta entre R2011a y R2026a.
+
 ### Tiempo Y Seguridad
 
 Una migracion correcta debe preservar, no solo aproximar:
@@ -141,6 +166,8 @@ Hasta la fase 7, R2011a sigue siendo produccion.
 - [Entrada/salida digital moderna](https://www.mathworks.com/help/daq/digital-input-and-output.html)
 - [Salida digital no sincronizada con `write`](https://www.mathworks.com/help/daq/generate-non-clocked-digital-data.html)
 - [Estado de GUIDE en MATLAB moderno](https://www.mathworks.com/help/matlab/ref/guide.html)
+- [Requisitos de MATLAB R2016a para Windows](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/SystemRequirements-Release2016a_Windows.pdf)
+- [Compatibilidad entre versiones de Data Acquisition Toolbox](https://www.mathworks.com/help/daq/ug/using-previous-matlab-releases.html)
 - [Compatibilidad de NI con sistemas operativos](https://www.ni.com/en/support/documentation/compatibility/21/ni-hardware-and-operating-system-compatibility.html)
 - [Manual de la NI USB-6501](https://download.ni.com/support/manuals/375267a.pdf)
 
