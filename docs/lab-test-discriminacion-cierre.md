@@ -7,7 +7,8 @@ Discriminacion; no iniciar Cruces Peligrosos hasta registrarla como aprobada.
 
 - Desplegar una copia separada de esta rama. No sobrescribir
   `CajaValentia_R2011a_CrucesSensor`.
-- Abrir MATLAB R2011a mediante el lanzador de esa copia y conservar su log.
+- Abrir `Abrir_CajaValentia_CierreHab_Pruebas.bat` del Escritorio y conservar
+  su log. El lanzador usa MATLAB R2011a y la copia aislada en `Documents`.
 - Usar la caja sin animal para estas validaciones tecnicas.
 
 ## Prueba 1: Flujo Corto, Contador Y LED

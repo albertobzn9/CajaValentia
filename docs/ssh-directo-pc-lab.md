@@ -10,6 +10,29 @@ directo. No depende de la red del instituto ni de internet.
 - Llave privada local: `~/.ssh/caja_valentia_lab_ed25519`.
 - La Mac resuelve `desktop-lab-s.local` por mDNS.
 
+## Ultima Conexion Verificada
+
+El 13 de julio de 2026, el enlace directo uso `en3` en la Mac
+(`169.254.161.104`) y la PC respondio como `DESKTOP-LAB-S` en
+`169.254.86.59`. Son direcciones locales automaticas: pueden cambiar al
+reconectar el cable. El script busca el nombre de la PC y no depende de ese
+numero fijo.
+
+La copia de pruebas actual esta en:
+
+```text
+C:\Users\Alberto\Documents\CajaValentia_R2011a_CierreHab_Pruebas
+```
+
+El unico lanzador nuevo de esa copia esta en el Escritorio:
+
+```text
+Abrir_CajaValentia_CierreHab_Pruebas.bat
+```
+
+Solicita administrador porque es el patron que ya funciona con la tarjeta. No
+sustituye los lanzadores anteriores.
+
 ## Conexion Correcta
 
 En el repo, ejecutar:
