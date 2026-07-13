@@ -8,7 +8,7 @@ end
 
 etiquetaControl = findobj(get(reloj, 'Parent'), 'Tag', 'text10');
 if ~isempty(etiquetaControl)
-    set(etiquetaControl(1), 'String', etiqueta);
+    set(etiquetaControl(1), 'String', cmc_etiqueta_reloj_compacta(etiqueta));
 end
 
 if nargin < 4 || isempty(total)
@@ -19,3 +19,12 @@ else
     set(reloj, 'String', sprintf('%.1f / %.1f', transcurrido, total));
 end
 drawnow;
+
+
+function texto = cmc_etiqueta_reloj_compacta(etiqueta)
+% La etiqueta larga de GUIDE ocupaba el espacio del contador de habituacion.
+if ~isempty(strfind(lower(etiqueta), 'habituacion'))
+    texto = 'Reloj hab. (s)';
+else
+    texto = 'Reloj ensayo (s)';
+end

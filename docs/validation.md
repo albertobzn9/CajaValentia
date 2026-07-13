@@ -10,10 +10,14 @@
 - La evidencia y los dos pendientes menores de Discriminacion estan en la
   [bitacora de laboratorio](bitacora-lab-2026-07-12-valentiae.md).
 
-## Pendiente
+## Pendiente Para Cerrar Discriminacion
 
-- Discriminacion: comprobar visualmente el reloj de habituacion y el aviso LED
-  final durante una corrida dedicada. No bloquean `main`.
+- Discriminacion: validar en la caja el contador dedicado de habituacion, el
+  aviso LED final de 100 ms cada segundo, el limite real de 60 s y el cierre
+  automatico. El plan y los archivos esperados estan en
+  [la prueba de cierre](lab-test-discriminacion-cierre.md).
+- Discriminacion: confirmar si el lanzador diario puede ejecutarse sin
+  administrador. Hasta esa prueba, el flujo validado sigue siendo elevado.
 - CP (`ValentiaE2`): prueba fisica completa antes de fusionar
   `feature/cp-time-aware-sound-only`. Ver el checklist exacto en
   [`architecture/06_cambios_reutilizables_discriminacion_a_cp.md`](architecture/06_cambios_reutilizables_discriminacion_a_cp.md).

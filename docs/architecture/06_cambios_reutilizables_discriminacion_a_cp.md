@@ -24,9 +24,9 @@ Este es el resumen vigente. Para la historia de pruebas y despliegues, leer la
 | Limite de no-cruce y mismo lado | `cmc_limite_duracion_sin_cruce.m`, `OA_ValentiaCuatroE.m` | Pasa prueba sin hardware; se acepta para esta version. | Auditoria futura: con duracion configurada en 180 s, medir que cierre a 60 s. |
 | Tabla y CSV de 10 columnas | `cmc_configurar_tabla_resultados.m`, `cmc_mostrar_tabla_resultados.m`, `cmc_escribir_csv_resultados.m` | Probado en R2011a. | Ninguna; revisar visualmente solo si se cambia la GUI. |
 | Columna `ensayo_cruce` | `OA_ValentiaCuatroE.m`, `cmc_cuenta_ensayo_cruce.m` | Probado: `1` cuenta, `0` no cuenta, `NA` es solo sonido. | Ninguna para esta version. |
-| CSV de palanqueos por fase | `cmc_registrar_palanqueos.m`, `cmc_escribir_csv_palanqueos.m` | Probado en habituacion, ITI, ensayo y final. | Prueba dedicada: una presion por lado en habituacion inicial y final, confirmar reloj y contadores visibles. |
-| Habituacion inicial/final y guardado automatico | `cmc_actualizar_reloj_fase.m`, `cmc_solicitar_guardado_final.m`, `OA_ValentiaCuatroE.m` | Flujo y CSV probados; reloj pasa suite sin hardware. | Configurar 30 s de habituacion y confirmar visualmente tiempo, contadores y dialogo de guardado final. |
-| Aviso LED final opcional | `cmc_iniciar_aviso_led_final.m`, `cmc_detener_aviso_led_final.m` | Prueba sin hardware aprobada. | Activar casilla y confirmar LED: 100 ms cada 2 s mientras se muestra Guardar resultados. |
+| CSV de palanqueos por fase y resumen | `cmc_registrar_palanqueos.m`, `cmc_escribir_csv_palanqueos.m`, `cmc_escribir_resumen_sesion.m` | CSV probado; resumen pasa prueba sin hardware. | Una presion por lado en habituacion inicial y final; confirmar fases en CSV y resumen. |
+| Habituacion inicial/final y guardado automatico | `cmc_actualizar_reloj_fase.m`, `cmc_actualizar_contador_habituacion.m`, `cmc_solicitar_guardado_final.m`, `OA_ValentiaCuatroE.m` | Flujo, contador y CSV pasan pruebas sin hardware. | Ejecutar la prueba corta: contador legible, cierre y dialogo final. |
+| Aviso LED final opcional | `cmc_iniciar_aviso_led_final.m`, `cmc_detener_aviso_led_final.m` | Calendario de 100 ms cada 1 s pasa prueba sin hardware. | Activar casilla y confirmar el pulso fisico mientras se muestra Guardar resultados. |
 
 ## Formato De Resultados
 

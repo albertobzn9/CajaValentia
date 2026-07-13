@@ -77,7 +77,10 @@ incluyendo:
 
 ## Resultados
 
-- `resultados/`: destino local de CSV de sesion y sus registros de palancas.
+- `resultados/`: destino local de CSV de sesion, registros de palancas y
+  `ultima_sesion_guardada.txt`, que permite localizar el ultimo guardado por
+  SSH.
+- Cada guardado final tambien produce `nombre_resumen.txt` junto a los dos CSV.
 - Los `.mat` incluidos son estado de MATLAB; no son entregables de sesion.
 
 ## Excluido A Proposito

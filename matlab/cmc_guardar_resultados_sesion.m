@@ -6,3 +6,11 @@ rutaCsv = cmc_escribir_csv_resultados(rutaCsv, Resultados);
 [carpeta, nombre] = fileparts(rutaCsv);
 cmc_escribir_csv_palanqueos(fullfile(carpeta, [nombre '_palanqueos.csv']), ...
     EventosPalanqueo);
+
+try
+    cmc_escribir_resumen_sesion(rutaCsv, Resultados, EventosPalanqueo);
+catch ME
+    % El CSV es el resultado principal: un resumen fallido no debe impedirlo.
+    warning('CajaValentia:ResumenSesion', ...
+        'No se pudo escribir el resumen de sesion: %s', ME.message);
+end

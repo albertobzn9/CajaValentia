@@ -4,8 +4,10 @@ function cmc_prueba_aviso_led_final
 assert(cmc_led_aviso_activo(0));
 assert(cmc_led_aviso_activo(0.099));
 assert(~cmc_led_aviso_activo(0.1));
-assert(~cmc_led_aviso_activo(1.999));
-assert(cmc_led_aviso_activo(2));
+assert(~cmc_led_aviso_activo(0.999));
+assert(cmc_led_aviso_activo(1));
+assert(cmc_led_aviso_activo(1.099));
+assert(~cmc_led_aviso_activo(1.1));
 assert(isempty(cmc_iniciar_aviso_led_final([])));
 
 posiciones = cmc_posiciones_gui_experimental;
