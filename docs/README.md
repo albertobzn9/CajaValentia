@@ -7,6 +7,7 @@
 3. [`validation.md`](validation.md): validaciones y pendientes reales.
 4. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de la validacion de Discriminacion.
 5. [`lab-test-discriminacion-cierre.md`](lab-test-discriminacion-cierre.md): pruebas fisicas que faltan para cerrar Discriminacion.
+6. [`ssh-directo-pc-lab.md`](ssh-directo-pc-lab.md): acceso por Ethernet directo a la PC del laboratorio.
 
 ## Entender O Cambiar El Programa
 
