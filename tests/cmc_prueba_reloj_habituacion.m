@@ -6,7 +6,8 @@ limpieza = onCleanup(@() close(figura)); %#ok<NASGU>
 uicontrol('Parent', figura, 'Style', 'text', 'Tag', 'text10');
 reloj = uicontrol('Parent', figura, 'Style', 'edit', 'Tag', 'edit9');
 
-cmc_actualizar_reloj_fase(reloj, 'Habituacion inicial (s)', 3.25, 15);
+% Evita un empate binario (3.25) cuyo redondeo varia entre MATLAB/R2011a.
+cmc_actualizar_reloj_fase(reloj, 'Habituacion inicial (s)', 3.2, 15);
 etiqueta = findobj(figura, 'Tag', 'text10');
 assert(strcmp(get(etiqueta, 'String'), 'Reloj hab. (s)'));
 assert(strcmp(get(reloj, 'String'), '3.2 / 15.0'));
