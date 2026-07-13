@@ -1,28 +1,31 @@
 # CajaValentia
 
-Private research software archive for the CMC/Valentia behavioral box. This
-repository makes the evolution of the MATLAB program explicit while preserving
-the historical program needed to understand old data and behavior.
+Codigo privado de la caja conductual CMC/Valentia. `main` contiene la version
+estable de Discriminacion (`ValentiaE`) validada con MATLAB R2011a y la caja el
+12-jul-2026. El codigo historico se conserva para auditoria, no para operar.
 
-## Releases
+## Estado Actual
 
-| Tag | Name | Meaning |
-| --- | --- | --- |
-| `v0.1.0` | Legacy Baseline | Untouched `fsotres` runtime snapshot, including both MATLAB code trees that were present on the lab computer. |
-| `v1.0.0` | Portable Core | Self-contained USB package with the daily-use MATLAB menu and its required dependencies. |
-| `v2.0.0-rc.1` | Sound-Only Controls | Candidate that adds sound-only controls to discrimination and dangerous crossings. Hardware validation is still required. |
-| `v2.0.0-rc.2` | Software Validation | Candidate with an expanded no-hardware test suite and a documented R2026a migration path. |
+| Referencia | Uso |
+| --- | --- |
+| `main` | Fuente activa de Discriminacion. |
+| `v2.0.0-rc.4-discriminacion-validada` | Foto inmutable de la version validada: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. |
+| `feature/cp-time-aware-sound-only` | Cruces Peligrosos en desarrollo; no esta validada ni fusionada. |
+| `legacy/` | Copia original de `fsotres`, solo lectura. |
 
-## Read First
+La historia corta vive en [CHANGELOG.md](CHANGELOG.md). Las etiquetas
+`v0.1.0` y `v1.0.0` preservan, respectivamente, el original y la etapa USB;
+son antecedentes, no instrucciones de uso actual.
 
-- [`matlab/README_USO_USB.md`](matlab/README_USO_USB.md): operating from USB.
-- [`docs/README.md`](docs/README.md): protocol, hardware, architecture, and decisions.
-- [`HISTORY.md`](HISTORY.md): why the releases exist.
-- [`AGENTS.md`](AGENTS.md): safety rules for people and coding agents changing the program.
+## Leer Primero
 
-## Scope and Safety
+1. [Uso diario en la PC del laboratorio](matlab/README_USO_ESCRITORIO.md).
+2. [Indice de documentacion](docs/README.md).
+3. [Mapa de versiones](docs/version-map.md).
+4. [Reglas de seguridad y edicion](AGENTS.md).
 
-This is a private research repository. The `legacy/` tree is read-only. Do not
-operate physical hardware or use an unvalidated version with animals without a
-person present at the box. Generated session results are intentionally not
-tracked by Git.
+## Seguridad
+
+No operar hardware ni probar una version no validada sin una persona entrenada
+frente a la caja. No subir a Git resultados de sesion, datos de animales ni
+archivos generados. `legacy/` no se limpia ni se modifica.

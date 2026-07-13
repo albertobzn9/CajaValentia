@@ -1,97 +1,76 @@
 # Que Hace `ValentiaE` Detras De La GUI
 
-Esta guia explica la version estable del programa: `06_matlab_limpio_usb`.
-No necesitas leer codigo para usarla.
+Esta guia describe la version estable en `main`. No requiere leer codigo para
+entender que cambian riesgo, aleatorizacion, numero de ensayos y sonido solo.
 
-## Idea Central
+## Secuencia Historica
 
-`ValentiaE` primero decide una secuencia de lados. Despues decide cuales
-cambios de lado son seguros o de riesgo. Solo entonces corre cada evento.
+`ValentiaE` genera primero 1000 lados. El maximo de repeticiones limita cuantos
+eventos seguidos pueden quedar en el mismo lado. Despues marca los cambios de
+lado como candidatos de riesgo; los eventos repetidos en el mismo lado siempre
+son seguros.
 
-```text
-lado -> cambio o repeticion -> seguro o riesgo -> luz/ruido/parrilla
-```
+`OA_ValentiaRiesgo` trabaja en bloques de 10 y usa `round(riesgo * 10)`. Por
+eso `0.15` se comporta como 2 riesgos de cada 10 candidatos, no como 15% exacto.
 
-## El Campo De Riesgo
+| Riesgo escrito | Riesgos por bloque |
+| --- | ---: |
+| `0` | 0 |
+| `0.10` | 1 |
+| `0.15` | 2 |
+| `0.20` | 2 |
+| `0.30` | 3 |
 
-El valor de riesgo se escribe como decimal:
+La opcion visual `Secuencia aleatoria` no controla este calculo actual. La
+secuencia ya es aleatoria; la casilla se conserva por continuidad operativa.
 
-| Valor | Intencion |
-|---|---|
-| `0` | Cruces seguros: sin riesgo. |
-| `0.1` | Un riesgo por cada diez cambios de lado. |
-| `0.3` | Tres riesgos por cada diez cambios de lado. |
+## Sonido Solo En Discriminacion
 
-El programa trabaja en grupos de diez cambios de lado. Solo puede poner un
-numero entero de riesgos dentro de cada grupo. Por eso redondea:
+La casilla `Agregar evento sonido 1:10` esta activa por defecto. Su regla es:
 
-| Valor escrito | Lo que realmente usa |
-|---|---|
-| `0.10` | 1 riesgo por 10 cambios |
-| `0.15` | 2 riesgos por 10 cambios |
-| `0.20` | 2 riesgos por 10 cambios |
-| `0.25` | 3 riesgos por 10 cambios |
-| `0.30` | 3 riesgos por 10 cambios |
+- Riesgo `0`: no agrega sonido solo; cruces seguros conservan su conducta.
+- Riesgo mayor que `0` y casilla activa: cada 10 eventos con comida recibe un
+  evento extra tipo `2`.
+- Tipo `2`: fuerza cambio de lado, dura 180 s completos, no enciende luz de
+  comida, no entrega pellet y no aumenta `Ensayos de cruce`.
+- Casilla apagada: usa la secuencia historica, sin tipo `2`.
 
-Por eso `0.15` no representa 15% exacto en esta version. Se comporta como
-20% de los cambios de lado.
+Para construir esta modalidad, `OA_ValentiaCuatroE` prepara al menos 1000
+eventos con comida. Con sonido solo activo, la secuencia contiene un evento
+adicional por cada bloque de 10. El campo `Ensayos a realizar` no limita esa
+preparacion: indica la meta de **ensayos de cruce** que debe alcanzar la sesion.
 
-## Que Significa “Aleatorizar”
+## Que Cuenta Para El Paro Automatico
 
-Hay dos aleatorizaciones automaticas:
+El contador `Ensayos de cruce` se actualiza al terminar cada evento normal.
 
-1. Se alternan los lados con repeticiones limitadas. La rata puede recibir
-   uno, dos o hasta el maximo configurado de eventos seguidos en el mismo lado.
-2. Dentro de cada grupo de diez cambios de lado, se sortean las posiciones de
-   los riesgos. El porcentaje decide cuantos; el sorteo decide donde caen.
+| Situacion | `ensayo_cruce` | Aumenta contador |
+| --- | --- | --- |
+| Cruce lateral valido, desplazamiento >= 1 s | `1` | Si |
+| No cruza, pero inicia lateral y el objetivo cambia de lado | `1` | Si |
+| Repeticion del mismo lado | `0` | No |
+| Inicio desde centro o sin deteccion corporal | `0` | No |
+| Tipo `2`, solo sonido | `NA` | No |
 
-Aleatorizar cambia el orden, no el numero de riesgos de un bloque completo.
+Un ensayo normal sin cruce o en el mismo lado termina en
+`min(duracion configurada, 60 s)`. El limite evita que una sesion quede
+indefinida cuando la rata no responde.
 
-## Cambio De Lado Y Mismo Lado
+## Ejemplos Practicos
 
-No todos los eventos implican cruzar.
+- Poner `300` deja tiempo para detener manualmente, pero no cambia los primeros
+  eventos de una secuencia dada; la meta automatica seria 300 ensayos de cruce.
+- Poner `30` usa la misma planificacion larga, pero termina al llegar a 30
+  ensayos de cruce.
+- Riesgo `0.3` con sonido solo activo construye, por bloque, siete seguros,
+  tres de comida+risk y uno solo sonido; el orden varia entre bloques.
 
-```text
-Izquierda -> Izquierda = mismo lado: evento seguro de comida.
-Izquierda -> Derecha   = cambio de lado: puede ser seguro o de riesgo.
-```
-
-Esta regla es importante: los riesgos solo se asignan a cambios de lado. Un
-evento repetido en el mismo lado no activa ruido ni parrilla.
-
-Por eso, los primeros 30 eventos de la GUI no tienen necesariamente nueve
-riesgos cuando se usa `0.3`: dependen de cuantos cambios de lado ocurrieron
-antes de parar la sesion.
-
-## El Campo De 300 Ensayos
-
-El campo normalmente se deja en `300`, pero no decide la secuencia ni el
-porcentaje de riesgo. El programa genera por dentro una secuencia de 1000
-eventos y usa `300` solamente como limite automatico de paro.
-
-Entonces:
-
-- poner `30` o `300` no cambia los primeros eventos de una misma secuencia;
-- `30` hace que el programa se detenga solo despues de 30;
-- `300` permite que el operador la detenga manualmente antes, como hace el lab.
-
-## Lo Que El Programa Si Y No Garantiza
-
-| Si garantiza | No garantiza |
-|---|---|
-| Riesgo solo cuando cambia el lado. | Un porcentaje exacto dentro de los primeros 30 eventos visibles. |
-| `0.1` y `0.3` exactos por cada diez cambios. | Que `0.15` sea 15% exacto. |
-| Orden aleatorio de riesgos dentro de cada bloque de cambios. | Que dos sesiones tengan el mismo orden. |
-
-## Regla Para El Nuevo Sonido Solo
-
-La copia experimental sigue la misma idea: sonido solo tambien debe aparecer
-solo cuando cambia el lado. Su diseno tecnico esta en
-[Handoff de sonido solo](../../12_matlab_experimental_discriminacion_sonido_solo/HANDOFF_TECNICO.md).
-
-## Si Alguien Necesita Revisar El Codigo
+## Archivos A Revisar
 
 - GUI y bucle de sesion: `OA_ValentiaCuatroE.m`.
-- Lados y cambios: `Valentia/OA_Secuencia.m`.
-- Riesgo sobre cambios: `Valentia/OA_SecuenciaEnsayos3.m`.
-- Redondeo y sorteo: `Valentia/OA_ValentiaRiesgo.m`.
+- Lados historicos: `Valentia/OA_Secuencia.m`.
+- Riesgo historico: `Valentia/OA_SecuenciaEnsayos3.m` y
+  `Valentia/OA_ValentiaRiesgo.m`.
+- Modalidad nueva: `Valentia/OA_SecuenciaDiscriminacionSonidoSolo.m`.
+- Conteo y CSV: `cmc_cuenta_ensayo_cruce.m` y
+  `cmc_escribir_csv_resultados.m`.

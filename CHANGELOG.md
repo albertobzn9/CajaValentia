@@ -1,14 +1,26 @@
 # Changelog
 
-This changelog records behaviorally meaningful changes. Git commits retain the
-lower-level implementation history.
+Cambios con significado conductual. Los commits contienen el detalle de
+implementacion; las etiquetas conservan fotos inmutables de cada etapa.
 
-## Unreleased - v2.0.0-rc.3 Candidate
+## v2.0.0-rc.4-discriminacion-validada - 2026-07-12
 
-- Records `Tipo evento` as a ninth column in all discrimination and
-  dangerous-crossing result rows, including safe-only discrimination sessions.
-- Displays the ninth column in both legacy GUIDE result tables and verifies it
-  can be saved and loaded without hardware.
+- Valida Discriminacion (`ValentiaE`) en MATLAB R2011a y caja real.
+- Agrega evento tipo `2`: solo sonido/parrilla, 180 s, sin luz de comida ni
+  pellet, opcional 1:10 y solo cuando hay riesgo.
+- Exporta `nombre.csv` con diez columnas y `nombre_palanqueos.csv` con cada
+  presion por fase; el dialogo de guardado usa CSV por defecto.
+- Define el contador `Ensayos de cruce`: cuenta cruces laterales validos y
+  no-cruces laterales; excluye centro, mismo lado, ausencia de deteccion y
+  sonido solo.
+- Agrega habituacion final, guardado automatico y limite de 60 s para
+  no-cruce/mismo lado. Las pruebas fisicas pendientes estan en
+  [`docs/architecture/06_cambios_reutilizables_discriminacion_a_cp.md`](docs/architecture/06_cambios_reutilizables_discriminacion_a_cp.md).
+
+## v2.0.0-rc.3 - Historical Candidate
+
+- Introdujo la novena columna `tipo_evento` y la primera prueba de resultados
+  con sonido solo. La rama y etiqueta historicas se conservan para comparar.
 
 ## v2.0.0-rc.2 - Software Validation
 
@@ -25,8 +37,9 @@ lower-level implementation history.
 
 ## v1.0.0 - Portable Core
 
-- Establishes the USB-contained runtime and the reduced daily-use menu.
+- Establecio la copia autocontenida y el menu reducido durante la etapa USB.
 
 ## v0.1.0 - Legacy Baseline
 
-- Imports the archived original `fsotres` program without cleanup.
+- Importa el programa original `fsotres` sin limpieza. Conserva sus dos arboles
+  MATLAB porque explican el sombreado historico de funciones.

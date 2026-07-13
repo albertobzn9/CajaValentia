@@ -12,6 +12,7 @@ runnable program:
 They are intended to exercise task logic without DAQ hardware. They are not a
 substitute for a supervised physical-box test.
 
-`tests/lab/` contains Windows launchers for supervised R2011a checks. Each
-launcher records a MATLAB launcher log under `resultados/`; the audio and
-sound-only diagnostics also save their own `.txt` log and `.mat` artifact.
+`tests/lab/Abrir_CajaValentia_CrucesSensor.bat` es el lanzador supervisado
+vigente de R2011a. Registra su salida de MATLAB en `resultados/`. Los
+lanzadores RC3 se retiraron de `main`; siguen disponibles en la etiqueta
+historica `v2.0.0-rc.3`.

@@ -55,10 +55,10 @@ try
     fprintf('Prueba activa: ruido + LED + parrilla, sin luz de comida.\n');
     pause(duracion);
 
-    % Misma forma de nueve columnas que un evento real tipo 2.
+    % Misma forma de diez columnas que un evento real tipo 2.
     ResultadosPrueba = [1 -2 1 duracion toc(R0) 0 0 duracion 2];
     assert(size(ResultadosPrueba, 2) == 9, ...
-        'La prueba debe registrar nueve columnas.');
+        'La prueba debe registrar diez columnas.');
     save(fullfile(cmc_results_dir(), 'prueba_sonido_solo_discriminacion.mat'), ...
         'ResultadosPrueba', 'lado', 'frecuencia');
 

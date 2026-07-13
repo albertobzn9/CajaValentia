@@ -1,7 +1,7 @@
-# Sound-Only Controls
+# Controles De Solo Sonido
 
-This document defines the behavior of `v2.0.0-rc.1`. It is the reference for
-review and for any future maintenance.
+Este documento define el contrato conductual de `main` y de la etiqueta
+`v2.0.0-rc.4-discriminacion-validada`.
 
 ## Discrimination: `ValentiaE`
 
@@ -19,6 +19,9 @@ review and for any future maintenance.
 
 ## Dangerous Crossings: `ValentiaE2`
 
+Esta es la especificacion de la rama `feature/cp-time-aware-sound-only`; CP no
+forma parte de la version validada en `main` hasta completar prueba fisica.
+
 - Normal CP behavior remains risk `1` with food/light and danger.
 - Sound-only events are due near minutes 9, 18, and 27 after habituation.
 - The program checks after a normal ITI and before the next normal CP. It never
@@ -28,15 +31,15 @@ review and for any future maintenance.
 - Sound-only uses sound, visible marker, and grid; it has no food light, no
   pellet, and does not end early on crossing or lever press.
 
-## Results
+## Resultados
 
-`TipoEvento` is column 9 in the candidate results:
+`tipo_evento` es la columna 9 y `ensayo_cruce` es la columna 10:
 
-| Value | Meaning |
+| Valor | Significado |
 | --- | --- |
 | `0` | Safe trial (discrimination only) |
 | `1` | Food-plus-danger/risk trial |
 | `2` | Sound-only control |
 
-Run the scripts named in [`../tests/README.md`](../tests/README.md) before a
-supervised physical test.
+El tipo `2` siempre usa `ensayo_cruce=NA`. Ejecutar la suite indicada en
+[`../tests/README.md`](../tests/README.md) antes de una prueba fisica supervisada.

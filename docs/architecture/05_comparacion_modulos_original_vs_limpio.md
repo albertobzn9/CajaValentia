@@ -1,61 +1,53 @@
-# Comparacion De Modulos: Original Vs Limpio
+# Comparacion De Modulos: Original Vs Runtime Activo
 
-## Resumen
+La comparacion util es contra `legacy/fsotres/MATLAB`, la carpeta que MATLAB
+resolvia en la PC antigua.
 
-La comparacion util es contra la copia original que MATLAB usaba en:
-`legacy/fsotres/MATLAB`.
+| Conjunto | Archivos `.m` | Lectura |
+| --- | ---: | --- |
+| Original activo | 104 | Mezcla de codigo vigente, variantes y pruebas antiguas. |
+| Runtime actual `matlab/` | 72 | Tareas vigentes, hardware, protecciones de ruta, CSV y pruebas reutilizables. |
+| Reduccion neta | 32 menos (31%) | El runtime crecio desde la primera limpieza para incluir seguridad, registro y validacion. |
 
-| Version | Archivos `.m` | Lectura |
-|---|---:|---|
-| Original activo | 104 | Carpeta de ejecucion antigua; mezcla codigo vigente y legado. |
-| MATLAB limpio | 49 | Copia portable actual. |
-| Reduccion | 55 menos (53%) | Se conserva lo necesario para las tareas actuales y hardware. |
+El archivo completo tiene **191** `.m`: conserva una segunda copia historica en
+`legacy/fsotres/Documents/MATLAB`. No se deben deduplicar: el conflicto entre
+ambas copias explica por que MATLAB podia abrir menus o funciones viejas.
 
-El respaldo completo tiene **191** archivos `.m`, pero no son 191 modulos
-distintos: contiene una segunda copia antigua en `Documents/MATLAB` (86
-archivos) y `pathdef.m`. Hay 87 nombres repetidos. Esa duplicacion era una
-fuente real de menus y funciones viejas cargadas por accidente.
+## Que Hay En Los 72 Modulos Activos
 
-## MATLAB Limpio: 49 Modulos
+| Grupo | Contenido |
+| --- | --- |
+| Tareas operativas | Las cinco GUIs del menu, incluida Discriminacion y CP. |
+| Logica y hardware | Secuencias, riesgo, audio, tarjeta NI, sensores, luces, pellet, parrilla y palancas. |
+| Operacion segura | Arranque aislado, rutas, tabla, CSV, conteo de cruces, habituacion y aviso final. |
+| Pruebas | 11 scripts `cmc_prueba_*`/`cmc_simulacion_*` que no aparecen en el menu normal. |
 
-| Categoria | Cantidad | Que contiene |
-|---|---:|---|
-| Tareas operativas | 5 | Condicionamiento, entrenamiento de palancas, ValentiaE y ValentiaE2. |
-| Logica experimental | 7 | Riesgo, secuencias, y eventos de solo sonido. |
-| Hardware y audio | 17 | Tarjeta NI, sensores, luces, parrilla, palancas, pellets y audio. |
-| Arranque, rutas, resultados y apoyo GUI | 12 | `abrir1`, aislamiento de rutas, tabla y guardado. |
-| Pruebas y simulaciones controladas | 8 | Diagnosticos de audio, tabla, secuencia y simulacion sin hardware. |
-| **Total** | **49** | |
-
-Los 8 modulos de prueba no aparecen en el menu normal. Estan para validar el
-programa sin volver a explorar el codigo cada vez que haya un cambio.
+Los modulos nuevos no son basura: reducen dependencia de la PC, registran datos
+analizables y permiten validar sin tocar hardware. El detalle de las capas esta
+en [el mapa del runtime](matlab-runtime-overview.md).
 
 ## Que Se Excluyo Del Original Activo
 
-De los 100 nombres unicos de la copia original activa, 27 se conservaron con el mismo nombre y 22
-modulos nuevos se agregaron para aislamiento portable, validacion y sonido
-solo. Quedaron fuera 73 nombres del original:
+Quedaron fuera variantes no necesarias para las tareas del manual. Git conserva
+la evidencia completa en `legacy/`; el runtime no las agrega al path:
 
 | Categoria excluida | Cantidad | Ejemplos | Interpretacion |
-|---|---:|---|---|
-| Versiones antiguas de programas | 14 | `OA_ValentiaCuatroB`, `...E3`, `...F`, `Uno`, `DosCP`, `TresCP` | Iteraciones o protocolos previos; no son el flujo diario actual. |
-| Variantes de secuencia, riesgo y audio | 15 | `OA_SecuenciaEnsayos2`, `...Conflicto`, `OA_RiesgoNeutros`, `OA_PreparaSonidosA` | Experimentos/prototipos alternativos no usados por el manual. |
-| Capa antigua de sensores y actuadores | 22 | `OA_ValentiaPosicion*`, `...Recompensa*_est`, `...EstimuloAlerta` | Implementaciones previas o auxiliares, sustituidas por los 10 drivers de hardware vigentes. |
-| Entrenamientos, analisis y pruebas historicas | 22 | `Analizar`, `GraficaValentia`, `OA_CondicionamientoConflicto`, `pruebaA` | Herramientas de otra etapa, diagnosticos sueltos o tareas fuera del alcance actual. |
-| **Total fuera** | **73** | | |
+| --- | ---: | --- | --- |
+| Versiones antiguas de programas | 14 | `OA_ValentiaCuatroB`, `...E3`, `...F`, `Uno`, `DosCP`, `TresCP` | Iteraciones o protocolos previos. |
+| Variantes de secuencia, riesgo y audio | 15 | `OA_SecuenciaEnsayos2`, `...Conflicto`, `OA_RiesgoNeutros`, `OA_PreparaSonidosA` | Prototipos alternativos no usados por el manual. |
+| Capa antigua de sensores y actuadores | 22 | `OA_ValentiaPosicion*`, `...Recompensa*_est`, `...EstimuloAlerta` | Implementaciones previas o auxiliares. |
+| Entrenamientos, analisis y pruebas historicas | 22 | `Analizar`, `GraficaValentia`, `OA_CondicionamientoConflicto`, `pruebaA` | Herramientas de otra etapa. |
 
-"Fuera" no significa necesariamente que cada archivo sea basura. Algunos son
-prototipos o evidencia historica. Significa que no forman parte de las tareas
-que el manual define como operativas y no deben estar en el path de la copia
-de uso diario.
+"Fuera" no significa que cada archivo sea basura. Significa que no pertenece a
+la ruta diaria definida por el manual.
 
 ## Conclusiones Operativas
 
-- El programa limpio no es una reescritura: es una seleccion controlada del
-  codigo que si funciona, mas utilidades nuevas de seguridad y validacion.
-- La estructura `Valentia/valentia` se conserva porque corresponde a la capa
-  de hardware y el arranque agrega esas rutas de forma explicita.
-- La copia limpia tiene 49 nombres unicos; no hay versiones duplicadas con el
-  mismo nombre compitiendo en el path.
+- El runtime no es una reescritura: es una seleccion controlada del codigo que
+  funciona, mas utilidades nuevas de seguridad, registro y validacion.
+- La estructura `Valentia/valentia` se conserva porque contiene la capa de
+  hardware y el arranque agrega sus rutas de forma explicita.
+- `cmc_prepara_entorno_r2011a` evita que versiones duplicadas compitan en el
+  path durante el uso diario.
 - El original queda preservado en `legacy/` para consulta, pero no debe
   ejecutarse durante una sesion experimental.

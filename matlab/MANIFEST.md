@@ -1,25 +1,26 @@
-# Manifest De La Carpeta Limpia
+# Manifest Del Runtime MATLAB
 
-Carpeta: `06_matlab_limpio_usb`
+Carpeta: `matlab/`
 
-Objetivo: conservar solo el MATLAB esencial para operar la Caja CMC segun el
-manual, sin copiar variantes historicas ni pruebas.
+Objetivo: runtime autocontenido de la Caja CMC. Conserva las tareas vigentes,
+la capa de hardware, estado minimo y pruebas reutilizables. Las variantes
+historicas viven solo en `../legacy/`.
 
 ## Fuente De Esta Version
 
-Esta version fue realineada con el diagnostico del lab del 2026-06-11. Para
-cada funcion se tomo como base la ruta que MATLAB resolvia con `which` en la
-computadora del lab y despues se quitaron rutas absolutas antiguas para que la
-copia funcione desde USB.
+Esta version se realineo con los diagnosticos del laboratorio. Las rutas se
+calculan desde la carpeta que contiene `cmc_root.m`; por eso el runtime puede
+desplegarse autocontenido, sin depender de las copias viejas de la PC.
 
 ## Entrada
 
-- `abrir.m`: wrapper local; redirige el comando historico a `abrir1`.
-- `abrir1.m`: menu depurado nuevo.
-- `cmc_root.m`: calcula la raiz de la copia USB.
+- `cmc_iniciar_gui_r2011a.m`: entrada aislada usada por el lanzador diario.
+- `abrir.m`: wrapper de compatibilidad; redirige a `abrir1`.
+- `abrir1.m`: menu de las cinco tareas operativas.
+- `cmc_root.m`: calcula la raiz de esta copia autocontenida.
 - `cmc_setup_paths.m`: agrega rutas necesarias.
 - `cmc_state_dir.m`: apunta a `Valentia`, donde viven `.mat` de estado.
-- `cmc_results_dir.m`: apunta a `resultados`, dentro del USB.
+- `cmc_results_dir.m`: apunta a `resultados/` dentro de esta copia.
 
 ## GUIs Activas
 
@@ -74,9 +75,10 @@ incluyendo:
 - `OA_Resultados.mat`
 - `DatosValentia.mat`
 
-## Carpeta De Resultados
+## Resultados
 
-- `resultados/`: destino local para guardar/cargar `.mat` desde el USB.
+- `resultados/`: destino local de CSV de sesion y sus registros de palancas.
+- Los `.mat` incluidos son estado de MATLAB; no son entregables de sesion.
 
 ## Excluido A Proposito
 

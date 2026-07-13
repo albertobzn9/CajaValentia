@@ -94,20 +94,21 @@ El entrenamiento completo dura **31 días**. Cada día es una sesión.
 
 > ⭐ **Discriminación** es la fase más importante para el Video Batch Processor: ahí están las conductas que se desean analizar (conductas de decisión ante conflicto).
 
-## Archivo `.mat` Y Nomenclatura
+## Datos: Actual Vs Historico
 
-Cada sesión genera un archivo `.mat` con todos los eventos registrados (prensadas de palanca, cruces, timeouts). El formato es un array de **N filas × 8 columnas**.
+Los ejemplos `.mat` de este protocolo describen el formato legacy. Son utiles
+para interpretar sesiones antiguas, pero no son el formato de salida de la
+version actual de Discriminacion.
 
-Cada fila NO es un ensayo — es un **evento de palanqueo** (la rata puede presionar la palanca varias veces del mismo lado, hasta 3 veces, en CS, CP y DIS).
+La version actual exporta dos CSV:
 
-Las 8 columnas se explican en detalle aquí:
-👉 **[Guía del formato .mat](../reference/mat-format.md)**
+- `nombre.csv`: una fila por evento terminado y 10 columnas, incluida
+  `tipo_evento` y `ensayo_cruce`.
+- `nombre_palanqueos.csv`: una fila por presion, con fase, ensayo, tipo y lado.
 
-Los archivos (`.mat`, `.mp4`) pueden seguir distintas nomenclaturas según el momento del proyecto: legacy, estándar del lab u output del Video Batch Processor.
-
-👉 **[Guía de nomenclatura](../reference/naming-convention.md)**
-
-Para evitar ambigüedad entre evento, ensayo, cruce, no cruce y timeout, usar la [convención operativa de términos](../reference/operational-terms.md).
+Los `.mat` que quedan en `Valentia/` son estado interno de MATLAB. Para las
+reglas actuales de datos, evento, ensayo, cruce, no-cruce y timeout, consultar
+[`architecture/06_cambios_reutilizables_discriminacion_a_cp.md`](architecture/06_cambios_reutilizables_discriminacion_a_cp.md).
 
 ## Guías Por Fase
 
@@ -157,7 +158,7 @@ La rata ahora tiene acceso a toda la caja. Puede **cruzar de un extremo al otro*
 
 Misma estructura de 8 columnas que DIS, pero con una diferencia clave: casi nunca hay **Lado=-2** y no hay estímulo eléctrico, es decir `Estim=0`.
 
-▶️ **[Ver formato .mat](../reference/mat-format.md)** para la descripción de las columnas.
+Este ejemplo usa el formato legacy de 8 columnas; no describe el CSV actual.
 
 ##### Ejemplo: `exp_0126_cs_d5r1.mat`
 
@@ -245,7 +246,7 @@ La duración de cada ensayo **aumenta progresivamente**, si la rata no cruza en 
 
 Misma estructura de 8 columnas. Aquí `Estim` **siempre es 1** (todos son conflicto). Aparecen timeouts cuando la rata no alcanza a cruzar en el tiempo límite del día.
 
-▶️ **[Ver formato .mat](../reference/mat-format.md)** para la descripción de las columnas.
+Este ejemplo usa el formato legacy de 8 columnas; no describe el CSV actual.
 
 ##### Ejemplo: `exp_0126_cp_d5r1.mat`
 
@@ -302,7 +303,7 @@ La rata debe **distinguir** entre dos tipos de ensayos **mezclados al azar**:
 
 Misma estructura de 8 columnas. Cada sesión tiene un archivo .mat con **~40–80 filas** (cada presión de palanca + cruce + timeout es un evento).
 
-▶️ **[Ver formato .mat](../reference/mat-format.md)** para la descripción detallada de las columnas.
+Este ejemplo usa el formato legacy de 8 columnas; no describe el CSV actual.
 
 ##### Ejemplo: `exp_0126_dis_d9r4.mat` (día 9, rata 4)
 
@@ -362,7 +363,8 @@ Ensayo | Lado | Estim | Latencia | TiempoAbs | PalI | PalD | Desplaz | Significa
 ## Referencias Internas
 
 - Si trabajas con **Discriminación** (la fase principal): [guía DIS](#phase-dis)
-- Para distinguir evento, ensayo, cruce, no cruce y timeout: [convención operativa de términos](../reference/operational-terms.md)
-- Si necesitas entender el .mat a fondo: [guía del formato .mat](../reference/mat-format.md)
-- Para entender los nombres de los archivos: [guía de nomenclatura](../reference/naming-convention.md)
+- Para reglas actuales de eventos, ensayos, cruces y no-cruces:
+  [cambios reutilizables](architecture/06_cambios_reutilizables_discriminacion_a_cp.md)
+- Para el comportamiento de riesgo, aleatorizacion y sonido solo:
+  [backend de Discriminacion](architecture/04_backend_valentiae_aleatorizacion.md)
 - Para el resto de fases: [Luz-Comida](#phase-f1) | [CS](#phase-cs) | [CM](#phase-cm) | [CP](#phase-cp)
