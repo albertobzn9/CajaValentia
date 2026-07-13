@@ -8,14 +8,14 @@ estable de Discriminacion (`ValentiaE`) validada con MATLAB R2011a y la caja el
 
 | Referencia | Uso |
 | --- | --- |
-| `main` | Fuente activa de Discriminacion. |
-| `v2.0.0-rc.4-discriminacion-validada` | Foto inmutable de la version validada: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. |
+| `main` | **V2.4 - Discriminacion Validada**, fuente activa de Discriminacion. |
+| `v2.0.0-rc.4-discriminacion-validada` | Foto inmutable de V2.4: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. |
 | `feature/cp-time-aware-sound-only` | Cruces Peligrosos en desarrollo; no esta validada ni fusionada. |
 | `legacy/` | Copia original de `fsotres`, solo lectura. |
 
-La historia corta vive en [CHANGELOG.md](CHANGELOG.md). Las etiquetas
-`v0.1.0` y `v1.0.0` preservan, respectivamente, el original y la etapa USB;
-son antecedentes, no instrucciones de uso actual.
+La historia y los nombres oficiales viven en [docs/version-map.md](docs/version-map.md).
+V0 es el original; V1 es la base limpia R2011a; V2.4 es la version estable
+actual. Ninguna de las versiones antiguas es una instruccion de uso diario.
 
 ## Leer Primero
 
@@ -23,6 +23,7 @@ son antecedentes, no instrucciones de uso actual.
 2. [Indice de documentacion](docs/README.md).
 3. [Mapa de versiones](docs/version-map.md).
 4. [Reglas de seguridad y edicion](AGENTS.md).
+5. [Handoff para rediseño GUIDE](handoff/eric-gui-redesign/README.md).
 
 ## Seguridad
 
