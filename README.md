@@ -1,8 +1,24 @@
 # CajaValentia
 
-Codigo privado de la caja conductual CMC/Valentia. `main` contiene la version
-estable de Discriminacion (`ValentiaE`) validada con MATLAB R2011a y la caja el
-12-jul-2026. El codigo historico se conserva para auditoria, no para operar.
+Software de control para la caja conductual CMC/Valentia. Conserva el programa
+MATLAB R2011a original, una base depurada y las mejoras validadas para las
+tareas de Discriminacion y Cruces Peligrosos.
+
+> Este es software de laboratorio que controla estimulos, recompensas y
+> registro conductual. No se debe operar hardware sin una persona entrenada
+> presente frente a la caja.
+
+## Proposito
+
+- Operar tareas conductuales de la caja Valentia.
+- Preservar una historia auditable desde el programa original hasta las
+  mejoras actuales.
+- Permitir cambios revisables sin mezclar datos de animales ni archivos de
+  sesion con el codigo.
+
+`main` contiene la version estable de Discriminacion (`ValentiaE`), validada
+con MATLAB R2011a y la caja el 12-jul-2026. El codigo historico se conserva
+para auditoria, no para operar.
 
 ## Estado Actual
 
@@ -16,6 +32,33 @@ estable de Discriminacion (`ValentiaE`) validada con MATLAB R2011a y la caja el
 La historia y los nombres oficiales viven en [docs/version-map.md](docs/version-map.md).
 V0 es el original; V1 es la base limpia R2011a; V2.4 es la version estable
 actual. Ninguna de las versiones antiguas es una instruccion de uso diario.
+
+## Estructura
+
+| Ruta | Contenido |
+| --- | --- |
+| `matlab/` | Paquete ejecutable actual para MATLAB R2011a. |
+| `legacy/` | Archivo original V0, solo lectura. |
+| `docs/` | Manuales, decisiones, arquitectura y bitacoras de validacion. |
+| `tests/` | Pruebas de logica sin hardware. |
+| `handoff/` | Paquetes de trabajo acotados para colaboradores. |
+
+## Colaborar
+
+1. Lee [AGENTS.md](AGENTS.md) y la documentacion relevante antes de editar.
+2. Crea una rama; no edites `main` ni una etiqueta de version directamente.
+3. Describe primero el cambio conductual y ejecuta las pruebas sin hardware.
+4. Para cambios que toquen la caja, documenta version de MATLAB, equipo y
+   resultado de la prueba fisica.
+
+La guia completa esta en [CONTRIBUTING.md](CONTRIBUTING.md). El paquete para
+el rediseño GUIDE esta en [handoff/eric-gui-redesign](handoff/eric-gui-redesign/README.md).
+
+## Acceso Y Licencia
+
+El acceso al repositorio se concede solo a colaboradores del proyecto. Aun no
+se ha asignado una licencia de distribucion: no se asume permiso para reutilizar
+o redistribuir el codigo fuera del equipo sin autorizacion explicita.
 
 ## Leer Primero
 
