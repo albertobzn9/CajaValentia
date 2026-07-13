@@ -20,4 +20,5 @@
 ## Futuro E Historia
 
 - [`migration-matlab-2026.md`](migration-matlab-2026.md): limite y plan de migracion a MATLAB moderno.
+- [`decisions/2026-07-13-obs-session-clock-and-preprocessing-handoff.md`](decisions/2026-07-13-obs-session-clock-and-preprocessing-handoff.md): contrato futuro para iniciar OBS y la sesion conductual con una identidad y reloj de sesion compartidos.
 - [`decisions/`](decisions/): decisiones que deben sobrevivir cambios de contexto.
