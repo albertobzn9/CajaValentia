@@ -1,196 +1,69 @@
-# Cambios Reutilizables: Discriminacion A Cruces Peligrosos
+# Estado Operativo: Discriminacion Y Transferencia A CP
 
-Alcance: cambios aplicados en `OA_ValentiaCuatroE` (Discriminacion). Este
-documento es la lista de transferencia para `OA_ValentiaCuatroE2` (Cruces
-Peligrosos), no una afirmacion de que ya esten aplicados ahi.
-
-Nota operativa actual: para la validacion de Discriminacion del 12-jul-2026,
-incluyendo el contador, CSV y archivos desplegados, leer primero la
+Este es el resumen vigente. Para la historia de pruebas y despliegues, leer la
 [bitacora de laboratorio](../bitacora-lab-2026-07-12-valentiae.md).
 
-## Cambios Ya Aplicados En Discriminacion
+## Version Estable
 
-### Arranque Y Aislamiento
+- Codigo estable: rama `main`.
+- Etiqueta: `v2.0.0-rc.4-discriminacion-validada`.
+- Programa validado: `OA_ValentiaCuatroE` (Discriminacion).
+- Copia usada en la caja: `C:\Users\Alberto\Desktop\CajaValentia_R2011a_CrucesSensor`.
+- `OA_ValentiaCuatroE2` (Cruces Peligrosos) sigue fuera de `main` para trabajo
+  y prueba separados.
 
-| Problema simple | Resolucion tecnica | Estado para CP |
-|---|---|---|
-| MATLAB podia abrir codigo viejo por accidente. | `abrir1`, el lanzador RC3 y `cmc_prepara_entorno_r2011a` restauran el path y cargan solo la copia portable del Escritorio. | Ya compartido por todo el programa. |
-| Una falla era dificil de repetir o diagnosticar. | Se agregaron lanzadores y pruebas sin hardware para secuencia, audio, sonido solo y resultados. | Reutilizable sin cambio. |
-| El ruido blanco podia iniciar en 5000 Hz. | `cmc_frecuencia_ruido_predeterminada` fija 15000 Hz para todos los modulos que ya la usan; se valido la separacion estereo fisicamente. | Ya compartido. |
-| Abrir `ValentiaE` podia dispensar un pellet. | `OA_ValentiaInicio` ahora deja las lineas 17:23 en cero al arrancar; se eliminó una secuencia de salida equivalente a la recompensa izquierda. | Pendiente prueba fisica; aplicar a todo programa que abra esta tarjeta. |
+## Cambios De Discriminacion
 
-### Conducta Y Eventos
+| Modulo o cambio | Archivos principales | Estado actual | Prueba pendiente exacta |
+|---|---|---|---|
+| Arranque seguro, sin pellet al abrir | `Valentia/OA_ValentiaInicio.m` | Probado con la caja. | Ninguna para esta version. |
+| Ruido blanco 15 kHz y salida estereo | `cmc_frecuencia_ruido_predeterminada.m`, `OA_Sonidos.m` | Probado fisicamente por ambos lados. | Ninguna para esta version. |
+| Solo sonido: 180 s, sin luz/pellet | `OA_ValentiaCuatroE.m`, `Valentia/OA_MonitoreaSonidoSolo.m`, `Valentia/OA_SecuenciaDiscriminacionSonidoSolo.m` | Probado: tipo `2`, 180 s, contador sin cambio. | Ninguna para Discriminacion. |
+| Sonido solo solo con riesgo mayor que 0 y casilla 1:10 | `OA_SecuenciaDiscriminacionSonidoSolo.m`, `OA_ValentiaCuatroE.m` | Probado en secuencia y caja. | Ninguna para Discriminacion. |
+| Contador `Ensayos de cruce` y cierre automatico | `cmc_cuenta_ensayo_cruce.m`, `cmc_es_cruce_valido.m`, `OA_ValentiaCuatroE.m` | Probado: cruce lateral y no-cruce lateral cuentan; inicio sin laser, centro y mismo lado no. | Ninguna para esta regla. |
+| Limite de no-cruce y mismo lado | `cmc_limite_duracion_sin_cruce.m`, `OA_ValentiaCuatroE.m` | Pasa prueba sin hardware; se acepta para esta version. | Auditoria futura: con duracion configurada en 180 s, medir que cierre a 60 s. |
+| Tabla y CSV de 10 columnas | `cmc_configurar_tabla_resultados.m`, `cmc_mostrar_tabla_resultados.m`, `cmc_escribir_csv_resultados.m` | Probado en R2011a. | Ninguna; revisar visualmente solo si se cambia la GUI. |
+| Columna `ensayo_cruce` | `OA_ValentiaCuatroE.m`, `cmc_cuenta_ensayo_cruce.m` | Probado: `1` cuenta, `0` no cuenta, `NA` es solo sonido. | Ninguna para esta version. |
+| CSV de palanqueos por fase | `cmc_registrar_palanqueos.m`, `cmc_escribir_csv_palanqueos.m` | Probado en habituacion, ITI, ensayo y final. | Prueba dedicada: una presion por lado en habituacion inicial y final, confirmar reloj y contadores visibles. |
+| Habituacion inicial/final y guardado automatico | `cmc_actualizar_reloj_fase.m`, `cmc_solicitar_guardado_final.m`, `OA_ValentiaCuatroE.m` | Flujo y CSV probados; reloj pasa suite sin hardware. | Configurar 30 s de habituacion y confirmar visualmente tiempo, contadores y dialogo de guardado final. |
+| Aviso LED final opcional | `cmc_iniciar_aviso_led_final.m`, `cmc_detener_aviso_led_final.m` | Prueba sin hardware aprobada. | Activar casilla y confirmar LED: 100 ms cada 2 s mientras se muestra Guardar resultados. |
 
-| Problema simple | Resolucion tecnica | Estado para CP |
-|---|---|---|
-| Faltaba un evento de solo sonido. | Tipo `2`: ruido blanco, LED marcador y parrilla, sin luz de comida ni pellet. Dura 180 s completos aunque la rata cruce. | CP ya tiene la planificacion de tipo `2`; falta validar su flujo completo. |
-| Sonido solo aparecia aun en cruces seguros. | En Discriminacion solo se agrega con riesgo mayor que cero y checkbox `Agregar evento sonido 1:10` activo. | No copiar literalmente: CP usa programacion por tiempo. |
-| Riesgo y sonido solo no debian existir si la rata no cambia de lado. | La secuencia los coloca solo en cambios de lado; los repetidos siguen siendo seguros. | Regla comun que CP debe conservar. |
-| El reloj se congelaba durante sonido solo al cruzar. | `OA_MonitoreaSonidoSolo` sigue los 180 s completos y actualiza el reloj visual. | Aplicar al monitor CP. |
-| Detener podia perder datos o cortar un ensayo a medias. | `Detener ahora` termina sin inventar una fila; `Detener tras ensayo` cierra el evento actual. Los textos de ambos botones quedan estables. | Aplicar. |
-| La habituacion final quedaba fuera de los datos. | La rutina final se ejecuta antes de guardar el estado temporal y el registro admite fase `habituacion_final`. | Falta el flujo automatico completo en ambos programas. |
+## Formato De Resultados
 
-### Datos, Tabla Y GUI
+`nombre.csv` tiene una fila por evento terminado:
 
-| Problema simple | Resolucion tecnica | Estado para CP |
-|---|---|---|
-| La tabla no distinguia tipo ni contribucion al objetivo. | Columna 9 `Tipo`: 0 seguro, 1 riesgo, 2 sonido solo; columna 10 `E. cruce`: 1 cuenta, 0 no cuenta, NA no aplica. El CSV conserva precision completa; la vista muestra 0.01 s. | Transferir a CP solo despues de definir su regla propia. |
-| Las columnas no cabian en R2011a. | Se compactaron encabezados y columnas; el rectangulo exterior se ajusta al ancho real de las diez columnas. | Pendiente inspeccion visual final R2011a. |
-| Habia demasiadas opciones que nadie usa. | Se ocultaron controles muertos: palancas, sonido inicial, luz intermitente, retardo y audio izquierdo/derecho. Valores utiles por defecto: luz segura; luz y sonido de riesgo; secuencia y sonido 1:10 activados. | Aplicar solo despues de revisar GUI CP. |
-| `Secuencia Aleatoria` genera ansiedad si desaparece. | Se conserva visible y marcada, aunque el callback historico no cambia la secuencia. | Mantener por compatibilidad de uso. |
-| Los palanqueos solo se veian como contadores incompletos y no se guardaban. | `EventosPalanqueo` registra segundo, fase, ensayo, tipo, lado y contador fisico. Al guardar se crean dos CSV hermanos. | No integrar a CP hasta validar su flujo propio. |
-| Un inicio en centro podia inflar los cruces. | El cruce fisico real exige cambio de lado, inicio lateral confirmado y desplazamiento de al menos 1 s. Un no-cruce lateral tambien cuenta como ensayo de cruce; centro y mismo lado no. | CP termina por tiempo; no copiar el cierre automatico sin revisar su protocolo. |
+```text
+ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento,ensayo_cruce
+```
 
-## Exportacion Final CSV
+Reglas importantes:
 
-Los `.mat` de `Valentia/` se conservan solo durante la sesion porque MATLAB los
-usa como estado interno. Al guardar, el programa ya no exporta un `.mat` final:
-crea dos archivos CSV con el mismo nombre base.
+- `lado=-2`: la rata no llego al lado objetivo.
+- `ensayo_cruce=1`: el evento avanzo el objetivo, incluso si fue un no-cruce
+  lateral valido.
+- `ensayo_cruce=0`: mismo lado, inicio desde centro o sin deteccion corporal.
+- `ensayo_cruce=NA`: solo sonido; nunca avanza el contador.
 
-- `nombre.csv`: una fila por ensayo terminado, con las diez columnas de
-  `Resultados`:
-  `ensayo,lado,estimulo,latencia_s,tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento,ensayo_cruce`.
-- `nombre_palanqueos.csv`: una fila por presion detectada:
-  `evento_sesion,tiempo_s,fase,ensayo,tipo_evento,lado,contador_lado_sesion,contador_hardware`.
+`nombre_palanqueos.csv` guarda cada presion con fase, ensayo, tipo y lado.
 
-Ambos usan punto decimal y seis decimales en los tiempos de ensayos. Esto
-preserva mas precision de la que muestra la tabla y permite leerlos directo en
-Python, Excel o R. La columna `ensayo` de palanqueos usa `NA` fuera de ensayo.
+## Cruces Peligrosos: Fuera De Main
 
-## Registro De Palanqueos
+Rama: `feature/cp-time-aware-sound-only`.
 
-Problema simple: los tres pares de contadores de la GUI no eran datos
-confiables. `Sin luz` nunca se actualizaba; durante ensayo solo se leian
-palancas despues del cruce; y un salto del contador fisico se contaba como un
-solo cambio.
+Antes de integrarla, hacer una prueba fisica de CP que confirme, en este orden:
 
-Resolucion tecnica actual:
+1. Arranque sin pellet y un pellet por palanqueo en ambos lados.
+2. Sonido solo cerca de los minutos 9, 18 y 27, sin luz ni pellet.
+3. Audio en el lado objetivo correcto.
+4. Limite de respuesta: duracion del ensayo + 10 s cuando cruza sin palanquear.
+5. Habituacion final, ambos CSV y `Detener tras ensayo`.
 
-- `cmc_registrar_palanqueos` interpreta los contadores de cuatro bits y
-  registra cada incremento, incluso si pasa de 15 a 0.
-- `EventosPalanqueo` se exporta en el CSV hermano de palanqueos.
-- `nombre_palanqueos.csv` contiene las mismas filas con estas columnas:
-  `evento_sesion`, `tiempo_s`, `fase`, `ensayo`, `tipo_evento`, `lado`,
-  `contador_lado_sesion`, `contador_hardware`.
-- `evento_sesion` es consecutivo para toda la sesion. `contador_lado_sesion`
-  es consecutivo por lado. `contador_hardware` se conserva como valor crudo de
-  la tarjeta: es independiente por lado, vuelve de 15 a 0 y puede resetearse.
-- En habituacion y `sin_luz`, `ensayo` es `NA` en CSV y `NaN` en `.mat`; no es
-  un inexistente "ensayo 0". Python puede leer `NA` directamente como faltante.
-- Esta mejora de esquema vive en la rama hija
-  `feature/lever-event-analysis-schema`. Pasó pruebas sin hardware; falta una
-  sesion fisica que genere el nuevo CSV.
-- Fases actuales: `habituacion_inicial`, `sin_luz`, `ensayo` y
-  `habituacion_final`.
-
-La prueba de sesion con rata genero el archivo correctamente y mostro saltos
-rapidos del contador. La prueba fisica controlada posterior los aclaro: una
-presion lenta por lado genero exactamente un incremento; tres presiones rapidas
-generaron exactamente tres. No se observo rebote en esa prueba. Por tanto, los
-saltos de la sesion probablemente fueron presiones reales repetidas mientras la
-rata o el operador intentaban completar la deteccion corporal por los laseres.
-
-Validacion ampliada en `pruebachecar.mat` (11-jul-2016): el `.mat` y su CSV
-hermano contienen las mismas 48 palanqueadas. Cobertura por fase: 33 en
-`habituacion_inicial`, 6 en `sin_luz` (ITI), 4 en `ensayo` y 5 en
-`habituacion_final`. El contador derecho tambien cruzo de 15 a 0 sin perder
-eventos. Esta sesion tuvo seguros y riesgos; no incluyo un evento `sonido_solo`.
-
-## Cruces Validos: Rama De Sensores
-
-La version estable RC3 conserva el contador historico. El cambio fundamental
-vive aislado en la rama `feature/sensor-validated-crosses`.
-
-Un cruce valido requiere las cuatro condiciones: cambio de lado programado,
-inicio lateral confirmado por sensores, llegada al lado opuesto y
-desplazamiento de al menos `1 s`. La ultima condicion iguala el criterio usado
-en el analisis posterior.
-
-Prueba fisica del 11-jul-2016 con mano extendida y sin retirar la mano de la
-caja:
-
-| Ensayo | Inicio detectado | Lado programado | Desplazamiento | Contador |
-|---|---:|---:|---:|---|
-| 1 | I | I | 7.036 s | valido |
-| 2 | C | D | 3.714 s | rechazado por inicio en centro |
-| 3 | I | I | 1.954 s | valido |
-
-La prueba de software cubre el limite: `0.99 s` se rechaza y `1.00 s` se
-acepta. En esta corrida, el intervalo interno entre el registro de una respuesta
-y el inicio MATLAB del siguiente evento fue `6.75-6.79 s`; por ello una rata
-puede legitimamente quedar en el centro entre ensayos. El programa viejo no
-resolvia esa excepcion y podia inflar el contador. El video sigue siendo la
-referencia para medir el ITI visual exacto.
-
-## Pendientes Antes De Copiar A CP
-
-| Pendiente | Criterio de terminado |
-|---|---|
-| Validar palanqueos con prueba fisica controlada. | **Completado:** 1 presion lenta produjo 1 incremento; 3 rapidas produjeron 3. |
-| Definir ensayo de cruce para el contador. | Implementado: cruce lateral real o no-cruce lateral ante un cambio de lado cuentan; centro y mismo lado no. Falta repetir la prueba fisica tras agregar columna 10. |
-| Hacer que `Ensayos a realizar` use ensayos de cruce. | Implementado: el cierre automatico consulta el mismo contador que muestra la GUI. Falta prueba fisica `no_cruce1.csv`. |
-| Cronometros de habituacion inicial y final. | La GUI muestra tiempo transcurrido y el tiempo configurado se cumple. |
-| Finalizacion automatica. | **Implementada:** `Inicio` ejecuta habituacion inicial, ensayos y habituacion final; despues abre el dialogo de guardado en `C:\Users\Alberto\Documents` y exporta `nombre.csv` mas `nombre_palanqueos.csv`. Cancelar conserva el estado temporal para el boton manual. Incluye cronometros visibles y aviso LED opcional; falta prueba fisica completa. |
-| Validar CSV analizable en Python. | Ejecutar una sesion corta en `CajaValentia_R2011a_CrucesSensor` y confirmar ambos CSV, diez columnas de ensayos, `ensayo_cruce` 1/0/NA, `NA` fuera de ensayo y acumulados secuenciales. |
-| Ajustar el rectangulo exterior de `uitable1`. | Implementado: el ancho exterior se calcula desde las diez columnas. Falta inspeccion visual R2011a. |
-| Centrar los valores de `uitable1`. | En GUIDE/R2011a no existe una propiedad estable para centrar celdas. Revisar visualmente; no introducir un hack Java o espacios variables sin necesidad real. |
-| Transferir los cambios a `OA_ValentiaCuatroE2`. | Simulacion y prueba fisica CP completadas antes de uso experimental. |
+No copiar automaticamente la regla de cierre de Discriminacion: CP termina por
+tiempo de sesion, no por el contador de ensayos de cruce.
 
 ## Regla De Trabajo
 
-Cada pendiente se implementa primero en Discriminacion, se prueba sin hardware,
-luego con la caja y solo entonces se adapta a Cruces Peligrosos. No copiar una
-GUI completa sin revisar sus diferencias conductuales.
-
-## Pruebas Modulares Para La Siguiente Visita Al Laboratorio
-
-La interfaz y el hardware son antiguos; por eso no se debe probar toda la
-sesion como una sola cosa. Cada modulo tiene una pregunta simple y un criterio
-de exito. Si uno falla, se corrige ese modulo antes de continuar.
-
-| Modulo | Que se prueba | Exito esperado | Estado actual |
-|---|---|---|---|
-| 1. Arranque seguro | Abrir `ValentiaE` sin rata. | No cae pellet, no se enciende luz, parrilla ni audio. | Cambio de codigo y prueba sin hardware listos; falta caja. |
-| 2. Tabla y CSV | Abrir la GUI y guardar una corrida corta. | Diez columnas visibles, sin traslape; CSV principal conserva `Tipo` y `ensayo_cruce`. | Logica lista; falta inspeccion visual final R2011a. |
-| 3. Conteo de ensayos | Simular cruce, mismo lado y no-cruce. | Cruce lateral y no-cruce lateral cuentan; centro y mismo lado no. | Logica lista; falta prueba `no_cruce1.csv`. |
-| 4. Sonido solo | Riesgo mayor que cero y casilla 1:10 activada. | Evento tipo 2 dura 180 s, sin comida ni pellet, `ensayo_cruce=NA` y contador sin cambio. | Prueba inicial funcional; falta validar CSV nuevo con una palanqueada real. |
-| 5. Cierre y guardado | Detener ahora o tras ensayo. | Pasa por habituacion final y ofrece guardar dos CSV juntos. | Flujo implementado; falta confirmar ruta Documents en R2011a. |
-| 6. Palanqueos | Una presion lenta y varias rapidas en cada fase. | CSV ordenado, `NA` fuera de ensayo y contadores de sesion consecutivos. | Esquema probado sin hardware; falta validar el CSV nuevo. |
-| 7. Aviso final | Casilla `Aviso LED al finalizar` activada al terminar. | LED marcador: 100 ms encendido cada 2 s hasta cerrar el dialogo de guardado. | Implementado y probado sin hardware; falta caja. |
-
-El reloj de la GUI tambien funciona como cronometro de fase: durante
-`habituacion_inicial` y `habituacion_final` muestra `transcurrido / total`.
-Al comenzar los ensayos recupera su etiqueta y formato de reloj de ensayo.
-Esta parte paso prueba sin hardware; falta inspeccion visual R2011a.
-
-### Aviso LED Final
-
-La casilla `Aviso LED al finalizar` aparece debajo de `Agregar evento sonido
-1:10`, sin ocupar la tabla ni mover botones existentes. Por seguridad inicia
-apagada. Si se marca, al terminar la habituacion final se abre el dialogo de
-guardado y, mientras ese dialogo este abierto, el LED marcador de estimulacion
-electrica enciende 100 ms al inicio de cada ciclo de 2 s.
-
-El aviso no entrega pellet, no enciende las luces de comida y no inicia ruido
-blanco. Se detiene y apaga el LED al guardar, cancelar o cerrar el dialogo.
-La funcion legacy que controla el LED mantiene su pausa normal de 0.3 s para
-todo el codigo existente; el aviso final es la unica llamada que solicita pausa
-cero, porque necesita un pulso de 100 ms controlado por un `timer` de MATLAB.
-
-### Pendientes Fisicos Antes De Uso Experimental
-
-- Confirmar que el inicio seguro no entrega pellet al abrir la GUI.
-- Revisar en R2011a que tabla, casilla de sonido, casilla LED y boton
-  `Detener tras ensayo` no se traslapen.
-- Probar el cronometro de ambas habituaciones y la ruta de guardado Documents.
-- Con la casilla LED marcada, comprobar pulso visible de 100 ms cada 2 s y
-  apagado inmediato al cerrar el dialogo.
-- Generar una sesion corta para confirmar el CSV nuevo, incluyendo si es
-  posible una palanqueada durante `sonido_solo`.
-
-### Limite Conocido De La Tabla
-
-`uitable` clasico de GUIDE/R2011a no ofrece una propiedad estable para centrar
-el texto de las celdas. No se agregara un hack Java ni espacios manuales: ambos
-pueden romperse entre R2011a y versiones modernas. El ancho, encabezados y la
-precision de los valores si estan bajo control del codigo.
+Todo cambio nuevo: prueba sin hardware, prueba corta con la caja, CSV revisado,
+bitacora actualizada y despues commit. Mantener el lanzador sin administrador
+fuera de uso hasta una prueba propia; el lanzador diario sigue siendo el de
+`CajaValentia_R2011a_CrucesSensor`.
