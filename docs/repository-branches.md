@@ -25,8 +25,8 @@ evitar que la lista crezca sin control. Fuentes oficiales:
 
 | Dato | Valor |
 | --- | ---: |
-| Ramas locales | 9 |
-| Ramas remotas reales en GitHub | 9 |
+| Ramas locales | 5 |
+| Ramas remotas reales en GitHub | 5 |
 | Etiquetas historicas | 6 |
 | Commits alcanzables desde `main` | 63 |
 | Commits conservados por todas las referencias locales | 89 |
@@ -48,10 +48,20 @@ rama y no en `main`. Una rama con `0` commits unicos ya esta contenida en
 | `feature/discriminacion-cierre-habituacion` | `f784950` - archivo de trabajo experimental | 7 | **Archivar, no integrar.** Contiene el intento posterior que se retiro por fallas. El ultimo commit existe solo localmente; no borrar hasta extraer o descartar cada idea con calma. Luego conviene renombrarla a `archive/...` si se decide subirla. |
 | `migration/r2022a-r2026a-ni-usb6501` | `2baf89d` - investigacion de migracion | 12 | **Conservar como investigacion.** Documenta la ruta MATLAB moderno/NI. No es compatible con el runtime R2011a actual y no se integra a `main`. |
 | `codex/drive-archive-reference` | `25405f1` - limite futuro video/datos | 8 | **Archivar.** Mezcla decisiones historicas de Drive, audio y hardware moderno. No hacer merge ciego; sus documentos utiles se incorporan selectivamente cuando hagan falta. |
-| `feature/lever-event-analysis-schema` | `da4daf5` | 0 | **Candidata a podar.** Ya esta completamente integrada en `main`. |
-| `feature/sensor-validated-crosses` | `546c27d` | 0 | **Candidata a podar.** Ya esta completamente integrada en `main`. |
-| `fix/startup-and-table` | `c27f34f` | 0 | **Candidata a podar.** Ya esta completamente integrada en `main`. |
-| `release/v2.0.0-rc.3-resultados-9-columnas` | `db14a27` | 0 | **Candidata a podar.** La etiqueta `v2.0.0-rc.3-resultados-9-columnas` conserva el hito historico. |
+
+## Ramas Podadas El 15-jul-2026
+
+Las siguientes ramas no tenian commits unicos, no tenian pull requests
+abiertos y ya estaban completamente integradas en `main`. Se eliminaron local
+y remotamente. Sus commits siguen en el historial de `main`; la etiqueta RC3
+tambien conserva el hito de resultados.
+
+| Rama eliminada | Ultimo commit | Motivo |
+| --- | --- | --- |
+| `feature/lever-event-analysis-schema` | `da4daf5` | Integrada en `main`. |
+| `feature/sensor-validated-crosses` | `546c27d` | Integrada en `main`. |
+| `fix/startup-and-table` | `c27f34f` | Integrada en `main`. |
+| `release/v2.0.0-rc.3-resultados-9-columnas` | `db14a27` | Integrada en `main`; tag RC3 preservado. |
 
 ## Etiquetas Historicas
 
@@ -108,8 +118,6 @@ git fetch --prune origin
 
 ## Decisiones Pendientes
 
-- No podar aun las cuatro ramas candidatas hasta verificar en GitHub que no
-  tengan pull requests abiertos.
 - Decidir si `feature/discriminacion-cierre-habituacion` se conserva en GitHub
   como `archive/...` o si basta como respaldo local temporal.
 - Retomar CP desde una rama nueva creada desde el `main` restaurado, usando la
