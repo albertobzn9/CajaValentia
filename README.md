@@ -63,11 +63,12 @@ o redistribuir el codigo fuera del equipo sin autorizacion explicita.
 
 ## Leer Primero
 
-1. [Comportamiento actual y limitaciones](docs/current-runtime-behavior-and-known-limitations.md).
-2. [Indice de documentacion](docs/README.md).
-3. [Mapa de versiones](docs/version-map.md).
-4. [Reglas de seguridad y edicion](AGENTS.md).
-5. [Handoff para rediseño GUIDE](handoff/eric-gui-redesign/README.md).
+1. [Handoff para un agente nuevo](docs/START_HERE_NEW_AGENT.md).
+2. [Comportamiento actual y limitaciones](docs/current-runtime-behavior-and-known-limitations.md).
+3. [Indice de documentacion](docs/README.md).
+4. [Mapa de versiones](docs/version-map.md).
+5. [Reglas de seguridad y edicion](AGENTS.md).
+6. [Handoff para rediseño GUIDE](handoff/eric-gui-redesign/README.md).
 
 ## Seguridad
 

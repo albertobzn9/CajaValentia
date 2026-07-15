@@ -1,5 +1,13 @@
 # Working Rules
 
+## Start Here
+
+Before any non-trivial work, read
+[`docs/START_HERE_NEW_AGENT.md`](docs/START_HERE_NEW_AGENT.md). It is the
+current handoff for a new agent: project state, source-of-truth boundaries,
+read order, known limits, branches and validation rules. Keep this file short;
+put changing technical detail in the referenced documentation.
+
 ## Non-negotiable
 
 - `legacy/` is an audit archive: do not clean it up or edit it.

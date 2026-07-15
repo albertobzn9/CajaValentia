@@ -8,12 +8,13 @@ primero [Comportamiento actual y limitaciones conocidas](current-runtime-behavio
 Este documento es la fuente de verdad de `main`; varios textos historicos
 todavia describen la rama experimental retirada de 10 columnas.
 
-1. [`current-runtime-behavior-and-known-limitations.md`](current-runtime-behavior-and-known-limitations.md): comportamiento real, excepciones y limites de `main`.
-2. [`../matlab/README_USO_USB.md`](../matlab/README_USO_USB.md): instructivo historico de despliegue portable; no asumir USB sin confirmar la copia de la PC del laboratorio.
-3. [`version-map.md`](version-map.md): que esta estable, historico o fuera de `main`.
-4. [`validation.md`](validation.md): validaciones y pendientes reales.
-5. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de una rama historica de Discriminacion.
-6. [`repository-branches.md`](repository-branches.md): ramas, tags, merge y mantenimiento del repositorio.
+1. [`START_HERE_NEW_AGENT.md`](START_HERE_NEW_AGENT.md): punto de entrada para retomar el proyecto sin contexto de chat.
+2. [`current-runtime-behavior-and-known-limitations.md`](current-runtime-behavior-and-known-limitations.md): comportamiento real, excepciones y limites de `main`.
+3. [`../matlab/README_USO_USB.md`](../matlab/README_USO_USB.md): instructivo historico de despliegue portable; no asumir USB sin confirmar la copia de la PC del laboratorio.
+4. [`version-map.md`](version-map.md): que esta estable, historico o fuera de `main`.
+5. [`validation.md`](validation.md): validaciones y pendientes reales.
+6. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de una rama historica de Discriminacion.
+7. [`repository-branches.md`](repository-branches.md): ramas, tags, merge y mantenimiento del repositorio.
 
 ## Entender O Cambiar El Programa
 

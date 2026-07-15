@@ -1,7 +1,9 @@
 # Ramas, Commits Y Mantenimiento Del Repositorio
 
-Foto del repositorio al 15-jul-2026. Este documento es la guia operativa para
-decidir que rama usar, conservar, integrar o podar.
+Foto local del repositorio al 15-jul-2026, tomada con `main` en `b4c0574`
+antes del handoff documental actual. Este documento es la guia operativa para
+decidir que rama usar, conservar, integrar o podar. Para el estado vivo, usar
+los comandos de consulta del final: una rama o sus contadores pueden cambiar.
 
 ## Idea Central
 
@@ -28,8 +30,8 @@ evitar que la lista crezca sin control. Fuentes oficiales:
 | Ramas locales | 5 |
 | Ramas remotas reales en GitHub | 5 |
 | Etiquetas historicas | 6 |
-| Commits alcanzables desde `main` | 63 |
-| Commits conservados por todas las referencias locales | 89 |
+| Commits alcanzables desde `main` | 66 |
+| Commits conservados por todas las referencias locales | 92 |
 | Merge commits dentro de `main` | 2 |
 
 `origin/HEAD` puede aparecer como una decima referencia remota, pero no es una
@@ -43,9 +45,9 @@ rama y no en `main`. Una rama con `0` commits unicos ya esta contenida en
 
 | Rama | Ultimo commit | Unicos | Estado y recomendacion |
 | --- | --- | ---: | --- |
-| `main` | `f63cee0` - restauracion de la base estable | 0 | **Conservar.** Rama por defecto y unica base de ejecucion. Incluye base funcional, reloj de habituacion y LED final. |
+| `main` | `b4c0574` - limitaciones actuales documentadas | 0 | **Conservar.** Rama por defecto y unica base de ejecucion. Incluye base funcional, reloj de habituacion y LED final. |
 | `feature/cp-time-aware-sound-only` | `71b879c` - sonido solo temporal para CP | 7 | **Conservar, no integrar aun.** Trabajo de Cruces Peligrosos pendiente de prueba fisica. Antes de reanudarlo hay que comparar contra el `main` restaurado; no hacer merge directo. |
-| `feature/discriminacion-cierre-habituacion` | `f784950` - archivo de trabajo experimental | 7 | **Archivar, no integrar.** Contiene el intento posterior que se retiro por fallas. El ultimo commit existe solo localmente; no borrar hasta extraer o descartar cada idea con calma. Luego conviene renombrarla a `archive/...` si se decide subirla. |
+| `feature/discriminacion-cierre-habituacion` | `f784950` - archivo de trabajo experimental | 7 | **Archivar, no integrar.** Contiene el intento posterior que se retiro por fallas. Su ultimo commit local esta **un commit adelante de `origin/feature/discriminacion-cierre-habituacion`**: no asumir que esta respaldado en GitHub ni empujarlo sin autorizacion. No borrar hasta extraer o descartar cada idea con calma. |
 | `migration/r2022a-r2026a-ni-usb6501` | `2baf89d` - investigacion de migracion | 12 | **Conservar como investigacion.** Documenta la ruta MATLAB moderno/NI. No es compatible con el runtime R2011a actual y no se integra a `main`. |
 | `codex/drive-archive-reference` | `25405f1` - limite futuro video/datos | 8 | **Archivar.** Mezcla decisiones historicas de Drive, audio y hardware moderno. No hacer merge ciego; sus documentos utiles se incorporan selectivamente cuando hagan falta. |
 
