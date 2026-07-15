@@ -1,5 +1,5 @@
 function raiz = cmc_prepara_entorno_r2011a
-%CMC_PREPARA_ENTORNO_R2011A Usa solo esta copia antes de una prueba.
+%CMC_PREPARA_ENTORNO_R2011A Usa solo la copia portable antes de una prueba.
 
 raiz = fileparts(mfilename('fullpath'));
 restoredefaultpath;

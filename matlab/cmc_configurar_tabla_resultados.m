@@ -1,13 +1,13 @@
 function cmc_configurar_tabla_resultados(tabla)
 %CMC_CONFIGURAR_TABLA_RESULTADOS Configura el formato comun de Resultados.
-% Compatible con GUIDE/R2011a. Las columnas 9 y 10 identifican evento y cruce.
+% Compatible con GUIDE/R2011a. La columna 9 siempre identifica el evento.
 
 nombres = {'Ens.','Lado','Est.','Lat.','T. abs.','Pal. I', ...
-    'Pal. D','Despl.','Tipo','E. cruce'};
-anchos = {53, 48, 60, 66, 77, 60, 60, 77, 62, 62};
+    'Pal. D','Despl.','Tipo'};
+anchos = {59, 53, 67, 73, 86, 67, 67, 86, 69};
 set(tabla, 'ColumnName', nombres, 'ColumnWidth', anchos);
 
-% Ajusta el contenedor al ancho real de las diez columnas, mas bordes y
+% Ajusta el contenedor al ancho real de las nueve columnas, mas bordes y
 % encabezado de filas. Evita el espacio vacio que dejaba GUIDE a la derecha.
 unidadesOriginales = get(tabla, 'Units');
 set(tabla, 'Units', 'pixels');

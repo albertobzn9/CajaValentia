@@ -2,7 +2,12 @@
 
 ## Uso Y Estado Actual
 
-1. [`../matlab/README_USO_ESCRITORIO.md`](../matlab/README_USO_ESCRITORIO.md): abrir la version correcta en la PC del laboratorio.
+La fuente ejecutable actual fue restaurada a la base funcional con reloj de
+habituacion y aviso LED final. Ver la
+[decision de restauracion](decisions/2026-07-15-restauracion-base-valentiae.md)
+antes de modificar `ValentiaE`.
+
+1. [`../matlab/README_USO_USB.md`](../matlab/README_USO_USB.md): abrir la version correcta en la PC del laboratorio.
 2. [`version-map.md`](version-map.md): que esta estable, historico o fuera de `main`.
 3. [`validation.md`](validation.md): validaciones y pendientes reales.
 4. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de la validacion de Discriminacion.

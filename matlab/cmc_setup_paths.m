@@ -1,5 +1,5 @@
 function rootDir = cmc_setup_paths
-%CMC_SETUP_PATHS Prepara rutas para ejecutar desde una copia autocontenida.
+%CMC_SETUP_PATHS Prepara rutas para ejecutar desde USB.
 
 rootDir = cmc_root();
 addpath(rootDir);
