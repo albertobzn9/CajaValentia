@@ -1,8 +1,7 @@
-function rutaCsv = cmc_guardar_resultados_sesion(rutaCsv, Resultados, EventosPalanqueo)
-%CMC_GUARDAR_RESULTADOS_SESION Exporta resultados y palanqueos como dos CSV.
-% Los MAT de estado siguen siendo internos y no son el formato de entrega.
+function cmc_guardar_resultados_sesion(rutaMat, Resultados, EventosPalanqueo)
+%CMC_GUARDAR_RESULTADOS_SESION Guarda resultados MATLAB y CSV de palanqueos.
 
-rutaCsv = cmc_escribir_csv_resultados(rutaCsv, Resultados);
-[carpeta, nombre] = fileparts(rutaCsv);
+save(rutaMat, 'Resultados', 'EventosPalanqueo');
+[carpeta, nombre] = fileparts(rutaMat);
 cmc_escribir_csv_palanqueos(fullfile(carpeta, [nombre '_palanqueos.csv']), ...
     EventosPalanqueo);

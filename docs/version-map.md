@@ -25,7 +25,12 @@ documento es la fuente unica para saber que significa cada una.
 
 ## Estado Actual
 
-- `main` es **V2.4 - Discriminacion Validada**.
+- `main` usa la **Base de Restauracion R2011a**: la base funcional previa a
+  cambios de logica de eventos, con solo reloj de habituacion y aviso LED
+  final. La decision y el alcance exacto estan en
+  [`decisions/2026-07-15-restauracion-base-valentiae.md`](decisions/2026-07-15-restauracion-base-valentiae.md).
+- `v2.0.0-rc.4-discriminacion-validada` permanece como evidencia historica; no
+  debe confundirse con el runtime restaurado.
 - `feature/cp-time-aware-sound-only` es trabajo de V2 final, no una version
   liberada ni apta para uso experimental.
 - `migration/r2022a-r2026a-ni-usb6501` es investigacion para V4.

@@ -37,13 +37,14 @@ fclose(fid);
 assert(~isempty(strfind(primeraFila, ',NA,')));
 delete(ruta);
 
-rutaResultados = [tempname '.csv'];
-Resultados = [1 0 0 1.23 5.67 0 0 2.34 0 1];
-cmc_guardar_resultados_sesion(rutaResultados, Resultados, eventos);
-assert(exist(rutaResultados, 'file') == 2);
-[carpeta, nombre] = fileparts(rutaResultados);
+rutaMat = [tempname '.mat'];
+Resultados = [1 0 0 1.23 5.67 0 0 2.34 0];
+cmc_guardar_resultados_sesion(rutaMat, Resultados, eventos);
+datos = load(rutaMat);
+assert(isfield(datos, 'Resultados') && isfield(datos, 'EventosPalanqueo'));
+[carpeta, nombre] = fileparts(rutaMat);
 assert(exist(fullfile(carpeta, [nombre '_palanqueos.csv']), 'file') == 2);
-delete(rutaResultados);
+delete(rutaMat);
 delete(fullfile(carpeta, [nombre '_palanqueos.csv']));
 
 disp('REGISTRO_PALANQUEOS_TEST_OK');
