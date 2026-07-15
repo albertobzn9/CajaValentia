@@ -1,5 +1,10 @@
 # OBS Session Clock And PreProcesamiento Handoff
 
+> Nota de estado: las referencias de este documento a un CSV principal de 10
+> columnas quedaron superadas por la restauracion de `main`. Mantiene valor
+> como contrato de sincronizacion; para formato actual, ver
+> [comportamiento actual](../current-runtime-behavior-and-known-limitations.md).
+
 ## Decision
 
 The future **Start** action in CajaValentia will coordinate the behavioral

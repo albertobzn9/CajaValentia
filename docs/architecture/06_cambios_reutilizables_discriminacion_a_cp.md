@@ -1,5 +1,10 @@
 # Estado Operativo: Discriminacion Y Transferencia A CP
 
+> Documento historico de una rama experimental retirada. No aplicar sus
+> cambios de conteo, CSV o limite de mismo lado directamente a `main`.
+> Ver [comportamiento actual](../current-runtime-behavior-and-known-limitations.md)
+> antes de retomar CP.
+
 Este es el resumen vigente. Para la historia de pruebas y despliegues, leer la
 [bitacora de laboratorio](../bitacora-lab-2026-07-12-valentiae.md).
 

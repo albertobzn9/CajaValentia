@@ -1,8 +1,9 @@
 # 2026-06-12 - Operacion Remota Y GUI Experimental (Historico)
 
-> Esta decision registra la etapa USB/GUI experimental. El runtime vigente es
-> `matlab/` desplegado en el Escritorio; consultar `docs/version-map.md` y
-> `matlab/README_USO_ESCRITORIO.md` antes de seguir estas instrucciones.
+> Esta decision registra la etapa USB/GUI experimental. No es una instruccion
+> de despliegue actual. Para el runtime vigente, consultar
+> [mapa de versiones](../version-map.md) y
+> [comportamiento actual](../current-runtime-behavior-and-known-limitations.md).
 
 ## Contexto
 

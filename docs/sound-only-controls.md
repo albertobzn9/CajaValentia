@@ -1,5 +1,11 @@
 # Controles De Solo Sonido
 
+> Nota de estado: el contrato conductual de este documento sigue siendo el
+> referente conceptual. Sus secciones que describen CSV principal de 10
+> columnas o `ensayo_cruce` pertenecen a una rama experimental retirada. Para
+> el codigo actual, ver
+> [comportamiento actual](current-runtime-behavior-and-known-limitations.md).
+
 Este documento define el contrato conductual de `main` y de la etiqueta
 `v2.0.0-rc.4-discriminacion-validada`.
 

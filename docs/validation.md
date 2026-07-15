@@ -1,21 +1,29 @@
 # Estado De Validacion
 
-## Discriminacion: Validada En R2011a
+## Fuente Actual
 
-- Suite sin hardware en R2026a: riesgo `0`, `0.1`, `0.15`, `0.2`, `0.3`,
-  `0.6`, resultados, reloj, LED y simulaciones CP.
-- Audio estereo, diagnostico de sonido solo, arranque sin pellet, guardado CSV,
-  contador de cruces/no-cruces, sonido solo y cierre automatico: probados con
-  la caja en R2011a el 12-jul-2026.
-- La evidencia y los dos pendientes menores de Discriminacion estan en la
-  [bitacora de laboratorio](bitacora-lab-2026-07-12-valentiae.md).
+`main` fue restaurado a la base estable mas reloj de habituacion y aviso LED.
+La referencia operativa es
+[Comportamiento actual y limitaciones conocidas](current-runtime-behavior-and-known-limitations.md).
+No confundir esta base con la rama experimental que generaba un CSV principal
+de 10 columnas.
 
-## Pendiente
+## Evidencia Disponible
 
-- Discriminacion: comprobar visualmente el reloj de habituacion y el aviso LED
-  final durante una corrida dedicada. No bloquean `main`.
-- CP (`ValentiaE2`): prueba fisica completa antes de fusionar
-  `feature/cp-time-aware-sound-only`. Ver el checklist exacto en
-  [`architecture/06_cambios_reutilizables_discriminacion_a_cp.md`](architecture/06_cambios_reutilizables_discriminacion_a_cp.md).
-- MATLAB moderno: la migracion de DAQ/audio no esta validada con la caja y no
-  sustituye R2011a.
+- La suite sin hardware se ejecuto antes de integrar la restauracion. Valida
+  secuencias y ayudas puramente de software; no valida NI, sensores, palancas
+  ni audio real.
+- Hubo pruebas R2011a de Discriminacion el 12-jul-2026, pero varias verificaron
+  reglas que ya no pertenecen a `main`. Se conservan como historia en la
+  [bitacora](bitacora-lab-2026-07-12-valentiae.md), no como certificacion de
+  los conteos actuales.
+
+## Pendiente Antes De Uso Critico
+
+- ValentiaE: prueba corta de reloj de habituacion, LED final opcional, guardado
+  `.mat` mas CSV de palanqueos y respuesta de **Detener ahora**.
+- ValentiaE2/CP: prueba fisica completa, incluidos ITI, eventos de sonido solo,
+  guardado manual y el caso cruzar sin palanquear.
+- Moldeamiento y Luz-Comida: comprobar el boton de detener del lado derecho
+  antes de una sesion real.
+- MATLAB moderno: DAQ/audio no estan validados y no sustituyen R2011a.

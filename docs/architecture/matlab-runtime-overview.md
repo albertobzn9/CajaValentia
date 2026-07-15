@@ -1,5 +1,10 @@
 # Mapa Del Runtime MATLAB
 
+> Nota de estado: este mapa conserva la arquitectura y rutas generales, pero
+> sus referencias a un CSV principal, `cmc_cuenta_ensayo_cruce` y resultados de
+> 10 columnas pertenecen a una rama experimental retirada. Para el runtime de
+> `main`, usar [comportamiento actual](../current-runtime-behavior-and-known-limitations.md).
+
 Alcance: `matlab/`, el runtime autocontenido que se despliega en la PC del
 laboratorio. No describe `legacy/`, que es un archivo de auditoria.
 

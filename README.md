@@ -1,8 +1,8 @@
 # CajaValentia
 
 Software de control para la caja conductual CMC/Valentia. Conserva el programa
-MATLAB R2011a original, una base depurada y las mejoras validadas para las
-tareas de Discriminacion y Cruces Peligrosos.
+MATLAB R2011a original, una base depurada y el historial de mejoras
+experimentales.
 
 > Este es software de laboratorio que controla estimulos, recompensas y
 > registro conductual. No se debe operar hardware sin una persona entrenada
@@ -16,22 +16,23 @@ tareas de Discriminacion y Cruces Peligrosos.
 - Permitir cambios revisables sin mezclar datos de animales ni archivos de
   sesion con el codigo.
 
-`main` contiene la version estable de Discriminacion (`ValentiaE`), validada
-con MATLAB R2011a y la caja el 12-jul-2026. El codigo historico se conserva
-para auditoria, no para operar.
+`main` contiene la base restaurada de `ValentiaE`: comportamiento previo mas
+reloj de habituacion y aviso LED final. El codigo historico se conserva para
+auditoria, no para operar. Antes de ejecutar una tarea, leer
+[el comportamiento real y sus limites](docs/current-runtime-behavior-and-known-limitations.md).
 
 ## Estado Actual
 
 | Referencia | Uso |
 | --- | --- |
-| `main` | **V2.4 - Discriminacion Validada**, fuente activa de Discriminacion. |
-| `v2.0.0-rc.4-discriminacion-validada` | Foto inmutable de V2.4: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. |
+| `main` | **Base R2011a Restaurada**, fuente activa; reloj de habituacion y aviso LED, sin la logica experimental retirada. |
+| `v2.0.0-rc.4-discriminacion-validada` | Foto historica de V2.4: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. No describe `main`. |
 | `feature/cp-time-aware-sound-only` | Cruces Peligrosos en desarrollo; no esta validada ni fusionada. |
 | `legacy/` | Copia original de `fsotres`, solo lectura. |
 
 La historia y los nombres oficiales viven en [docs/version-map.md](docs/version-map.md).
-V0 es el original; V1 es la base limpia R2011a; V2.4 es la version estable
-actual. Ninguna de las versiones antiguas es una instruccion de uso diario.
+V0 es el original; V1 es la base limpia R2011a; V2.4 es una referencia
+historica. Ninguna de las versiones antiguas es una instruccion de uso diario.
 
 ## Estructura
 
@@ -62,7 +63,7 @@ o redistribuir el codigo fuera del equipo sin autorizacion explicita.
 
 ## Leer Primero
 
-1. [Uso diario en la PC del laboratorio](matlab/README_USO_ESCRITORIO.md).
+1. [Comportamiento actual y limitaciones](docs/current-runtime-behavior-and-known-limitations.md).
 2. [Indice de documentacion](docs/README.md).
 3. [Mapa de versiones](docs/version-map.md).
 4. [Reglas de seguridad y edicion](AGENTS.md).

@@ -1,5 +1,10 @@
 # Que Hace `ValentiaE` Detras De La GUI
 
+> Documento historico de una rama experimental retirada. Las secciones sobre
+> `ensayo_cruce`, CSV principal y conteo de cruces no reflejan `main`.
+> La especificacion operativa actual esta en
+> [comportamiento actual](../current-runtime-behavior-and-known-limitations.md).
+
 Esta guia describe la version estable en `main`. No requiere leer codigo para
 entender que cambian riesgo, aleatorizacion, numero de ensayos y sonido solo.
 

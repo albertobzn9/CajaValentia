@@ -1,5 +1,10 @@
 # Bitacora Lab: ValentiaE - 2026-07-12
 
+> Registro historico: esta bitacora conserva pruebas de una rama posterior que
+> fue retirada de `main`. Sus resultados sobre CSV de 10 columnas,
+> `ensayo_cruce` y limite de mismo lado no certifican el codigo actual. Ver
+> [comportamiento actual](current-runtime-behavior-and-known-limitations.md).
+
 ## Proposito
 
 Registrar la validacion fisica y los cambios hechos en `ValentiaE` durante la

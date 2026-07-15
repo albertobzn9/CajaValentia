@@ -1,5 +1,11 @@
 # CMC Protocol
 
+> Nota de estado del software: este documento conserva el protocolo
+> experimental. Para saber que datos y reglas ejecuta el codigo actual de
+> `main`, usar [comportamiento actual](current-runtime-behavior-and-known-limitations.md).
+> Las referencias posteriores a un CSV de 10 columnas y `ensayo_cruce` son de
+> una rama experimental retirada.
+
 <a id="overview"></a>
 
 ## Propósito Del Documento

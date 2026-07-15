@@ -1,5 +1,11 @@
 # Mapa De Versiones
 
+> Estado actual: `main` corresponde a la base restaurada con reloj de
+> habituacion y aviso LED final. Las entradas que describen CSV de 10 columnas,
+> `ensayo_cruce` o limites nuevos de mismo lado son historia de ramas
+> experimentales, no el runtime actual. Ver
+> [comportamiento actual](current-runtime-behavior-and-known-limitations.md).
+
 Una version tiene dos nombres: una etiqueta tecnica de Git y un nombre humano.
 Las etiquetas existentes no se renombran: son referencias historicas. Este
 documento es la fuente unica para saber que significa cada una.
@@ -13,7 +19,8 @@ documento es la fuente unica para saber que significa cada una.
 | V2.1 | **Controles de Solo Sonido** | `v2.0.0-rc.1` | Primera integracion de sonido solo en Discriminacion y CP. |
 | V2.2 | **Validacion de Software** | `v2.0.0-rc.2` | Simulaciones sin hardware y linea de migracion moderna. |
 | V2.3 | **Resultados con Tipo de Evento** | `v2.0.0-rc.3-resultados-9-columnas` | Punto historico de columna 9 y resultados previos. |
-| V2.4 | **Discriminacion Validada** | `v2.0.0-rc.4-discriminacion-validada` y `main` | Version estable actual: sonido solo, CSV de 10 columnas y contador de ensayos de cruce, validada en R2011a. |
+| V2.4 | **Discriminacion Experimental Validada** | `v2.0.0-rc.4-discriminacion-validada` | Foto historica: sonido solo, CSV de 10 columnas y contador de ensayos de cruce. No es `main`. |
+| Actual | **Base R2011a Restaurada** | `main` | Base funcional previa a esos cambios, con reloj de habituacion y aviso LED final. |
 
 ## Etapas Planeadas
 
