@@ -3,7 +3,13 @@
 Cambios con significado conductual. Los commits contienen el detalle de
 implementacion; las etiquetas conservan fotos inmutables de cada etapa.
 
-## V2.4 - Discriminacion Validada (`v2.0.0-rc.4-discriminacion-validada`) - 2026-07-12
+> **Estado actual:** `main` es la **Base R2011a Restaurada**. Las entradas
+> V2.1--V2.4 de abajo describen etiquetas historicas, incluida la exportacion
+> CSV de 10 columnas; no son instrucciones de uso del runtime actual. Para
+> operar o modificar la caja, leer primero
+> [`docs/current-runtime-behavior-and-known-limitations.md`](docs/current-runtime-behavior-and-known-limitations.md).
+
+## V2.4 Historica - Discriminacion Validada (`v2.0.0-rc.4-discriminacion-validada`) - 2026-07-12
 
 - Valida Discriminacion (`ValentiaE`) en MATLAB R2011a y caja real.
 - Agrega evento tipo `2`: solo sonido/parrilla, 180 s, sin luz de comida ni
