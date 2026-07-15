@@ -15,6 +15,8 @@ todavia describen la rama experimental retirada de 10 columnas.
 5. [`validation.md`](validation.md): validaciones y pendientes reales.
 6. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de una rama historica de Discriminacion.
 7. [`repository-branches.md`](repository-branches.md): ramas, tags, merge y mantenimiento del repositorio.
+8. [`roadmap-2026-julio-diciembre.md`](roadmap-2026-julio-diciembre.md): orden
+   de trabajo B1/B2/B3, Eric, entendimiento de modulos y V4.
 
 ## Entender O Cambiar El Programa
 

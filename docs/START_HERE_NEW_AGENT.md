@@ -46,6 +46,7 @@ Lectura adicional segun el cambio:
 - Caja virtual: [`virtual-box-development.md`](virtual-box-development.md).
 - Rediseño GUIDE de Eric:
   [`../handoff/eric-gui-redesign/README.md`](../handoff/eric-gui-redesign/README.md).
+- Hoja de ruta 2026: [`roadmap-2026-julio-diciembre.md`](roadmap-2026-julio-diciembre.md).
 
 ## Estado Real: 15-jul-2026
 
