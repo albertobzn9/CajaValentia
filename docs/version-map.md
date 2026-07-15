@@ -28,7 +28,7 @@ documento es la fuente unica para saber que significa cada una.
 | --- | --- | --- |
 | V2 final | **Conducta Extendida R2011a** | Cuando Cruces Peligrosos pase validacion fisica e integre a `main`. |
 | V3 | **Interfaz GUIDE Unificada** | Cuando la nueva GUI de Eric sea equivalente y validada contra V2. |
-| V4 | **Runtime Moderno** | Cuando la reescritura en tecnologia moderna controle la caja con equivalencia validada. |
+| V4 | **Runtime Moderno** | Cuando la [reescritura total para Windows](modern-rewrite-blueprint.md) controle la caja con equivalencia validada. |
 
 ## Estado Actual
 

@@ -14,8 +14,9 @@ casualidad.
 
 ## Decisión
 
-La futura aplicación Windows (.NET 10 + Avalonia, o tecnología equivalente)
-debe modelar el ITI como una fase explícita de la tarea. La interfaz puede
+La futura aplicacion Windows de V4, definida en el
+[`modern-rewrite-blueprint.md`](../modern-rewrite-blueprint.md), debe modelar
+el ITI como una fase explícita de la tarea. La interfaz puede
 mostrarla, pero la lógica debe vivir fuera de la GUI y fuera del adaptador de
 hardware.
 

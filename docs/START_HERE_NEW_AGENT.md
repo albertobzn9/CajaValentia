@@ -43,6 +43,7 @@ Lectura adicional segun el cambio:
   `matlab/Valentia/OA_EjecutaSonidoSoloCP.m`.
 - Migracion: [`migration-matlab-2026.md`](migration-matlab-2026.md) y
   [`decisions/`](decisions/).
+- Caja virtual: [`virtual-box-development.md`](virtual-box-development.md).
 - Rediseño GUIDE de Eric:
   [`../handoff/eric-gui-redesign/README.md`](../handoff/eric-gui-redesign/README.md).
 
