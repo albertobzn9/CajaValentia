@@ -11,6 +11,7 @@ antes de modificar `ValentiaE`.
 2. [`version-map.md`](version-map.md): que esta estable, historico o fuera de `main`.
 3. [`validation.md`](validation.md): validaciones y pendientes reales.
 4. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de la validacion de Discriminacion.
+5. [`repository-branches.md`](repository-branches.md): ramas, tags, merge y mantenimiento del repositorio.
 
 ## Entender O Cambiar El Programa
 
