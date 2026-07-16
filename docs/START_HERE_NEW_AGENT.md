@@ -37,6 +37,8 @@ Lectura adicional segun el cambio:
 
 - Hardware, sensores, parrilla, pellet o audio:
   [`hardware-io.md`](hardware-io.md).
+- Conexion SSH, red y limites de operacion remota:
+  [`lab-pc-ssh.md`](lab-pc-ssh.md).
 - Discriminacion / ValentiaE: `matlab/OA_ValentiaCuatroE.m` y
   `matlab/Valentia/OA_SecuenciaDiscriminacionSonidoSolo.m`.
 - Cruces Peligrosos / ValentiaE2: `matlab/OA_ValentiaCuatroE2.m` y

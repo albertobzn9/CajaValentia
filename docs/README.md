@@ -15,6 +15,8 @@ todavia describen la rama experimental retirada de 10 columnas.
 5. [`validation.md`](validation.md): validaciones y pendientes reales.
 6. [`bitacora-lab-2026-07-12-valentiae.md`](bitacora-lab-2026-07-12-valentiae.md): evidencia cronologica de una rama historica de Discriminacion.
 7. [`repository-branches.md`](repository-branches.md): ramas, tags, merge y mantenimiento del repositorio.
+8. [`lab-pc-ssh.md`](lab-pc-ssh.md): conexion remota segura a la PC del laboratorio.
+9. [`NEW_AGENT_LAB_BRIEF.md`](NEW_AGENT_LAB_BRIEF.md): inicio rapido para un agente sin contexto.
 
 ## Entender O Cambiar El Programa
 
