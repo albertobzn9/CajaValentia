@@ -2,6 +2,10 @@
 
 Inicio previsto: 20-jul-2026. Duracion: tres semanas.
 
+> Antes de editar la GUI, leer [Recuperacion e integracion](RECOVERY_AND_INTEGRATION.md).
+> Las funciones perdidas se investigan e integran una por una desde `main`;
+> esta carpeta no autoriza fusionar toda una rama experimental.
+
 ## Objetivo
 
 Crear una interfaz GUIDE nueva para `ValentiaE`, `ValentiaE2` y `EntrenaE`, sin
