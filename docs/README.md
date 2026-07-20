@@ -21,9 +21,14 @@ todavia describen la rama experimental retirada de 10 columnas.
 ## Entender O Cambiar El Programa
 
 - [`behavioral-protocol.md`](behavioral-protocol.md): tarea experimental.
+- [`manual-uso-equipo-conflicto-cruces-legacy-v1.pdf`](manual-uso-equipo-conflicto-cruces-legacy-v1.pdf): manual historico operativo de legacy V1; conservar como referencia, no usarlo como fuente de verdad de `main` sin contrastarlo con las limitaciones actuales.
 - [`hardware-io.md`](hardware-io.md): entradas y salidas de la caja.
 - [`virtual-box-development.md`](virtual-box-development.md): plan para probar
   una caja virtual en la Mac sin depender del hardware del laboratorio.
+- [`lab-session-closure-checklist.md`](lab-session-closure-checklist.md):
+  cierre seguro, preservacion y verificacion de una prueba supervisada.
+- [`lab-pc-ssh.md`](lab-pc-ssh.md): identidad de red, recuperacion de IP y
+  verificacion SSH de la PC del laboratorio.
 - [`architecture/matlab-runtime-overview.md`](architecture/matlab-runtime-overview.md): mapa de modulos, conceptos GUIDE y rutas para cambiar algo.
 - [`architecture/04_backend_valentiae_aleatorizacion.md`](architecture/04_backend_valentiae_aleatorizacion.md): riesgo, aleatorizacion, sonido solo y contador de cruces.
 - [`architecture/05_comparacion_modulos_original_vs_limpio.md`](architecture/05_comparacion_modulos_original_vs_limpio.md): que se retuvo y que se excluyo del original.

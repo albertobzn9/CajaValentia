@@ -37,14 +37,20 @@ fclose(fid);
 assert(~isempty(strfind(primeraFila, ',NA,')));
 delete(ruta);
 
-rutaMat = [tempname '.mat'];
+rutaCsv = [tempname '.csv'];
 Resultados = [1 0 0 1.23 5.67 0 0 2.34 0];
-cmc_guardar_resultados_sesion(rutaMat, Resultados, eventos);
-datos = load(rutaMat);
-assert(isfield(datos, 'Resultados') && isfield(datos, 'EventosPalanqueo'));
-[carpeta, nombre] = fileparts(rutaMat);
+cmc_guardar_resultados_sesion(rutaCsv, Resultados, eventos);
+assert(exist(rutaCsv, 'file') == 2);
+fid = fopen(rutaCsv, 'rt');
+cabeceraResultados = fgetl(fid);
+filaResultados = fgetl(fid);
+fclose(fid);
+assert(strcmp(cabeceraResultados, ['ensayo,lado,estimulo,latencia_s,' ...
+    'tiempo_absoluto_s,palancas_izq,palancas_der,desplazamiento_s,tipo_evento']));
+assert(~isempty(strfind(filaResultados, '1,0,0,1.230000')));
+[carpeta, nombre] = fileparts(rutaCsv);
 assert(exist(fullfile(carpeta, [nombre '_palanqueos.csv']), 'file') == 2);
-delete(rutaMat);
+delete(rutaCsv);
 delete(fullfile(carpeta, [nombre '_palanqueos.csv']));
 
 disp('REGISTRO_PALANQUEOS_TEST_OK');

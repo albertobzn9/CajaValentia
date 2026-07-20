@@ -5,6 +5,8 @@ cierta forma. Cada decision debe incluir contexto, decision y consecuencias.
 
 ## Decisiones
 
+- [2026-07-16 - Cierre LED y exportacion CSV en ValentiaE](2026-07-16-cierre-led-y-exportacion-csv-valentiae.md)
+- [2026-07-16 - Contador de cruces validos en ValentiaE](2026-07-16-contador-cruces-validos-valentiae.md)
 - [2026-07-13 - Reloj de sesion OBS y handoff a PreProcesamiento](2026-07-13-obs-session-clock-and-preprocessing-handoff.md)
 - [2026-07-11 - Contrato temporal para reescritura](2026-07-11-contrato-temporal-para-reescritura.md)
 - [2026-07-09 - Riesgo y sonido solo solo en cambios de lado](2026-07-09-riesgo-y-sonido-solo-solo-en-cambios-de-lado.md)

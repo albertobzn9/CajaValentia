@@ -2,6 +2,9 @@ function cmc_prueba_sin_hardware_completa
 %CMC_PRUEBA_SIN_HARDWARE_COMPLETA Verifica la logica v2 sin DAQ, audio ni GUI.
 
 cmc_setup_paths();
+cmc_prueba_conteo_cruces_validos;
+cmc_prueba_registro_palanqueos;
+cmc_prueba_cierre_sin_hardware;
 cmc_prueba_discriminacion(0);
 cmc_prueba_discriminacion(0.1);
 cmc_prueba_discriminacion(0.15);

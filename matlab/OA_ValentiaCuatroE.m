@@ -127,8 +127,8 @@ set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
-set(handles.text19,'String','Ensayos terminados');
-set(handles.edit19,'String','0'); %ensayos que dejaron una fila de resultado
+set(handles.text19,'String','Cruces validos');
+set(handles.edit19,'String','0'); %cruces validos que cuentan hacia el objetivo
 set(handles.Terminarn2,'String','Detener ahora');
 set(handles.checkbox1,'Value',1); %secuencia aleatoria (informativa)
 set(handles.checkbox4,'Value',1); %luz en ensayo seguro
@@ -189,6 +189,8 @@ function Inicio_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% A new session must not inherit the final-save LED from an earlier session.
+cmc_detener_aviso_led_final([], handles.OA);
 
 
 Riesgo=str2num(get(handles.edit1,'String'));
@@ -201,8 +203,11 @@ if(Riesgo==1)
 end
 
 try
+    % A valid-crossing goal needs spare events for no-crosses and same-side
+    % events. Risk 0 already uses 1000, but this also protects the other modes.
+    NumEnsayosPlanificados=max(1000,NumEnsayos);
     [Secuencia,ModoSonidoSolo]=OA_SecuenciaDiscriminacionSonidoSolo( ...
-        NumEnsayos,NumRepLado,Riesgo,ActivarSonidoSolo);
+        NumEnsayosPlanificados,NumRepLado,Riesgo,ActivarSonidoSolo);
 catch ME
     errordlg(ME.message,'Discriminacion experimental');
     return
@@ -279,12 +284,10 @@ EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 
 CrucesValidos=0;
-EnsayosTerminados=0;
-set(handles.edit19,'String',num2str(EnsayosTerminados));
+set(handles.edit19,'String',num2str(CrucesValidos));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
-    FilasAntesDelEnsayo=size(Resultados,1);
     
     OA_ValentiaEstimuloI(handles.OA,0,0)
     OA_ValentiaEstimuloD(handles.OA,0,0)
@@ -670,13 +673,9 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     end  %ensayo lado derecho
     end  %sonido solo o ensayo con comida
 
-    if(size(Resultados,1)>FilasAntesDelEnsayo)
-        EnsayosTerminados=cmc_ensayos_terminados(Resultados);
-        CT_Ensayos=EnsayosTerminados;
-        set(handles.edit19,'String',num2str(EnsayosTerminados));
-        fprintf('Ensayos terminados=%d, cruces validos=%d\n', ...
-            EnsayosTerminados,CrucesValidos);
-    end
+    CT_Ensayos=CrucesValidos;
+    set(handles.edit19,'String',num2str(CrucesValidos));
+    fprintf('Cruces validos=%d\n',CrucesValidos);
     
     OA_ValentiaElectrico(handles.OA,0)
     pause(.5)
@@ -689,12 +688,8 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(CT_Ejecuta==0 || CT_FinalizarTrasEnsayo==1)
         break;
     end
-    if(ModoSonidoSolo==1)
-        FinEnsayos=size(Secuencia,1);
-    else
-        FinEnsayos=str2num(get(handles.edit4,'String'));
-    end
-    if(EnsayosTerminados>=FinEnsayos)
+    FinCruces=str2num(get(handles.edit4,'String'));
+    if(cmc_objetivo_cruces_alcanzado(CrucesValidos,FinCruces))
         break
     end
     
@@ -726,6 +721,7 @@ cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[])
 save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo');
 cmc_solicitar_guardado_final(Resultados,EventosPalanqueo,handles.OA, ...
     get(handles.AvisoLedFinal,'Value'));
+cmc_detener_aviso_led_final([], handles.OA);
 
 
 
@@ -774,6 +770,7 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % Hint: delete(hObject) closes the figure
 OA_ValentiaEstimuloI(handles.OA,0,0)
 OA_ValentiaEstimuloD(handles.OA,0,0)
+cmc_detener_aviso_led_final([], handles.OA)
 try
     daqreset
 catch
@@ -816,15 +813,13 @@ if isfield(datosSesion,'EventosPalanqueo')
 else
     [~,EventosPalanqueo]=cmc_nuevo_registro_palanqueos;
 end
-viejo=pwd;
-cd(cmc_results_dir());
-[fname,pname]=uiputfile('*.mat','nombre y ruta para guardar resultados');
-if isequal(fname,0)
-    cd(viejo);
+filtroCsv = {'*.csv', 'CSV (*.csv)'; '*.*', 'Todos los archivos'};
+[fname,pname]=uiputfile(filtroCsv,'Guardar resultados de la sesion', ...
+    fullfile(cmc_results_dir(), 'resultados.csv'));
+if isequal(fname,0) || isequal(pname,0)
     return
 end
 cmc_guardar_resultados_sesion(fullfile(pname,fname),Resultados,EventosPalanqueo);
-cd(viejo);
 
 
 function edit2_Callback(hObject, eventdata, handles)

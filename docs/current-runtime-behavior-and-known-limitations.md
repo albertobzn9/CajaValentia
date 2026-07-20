@@ -52,7 +52,7 @@ tarjeta y archivos de control; una instancia puede interferir con la otra.
 | ValentiaE: la rata llega al lado objetivo pero no palanquea | El ensayo puede quedar esperando sin limite. | Usar **Detener ahora**. `Detener tras ensayo` no puede terminar un ensayo que aun espera palanca. |
 | ValentiaE2/CP: la rata cruza pero no palanquea | Igual: el ensayo queda esperando sin limite. | Usar **Detener ahora** y anotar la excepcion. |
 | ValentiaE2/CP: se pulsa detener durante ITI | El codigo puede tardar hasta el final del ITI (60 a 180 s) en leer el boton. | Esperar; no asumir que el boton fallo inmediatamente. |
-| ValentiaE: contador `Ensayos terminados` | Cuenta cada fila registrada, incluidos no-cruces y sonido solo. No cuenta solo cruces reales. | No usarlo como contador de cruces validos. |
+| ValentiaE: contador `Cruces validos` | Cuenta solo cambios de lado con zona inicial lateral confirmada y desplazamiento de al menos un segundo. | Usar este contador para el objetivo de cruces; no suma no-cruces, repeticiones del mismo lado ni inicios desde el centro. |
 | Evento `sonido solo` | No es solo audio: activa ruido, LED marcador y `OA_ValentiaElectrico(1)`; no activa luz de comida ni pellet. | Confirmar que esto coincide con la condicion experimental antes de usarlo. |
 | Moldeamiento o Luz-comida: boton dedicado de detener lado derecho | Escribe un archivo de control distinto del que consulta el ciclo derecho. | **[NO RESUELTO]** No confiar en ese boton sin una prueba breve previa. |
 
@@ -100,12 +100,15 @@ palanca sin limite. No es que el maximo del mismo lado este configurado mal:
   con `Lado=-2`, no hay pellet y el programa avanza.
 - Si se detecta el lado y se alcanza el numero de palancas, se escribe la fila
   y se entrega el numero configurado de pellets.
-- `cmc_es_cruce_valido` calcula una regla util para analisis (cambio de lado,
-  zona inicial lateral y desplazamiento >= 1 s), pero su resultado solo se
-  imprime en consola. **No decide el fin de la sesion.**
-- El contador visible y el fin automatico usan `cmc_ensayos_terminados`, que
-  equivale al numero de filas de `Resultados`. Por tanto incluyen no-cruces y
-  sonido solo completos.
+- `cmc_es_cruce_valido` decide si una llegada cuenta como cruce: cambio de
+  lado, zona inicial lateral confirmada y desplazamiento >= 1 s. No cuentan
+  no-cruces, repeticiones del mismo lado ni inicios desde la zona central.
+- El contador visible `Cruces validos` y el fin automatico usan esa regla. El
+  numero indicado en la interfaz es el objetivo de cruces validos, no de filas
+  de `Resultados`.
+- El contador se muestra y el final se evalua al cerrar el evento actual. Si
+  la rata llega pero no palanquea, persiste la espera sin limite conocida y el
+  operador debe usar **Detener ahora**.
 
 ### Evento Tipo 2: Sonido Solo
 
@@ -118,15 +121,16 @@ electrico; no enciende la luz de comida ni dispensa pellet. Si se usa
 ### Cierre Y Guardado
 
 ValentiaE si ejecuta habituacion inicial, tarea, habituacion final y dialogo
-de guardado. El LED final es opcional y, en el codigo actual, parpadea 100 ms
-cada **2 s** mientras el dialogo esta abierto. Al guardar o cancelar se apaga.
+de guardado. El LED final es opcional y parpadea 100 ms cada **2 s** mientras
+el dialogo esta abierto. Al guardar, cancelar con Escape, cerrar la GUI o
+iniciar una sesion nueva, el timer se elimina y el LED marcador se apaga.
 
 El guardado produce:
 
-- un archivo `.mat` con `Resultados` y `EventosPalanqueo`;
+- un CSV principal con las nueve columnas de `Resultados`;
 - un CSV separado `nombre_palanqueos.csv`.
 
-No existe actualmente un CSV principal de resultados.
+El dialogo de guardado propone `resultados.csv` y filtra CSV por defecto.
 
 ## ValentiaE2: Cruces Peligrosos
 

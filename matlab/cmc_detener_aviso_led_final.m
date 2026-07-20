@@ -1,12 +1,22 @@
 function cmc_detener_aviso_led_final(aviso, OA)
-%CMC_DETENER_AVISO_LED_FINAL Detiene el timer y deja el LED apagado.
+%CMC_DETENER_AVISO_LED_FINAL Detiene avisos activos y deja el LED apagado.
 
+avisos = timerfindall('Tag', 'CajaValentiaAvisoLedFinal');
 if ~isempty(aviso) && ishandle(aviso)
-    try
-        stop(aviso);
-    catch
+    avisos = [avisos(:); aviso];
+end
+
+for i = 1:numel(avisos)
+    if ishandle(avisos(i))
+        try
+            stop(avisos(i));
+        catch
+        end
+        try
+            delete(avisos(i));
+        catch
+        end
     end
-    delete(aviso);
 end
 
 if nargin >= 2 && ~isempty(OA)

@@ -1,5 +1,5 @@
 function guardado = cmc_solicitar_guardado_final(Resultados, EventosPalanqueo, OA, ActivarAvisoLed)
-%CMC_SOLICITAR_GUARDADO_FINAL Pide ruta al terminar y guarda MAT mas CSV.
+%CMC_SOLICITAR_GUARDADO_FINAL Pide ruta al terminar y exporta dos CSV.
 % En Windows inicia en Documents del usuario. Cancelar o presionar Esc no
 % escribe ningun archivo nuevo.
 
@@ -21,12 +21,15 @@ if ~exist(carpetaInicial, 'dir')
     carpetaInicial = pwd;
 end
 
-[nombre, carpeta] = uiputfile(fullfile(carpetaInicial, 'resultados.mat'), ...
-    'Guardar resultados de la sesion');
+filtroCsv = {'*.csv', 'CSV (*.csv)'; '*.*', 'Todos los archivos'};
+[nombre, carpeta] = uiputfile(filtroCsv, 'Guardar resultados de la sesion', ...
+    fullfile(carpetaInicial, 'resultados.csv'));
 if isequal(nombre,0) || isequal(carpeta,0)
+    cmc_detener_aviso_led_final(aviso, OA);
     guardado = false;
     return
 end
 
 cmc_guardar_resultados_sesion(fullfile(carpeta,nombre),Resultados,EventosPalanqueo);
+cmc_detener_aviso_led_final(aviso, OA);
 guardado = true;

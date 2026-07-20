@@ -7,10 +7,12 @@ if isempty(OA)
     return
 end
 
+cmc_detener_aviso_led_final([], OA);
 estado = struct('OA', OA, 'inicio', tic, 'encendido', false);
 try
     aviso = timer('ExecutionMode', 'fixedSpacing', 'Period', 0.05, ...
-        'BusyMode', 'drop', 'TimerFcn', @cmc_actualizar_aviso_led);
+        'BusyMode', 'drop', 'Tag', 'CajaValentiaAvisoLedFinal', ...
+        'TimerFcn', @cmc_actualizar_aviso_led);
     set(aviso, 'UserData', estado);
     cmc_actualizar_aviso_led(aviso, []);
     start(aviso);
