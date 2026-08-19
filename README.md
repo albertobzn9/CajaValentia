@@ -52,8 +52,11 @@ historica. Ninguna de las versiones antiguas es una instruccion de uso diario.
 4. Para cambios que toquen la caja, documenta version de MATLAB, equipo y
    resultado de la prueba fisica.
 
-La guia completa esta en [CONTRIBUTING.md](CONTRIBUTING.md). El paquete para
-el rediseño GUIDE esta en [handoff/eric-gui-redesign](handoff/eric-gui-redesign/README.md).
+La guia completa esta en [CONTRIBUTING.md](CONTRIBUTING.md). El handoff de
+recuperacion para el responsable tecnico actual esta en
+[handoff/miguel-recovery](handoff/miguel-recovery/README.md). El paquete
+historico para el rediseño GUIDE se conserva en
+[handoff/eric-gui-redesign](handoff/eric-gui-redesign/README.md).
 
 ## Acceso Y Licencia
 
