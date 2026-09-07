@@ -16,6 +16,22 @@ Este documento reúne las guías de protocolo CMC sin resumir contenido. Sirve c
 > Si eres nuevo, empieza aquí.
 > Si tienes duda de una fase, ve directo a la que te interese.
 
+## Fuente Científica Y Alcance
+
+La referencia publicada del paradigma es Illescas-Huerta et al. (2021),
+[*Conflict Test Battery for Studying the Act of Facing Threats in Pursuit of
+Rewards*](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.645769/full)
+([PDF](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.645769/pdf),
+DOI: `10.3389/fnins.2021.645769`). El artículo describe el paradigma general:
+el pasillo, las zonas seguras, la rejilla, las señales, la recompensa y las
+fases experimentales.
+
+El artículo no es una especificación completa del programa MATLAB. Reglas
+operativas como qué cuenta como cruce, cómo tratar eventos del mismo lado y qué
+hacer al alcanzar un timeout deben contrastarse con el manual del laboratorio,
+el código histórico y una validación conductual explícita antes de modificar el
+software.
+
 ## Idea Central De La Tarea
 
 Una rata motivada debe decidir si **cruza una rejilla electrificada** para llegar a la recompensa (comida) que está del otro lado. ¿Cruza o no cruza? Eso es todo.
