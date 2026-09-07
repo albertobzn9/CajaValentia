@@ -127,8 +127,8 @@ set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
 set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
-set(handles.text19,'String','Ensayos terminados');
-set(handles.edit19,'String','0'); %ensayos que dejaron una fila de resultado
+set(handles.text19,'String','Ensayos de cruce');
+set(handles.edit19,'String','0'); %ensayos programados que exigieron cambiar de lado
 set(handles.Terminarn2,'String','Detener ahora');
 set(handles.checkbox1,'Value',1); %secuencia aleatoria (informativa)
 set(handles.checkbox4,'Value',1); %luz en ensayo seguro
@@ -195,6 +195,12 @@ Riesgo=str2num(get(handles.edit1,'String'));
 NumRepLado=str2num(get(handles.edit16,'String'));
 NumEnsayos=str2num(get(handles.edit4,'String'));
 ActivarSonidoSolo=get(handles.ActivarSonidoSolo,'Value');
+if(isempty(NumEnsayos)||NumEnsayos<=0||mod(NumEnsayos,1)~=0)
+    errordlg('El numero de ensayos de cruce debe ser un entero positivo.', ...
+        'Numero de ensayos');
+    return
+end
+FinEnsayos=NumEnsayos;
 if(Riesgo==1)
     NumRepLado=1;
     set(handles.edit16,'String','1');
@@ -205,6 +211,11 @@ try
         NumEnsayos,NumRepLado,Riesgo,ActivarSonidoSolo);
 catch ME
     errordlg(ME.message,'Discriminacion experimental');
+    return
+end
+if(cmc_cuenta_ensayos_cruce_programados(Secuencia)<FinEnsayos)
+    errordlg('La secuencia no contiene suficientes ensayos de cruce.', ...
+        'Secuencia experimental');
     return
 end
 
@@ -279,8 +290,8 @@ EstadoPalanqueos=cmc_reiniciar_referencia_palanqueos(EstadoPalanqueos,DI,DD);
 
 
 CrucesValidos=0;
-EnsayosTerminados=0;
-set(handles.edit19,'String',num2str(EnsayosTerminados));
+EnsayosCruce=0;
+set(handles.edit19,'String',num2str(EnsayosCruce));
 
 while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ensayos
     clc
@@ -671,11 +682,13 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     end  %sonido solo o ensayo con comida
 
     if(size(Resultados,1)>FilasAntesDelEnsayo)
-        EnsayosTerminados=cmc_ensayos_terminados(Resultados);
-        CT_Ensayos=EnsayosTerminados;
-        set(handles.edit19,'String',num2str(EnsayosTerminados));
-        fprintf('Ensayos terminados=%d, cruces validos=%d\n', ...
-            EnsayosTerminados,CrucesValidos);
+        if(cmc_es_ensayo_cruce_programado(EnsayoMismoLado,TipoEvento))
+            EnsayosCruce=EnsayosCruce+1;
+        end
+        CT_Ensayos=EnsayosCruce;
+        set(handles.edit19,'String',num2str(EnsayosCruce));
+        fprintf('Ensayos de cruce=%d, cruces validos=%d\n', ...
+            EnsayosCruce,CrucesValidos);
     end
     
     OA_ValentiaElectrico(handles.OA,0)
@@ -689,12 +702,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(CT_Ejecuta==0 || CT_FinalizarTrasEnsayo==1)
         break;
     end
-    if(ModoSonidoSolo==1)
-        FinEnsayos=size(Secuencia,1);
-    else
-        FinEnsayos=str2num(get(handles.edit4,'String'));
-    end
-    if(EnsayosTerminados>=FinEnsayos)
+    if(EnsayosCruce>=FinEnsayos)
         break
     end
     

@@ -8,6 +8,8 @@ runnable program:
 - `cmc_simulacion_discriminacion_sonido_solo`
 - `cmc_prueba_plan_sonido_solo_cp`
 - `cmc_simulacion_cp_sonido_solo`
+- `problema_1_conteo_ensayos_cruce/cmc_prueba_conteo_ensayos_cruce` -
+  conteo, secuencia suficiente y cierre por ensayos programados de cruce.
 
 They are intended to exercise task logic without DAQ hardware. They are not a
 substitute for a supervised physical-box test.
