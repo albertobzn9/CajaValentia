@@ -21,6 +21,22 @@ reloj de habituacion y aviso LED final. El codigo historico se conserva para
 auditoria, no para operar. Antes de ejecutar una tarea, leer
 [el comportamiento real y sus limites](docs/current-runtime-behavior-and-known-limitations.md).
 
+## Protocolo Cientifico
+
+La referencia publicada del paradigma es Illescas-Huerta et al. (2021),
+[*Conflict Test Battery for Studying the Act of Facing Threats in Pursuit of
+Rewards*](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.645769/full)
+([PDF](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.645769/pdf),
+DOI: `10.3389/fnins.2021.645769`). El articulo describe el protocolo cientifico
+general, incluidos el pasillo, las zonas seguras, la rejilla, las senales y las
+sesiones de cruces.
+
+Para su interpretacion dentro de este proyecto, consultar el
+[protocolo conductual](docs/behavioral-protocol.md). El articulo no especifica
+todas las reglas operativas del programa, como el conteo de intentos del mismo
+lado o el tratamiento exacto de los timeouts; esas reglas deben contrastarse
+con el manual del laboratorio, el codigo historico y la validacion conductual.
+
 ## Estado Actual
 
 | Referencia | Uso |
@@ -52,8 +68,11 @@ historica. Ninguna de las versiones antiguas es una instruccion de uso diario.
 4. Para cambios que toquen la caja, documenta version de MATLAB, equipo y
    resultado de la prueba fisica.
 
-La guia completa esta en [CONTRIBUTING.md](CONTRIBUTING.md). El paquete para
-el rediseño GUIDE esta en [handoff/eric-gui-redesign](handoff/eric-gui-redesign/README.md).
+La guia completa esta en [CONTRIBUTING.md](CONTRIBUTING.md). El handoff de
+recuperacion para el responsable tecnico actual esta en
+[handoff/miguel-recovery](handoff/miguel-recovery/README.md). El paquete
+historico para el rediseño GUIDE se conserva en
+[handoff/eric-gui-redesign](handoff/eric-gui-redesign/README.md).
 
 ## Acceso Y Licencia
 
