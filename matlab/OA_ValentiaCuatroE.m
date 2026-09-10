@@ -320,17 +320,22 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     caso=Secuencia(Ensayo,1);
     if(caso==1)
         Lado='I';
+        LadoObjetivo='D';
     elseif(caso==0)
         Lado='D';
+        LadoObjetivo='I';
     end
 
     TipoEvento=Secuencia(Ensayo,2);
     if(TipoEvento==0)
         TipoEventoTexto='seguro';
+        ActivarLuzEvento=get(handles.checkbox4,'Value');
     elseif(TipoEvento==1)
         TipoEventoTexto='riesgo';
+        ActivarLuzEvento=get(handles.checkbox7,'Value');
     else
         TipoEventoTexto='sonido_solo';
+        ActivarLuzEvento=0;
     end
     % La zona se confirma antes de encender estimulos solo en ensayos con
     % comida. Sonido solo mantiene su flujo independiente de cruces.
@@ -371,9 +376,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(strcmp(Lado,'D')==1)
         
         if(Secuencia(Ensayo,2)==0) %ensayo seguro
-            if(get(handles.checkbox4,'Value')==1)
-                OA_ValentiaEstimuloI(handles.OA,0,1); %dejamos sonido apagado luz prendida
-            end
             ES=0;
             EL=1;
             PelletsEvento=str2num(get(handles.edit3,'String'));
@@ -396,9 +398,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             end
             OA_ValentiaElectrico(handles.OA,1);
             pause(.1)
-            if(get(handles.checkbox7,'Value')==1)
-                OA_ValentiaEstimuloI(handles.OA,0,1); %dejamos sonido apagado luz prendida
-            end
             ES=2;
             EL=2;
             PelletsEvento=str2num(get(handles.edit17,'String'));
@@ -407,7 +406,12 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
 %             end
             
         end
-        
+
+        cmc_activar_foco_objetivo( ...
+            handles.OA,LadoObjetivo,TipoEvento,ActivarLuzEvento);
+        fprintf('Ensayo %d: foco objetivo=%s, tipo=%d, luz=%d\n', ...
+            Ensayo,LadoObjetivo,TipoEvento,ActivarLuzEvento);
+
 %         if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==0)) %si se pide meter la palanca antes de cruzar
 %             OA_ValentiaPalanca(handles.OA,'D',2); %se mete la palanca del otro lado
 %         end
@@ -534,9 +538,6 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     if(strcmp(Lado,'I')==1)
         
         if(Secuencia(Ensayo,2)==0) %ensayo seguro
-            if(get(handles.checkbox4,'Value')==1)
-                OA_ValentiaEstimuloD(handles.OA,0,1);  %dejamos sonido apagado luz prendida
-            end
             PelletsEvento=str2num(get(handles.edit3,'String'));
             DurMaxEns=str2num(get(handles.edit8,'String'));
 %             if(get(handles.checkbox9,'Value')==1)
@@ -554,18 +555,18 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
             end
             OA_ValentiaElectrico(handles.OA,1);
             pause(.1)
-           
-            if(get(handles.checkbox7,'Value')==1)
-                OA_ValentiaEstimuloD(handles.OA,2,1); %dejamos sonido apagado luz prendida
-                pause(.1)
-            end
             PelletsEvento=str2num(get(handles.edit17,'String'));
 %             if(get(handles.checkbox9,'Value')==1)
 %                 OA_ValentiaPalanca(handles.OA,'D',1); %nos aseguramos que la palanca der este afuera
 %             end
 
         end
-        
+
+        cmc_activar_foco_objetivo( ...
+            handles.OA,LadoObjetivo,TipoEvento,ActivarLuzEvento);
+        fprintf('Ensayo %d: foco objetivo=%s, tipo=%d, luz=%d\n', ...
+            Ensayo,LadoObjetivo,TipoEvento,ActivarLuzEvento);
+
 %         if((get(handles.checkbox6,'Value')==1)&&(get(handles.checkbox11,'Value')==0)) %si se pide meter la palanca antes del cruce
 %             OA_ValentiaPalanca(handles.OA,'I',2); %se mete la palanca del otro lado
 %         end

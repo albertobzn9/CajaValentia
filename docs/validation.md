@@ -20,6 +20,10 @@ de 10 columnas.
   `cmc_prueba_secuencia_sonido_solo`. Sigue pendiente ejecutar la misma suite
   en R2011a y hacer la prueba fisica supervisada; esta evidencia no certifica
   hardware.
+- En `dev`, el control de focos de comida restaura las pausas legacy del pulso
+  y apaga explicitamente el lado contrario antes de fijar el objetivo. Las
+  pruebas sin hardware validan las tramas y la exclusion; sigue pendiente
+  ejecutar `cmc_prueba_fisica_focos_comida` en R2011a con la caja vacia.
 - Hubo pruebas R2011a de Discriminacion el 12-jul-2026, pero varias verificaron
   reglas que ya no pertenecen a `main`. Se conservan como historia en la
   [bitacora](bitacora-lab-2026-07-12-valentiae.md), no como certificacion de

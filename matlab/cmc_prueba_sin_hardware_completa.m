@@ -14,6 +14,7 @@ cmc_prueba_discriminacion(0.6);
 cmc_prueba_modo_historico_sin_sonido;
 cmc_prueba_conteo_ensayos_cruce;
 cmc_prueba_temporizacion_estimulos;
+cmc_prueba_foco_objetivo;
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
