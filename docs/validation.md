@@ -24,6 +24,10 @@ de 10 columnas.
   y apaga explicitamente el lado contrario antes de fijar el objetivo. Las
   pruebas sin hardware validan las tramas y la exclusion; sigue pendiente
   ejecutar `cmc_prueba_fisica_focos_comida` en R2011a con la caja vacia.
+- En `dev`, los botones de sesion de ValentiaE tienen estados explicitos. Inicio
+  se bloquea durante la sesion, los botones de detener nacen bloqueados y
+  Detener ahora se consulta durante la habituacion inicial. La prueba sin
+  hardware cubre los estados; falta validarlos visualmente en R2011a.
 - Hubo pruebas R2011a de Discriminacion el 12-jul-2026, pero varias verificaron
   reglas que ya no pertenecen a `main`. Se conservan como historia en la
   [bitacora](bitacora-lab-2026-07-12-valentiae.md), no como certificacion de

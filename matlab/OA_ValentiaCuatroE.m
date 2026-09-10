@@ -164,6 +164,7 @@ handles.DetenerTrasEnsayo = uicontrol('Parent', hObject, ...
     'Position', posicionesExperimentales.detenerTrasEnsayo, ...
     'FontSize', 8, ...
     'Callback', @DetenerTrasEnsayo_Callback);
+cmc_aplicar_estado_controles_sesion(handles,'listo');
 guidata(hObject, handles);
 
 
@@ -188,8 +189,11 @@ function Inicio_Callback(hObject, eventdata, handles)
 % hObject    handle to Inicio (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
+datosControl = load('ControlTarea','CT_Ejecuta');
+if datosControl.CT_Ejecuta==1 || strcmp(get(handles.Inicio,'Enable'),'off')
+    warndlg('Ya existe una sesion activa.','CajaValentia');
+    return
+end
 
 Riesgo=str2num(get(handles.edit1,'String'));
 NumRepLado=str2num(get(handles.edit16,'String'));
@@ -224,6 +228,11 @@ CT_Ejecuta=1;
 CT_FinalizarTrasEnsayo=0;
 save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
 
+cmc_aplicar_estado_controles_sesion(handles,'habituacion_inicial');
+drawnow;
+
+try
+
 Ensayo=0;
 Resultados=[];
 ContadorTD=0;
@@ -242,8 +251,6 @@ set(handles.edit20,'String','0'); %habituacion izq
 set(handles.edit21,'String','0'); %habituacion der
 set(handles.edit22,'String','0'); %sin luz izq
 set(handles.edit23,'String','0'); %sin luz der
-
-set(handles.Inicio,'String','Ejecutando');
 
 PalXRec=str2num(get(handles.edit5,'String'));
 
@@ -280,9 +287,17 @@ while toc(RHabituacion)<THabitua
     set(handles.edit21,'String',num2str(ContadorHabD));
     cmc_actualizar_reloj_fase(handles.edit9,'Habituacion inicial (s)', ...
         toc(RHabituacion),THabitua);
+    load('ControlTarea','CT_Ejecuta');
+    if(CT_Ejecuta==0)
+        break
+    end
     pause(min(0.3,max(0,THabitua-toc(RHabituacion))));
 end
 cmc_actualizar_reloj_fase(handles.edit9,'Reloj de duracion del ensayo (s)',0,[]);
+
+if(CT_Ejecuta==1)
+    cmc_aplicar_estado_controles_sesion(handles,'ensayos');
+end
 
 OA_ValentiaResetPalancas(handles.OA);
 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
@@ -710,7 +725,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
 end
 
 
-set(handles.Inicio,'String','Inicio');
+cmc_aplicar_estado_controles_sesion(handles,'finalizando');
 THabitua=str2num(get(handles.edit15,'String'));
 
 [DI,DD]=OA_ValentiaRevisaPalanca(handles.OA);
@@ -736,6 +751,16 @@ save(fullfile(cmc_state_dir(), 'OA_Resultados'), 'Resultados', 'EventosPalanqueo
 cmc_solicitar_guardado_final(Resultados,EventosPalanqueo,handles.OA, ...
     get(handles.AvisoLedFinal,'Value'));
 
+load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
+CT_Ejecuta=0;
+CT_FinalizarTrasEnsayo=0;
+save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+cmc_aplicar_estado_controles_sesion(handles,'listo');
+catch ME
+    cmc_aplicar_estado_controles_sesion(handles,'error');
+    rethrow(ME)
+end
+
 
 
 %retiramos las dos palancas
@@ -758,19 +783,27 @@ function Terminarn2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+handles=guidata(hObject);
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
-CT_Ejecuta=0;
-CT_FinalizarTrasEnsayo=0;
-save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+if(CT_Ejecuta==1)
+    CT_Ejecuta=0;
+    CT_FinalizarTrasEnsayo=0;
+    save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+    cmc_aplicar_estado_controles_sesion(handles,'detencion_inmediata');
+    drawnow;
+end
 
 
-function DetenerTrasEnsayo_Callback(hObject, eventdata, handles)
+function DetenerTrasEnsayo_Callback(hObject, eventdata)
 %DETENERTRASENSAYO_CALLBACK Cierra al terminar el evento actual.
 
+handles=guidata(hObject);
 load('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos');
 if(CT_Ejecuta==1)
     CT_FinalizarTrasEnsayo=1;
     save('ControlTarea','CT_Ejecuta','CT_Pausa','CT_Ensayos','CT_FinalizarTrasEnsayo');
+    cmc_aplicar_estado_controles_sesion(handles,'detencion_tras_ensayo');
+    drawnow;
 end
 
 

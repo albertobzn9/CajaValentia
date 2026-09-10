@@ -14,6 +14,8 @@ runnable program:
   pausas legacy del bus de estimulos, sin acceso a la tarjeta NI.
 - `problema_focos_comida/cmc_prueba_foco_objetivo` - exclusion del foco
   contrario para eventos seguros y de riesgo, incluidos eventos del mismo lado.
+- `problema_gui_controles/cmc_prueba_estado_controles_sesion` - bloqueo y texto
+  de Inicio, Detener ahora y Detener tras ensayo durante cada fase.
 
 La prueba fisica `cmc_prueba_fisica_focos_comida` vive en `matlab/`. Solo
 enciende focos de comida y el LED marcador; no usa audio, descarga ni pellet.

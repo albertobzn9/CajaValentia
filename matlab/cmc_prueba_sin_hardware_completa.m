@@ -5,6 +5,7 @@ cmc_setup_paths();
 raizProyecto = fileparts(fileparts(mfilename('fullpath')));
 addpath(fullfile(raizProyecto,'tests','problema_1_conteo_ensayos_cruce'));
 addpath(fullfile(raizProyecto,'tests','problema_focos_comida'));
+addpath(fullfile(raizProyecto,'tests','problema_gui_controles'));
 cmc_prueba_discriminacion(0);
 cmc_prueba_discriminacion(0.1);
 cmc_prueba_discriminacion(0.15);
@@ -15,6 +16,7 @@ cmc_prueba_modo_historico_sin_sonido;
 cmc_prueba_conteo_ensayos_cruce;
 cmc_prueba_temporizacion_estimulos;
 cmc_prueba_foco_objetivo;
+cmc_prueba_estado_controles_sesion;
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
