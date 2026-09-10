@@ -10,6 +10,8 @@ runnable program:
 - `cmc_simulacion_cp_sonido_solo`
 - `problema_1_conteo_ensayos_cruce/cmc_prueba_conteo_ensayos_cruce` -
   conteo, secuencia suficiente y cierre por ensayos programados de cruce.
+- `problema_focos_comida/cmc_prueba_temporizacion_estimulos` - tramas y
+  pausas legacy del bus de estimulos, sin acceso a la tarjeta NI.
 
 They are intended to exercise task logic without DAQ hardware. They are not a
 substitute for a supervised physical-box test.

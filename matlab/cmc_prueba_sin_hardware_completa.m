@@ -4,6 +4,7 @@ function cmc_prueba_sin_hardware_completa
 cmc_setup_paths();
 raizProyecto = fileparts(fileparts(mfilename('fullpath')));
 addpath(fullfile(raizProyecto,'tests','problema_1_conteo_ensayos_cruce'));
+addpath(fullfile(raizProyecto,'tests','problema_focos_comida'));
 cmc_prueba_discriminacion(0);
 cmc_prueba_discriminacion(0.1);
 cmc_prueba_discriminacion(0.15);
@@ -12,6 +13,7 @@ cmc_prueba_discriminacion(0.3);
 cmc_prueba_discriminacion(0.6);
 cmc_prueba_modo_historico_sin_sonido;
 cmc_prueba_conteo_ensayos_cruce;
+cmc_prueba_temporizacion_estimulos;
 
 DuracionesCP = [30 60 90 120];
 for k = 1:length(DuracionesCP)
