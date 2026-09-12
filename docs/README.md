@@ -8,3 +8,4 @@ Start with the item closest to the question:
 - [`architecture/02_inventario_modulos_matlab_limpio.md`](architecture/02_inventario_modulos_matlab_limpio.md): each active module in plain language.
 - [`architecture/04_backend_valentiae_aleatorizacion.md`](architecture/04_backend_valentiae_aleatorizacion.md): what risk, randomization, and trial count do.
 - [`decisions/`](decisions/): behavioral/technical choices that must survive context loss.
+- [`v1-sonido-solo-experimental.md`](v1-sonido-solo-experimental.md): alcance y limites de la rama experimental basada en v1.

@@ -43,6 +43,10 @@ copia funcione desde USB.
 - `Valentia/OA_CtrlDispIzqCero.m`
 - `Valentia/OA_CtrlDispIzq.m`
 
+En la rama experimental de sonido solo basada en `v1.0.0`, ValentiaE agrega
+`cmc_posiciones_sonido_solo_v1.m`, `cmc_ejecutar_sonido_solo_v1.m` y
+`cmc_fila_sonido_solo_v1.m`; no reemplaza el generador de secuencia original.
+
 ## Funciones De Bajo Nivel
 
 - `Valentia/valentia/OA_ValentiaEstimuloI.m`

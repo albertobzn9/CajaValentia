@@ -126,7 +126,7 @@ set(handles.edit12,'String','1000'); %frecuencia del estimulo auditivo D
 set(handles.edit13,'String','1'); %amplitud del estimulo auditivo D
 set(handles.edit14,'String','5000'); %Frecuencia del estimulo auditivo de Riesgo D
 set(handles.edit15,'String','300'); %amplitud del estimulo auditivo D
-set(handles.edit16,'String','3'); %máximo número de repeticiones por lado
+set(handles.edit16,'String','3'); %maximo numero de repeticiones por lado
 set(handles.edit17,'String','1');  %pellets por recompensa ensayo riesgo
 set(handles.edit18,'String','180'); %maxima duracion de ensayo riesgo (s)
 set(handles.edit19,'String','0'); %cuenta de ensayos donde la rata cruzo
@@ -176,6 +176,7 @@ if(Riesgo==1)
 end
 %[Secuencia]=OA_SecuenciaEnsayos2(NumRepLado,Riesgo);
 [Secuencia]=OA_SecuenciaEnsayos3(NumRepLado,Riesgo);
+ProgramarSonido=cmc_posiciones_sonido_solo_v1(size(Secuencia,1),Riesgo);
 
 %limpiamos contadores de palanqueos
 set(handles.edit6,'String','0'); %lado izq
@@ -407,7 +408,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion máxima
+        end %si la rata cruza antes de la duracion maxima
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'I',2); %nos aseguramos que la palanca der este afuera
         %           end
@@ -561,7 +562,7 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
                     break;
                 end
             end
-        end %si la rata cruza antes de la duracion máxima
+        end %si la rata cruza antes de la duracion maxima
         
         %           if((get(handles.checkbox9,'Value')==1)&&(Secuencia(Ensayo,1)~=Secuencia(Ensayo+1,1))) %si se pide meter la palanca y el ensayo siguiente es de lado diferente
         %               OA_ValentiaPalanca(handles.OA,'D',2); %nos aseguramos que la palanca der este afuera
@@ -581,6 +582,23 @@ while(CT_Ejecuta==1);% ciclo principal aqui se mantiene hasta terminar los n ens
     load('ControlTarea');
     if(CT_Ejecuta==0)
         break;
+    end
+    EnsayoNormal=Ensayo-1;
+    if(ProgramarSonido(EnsayoNormal))
+        DuracionSonido=str2num(get(handles.edit18,'String'));
+        [ContadorTI,ContadorTD,LatenciaSonido,TiempoSonido,Detenido]= ...
+            cmc_ejecutar_sonido_solo_v1(handles.OA,handles.GS, ...
+            Secuencia(EnsayoNormal,1),DuracionSonido,freqRiesgo, ...
+            handles.edit9,ContadorTI,ContadorTD);
+        set(handles.edit6,'String',num2str(ContadorTI));
+        set(handles.edit7,'String',num2str(ContadorTD));
+        if(Detenido==0)
+            Resultados=[Resultados;cmc_fila_sonido_solo_v1( ...
+                EnsayoNormal,TiempoSonido,toc(R0),ContadorTI,ContadorTD,LatenciaSonido)];
+            set(handles.uitable1,'Data',Resultados);
+        else
+            break;
+        end
     end
     FinEnsayos=str2num(get(handles.edit4,'String'));
     if(Ensayo>=FinEnsayos+1)
@@ -653,6 +671,12 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
+try
+    OA_ValentiaElectrico(handles.OA,0)
+catch ME
+    warning('CMC:ParrillaCierre', ...
+        'No se pudo apagar la parrilla al cerrar: %s',ME.message);
+end
 OA_ValentiaEstimuloI(handles.OA,0,0)
 OA_ValentiaEstimuloD(handles.OA,0,0)
 try
